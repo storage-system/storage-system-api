@@ -3,7 +3,7 @@ import { Entity } from '@/core/entities/entity'
 import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-interface CategoryProps {
+export interface CategoryProps {
   name: string
   slug: Slug
   companyId: UniqueEntityID
