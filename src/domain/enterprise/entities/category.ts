@@ -6,7 +6,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 interface CategoryProps {
   name: string
   slug: Slug
-  companyId: string
+  companyId: UniqueEntityID
   isActive: boolean
   createdAt: Date
   updatedAt?: Date
