@@ -10,11 +10,18 @@ interface CategoryProps {
   isActive: boolean
   createdAt: Date
   updatedAt?: Date
+  deletedAt?: Date
 }
 
 export class Category extends Entity<CategoryProps> {
   get name() {
     return this.props.name
+  }
+
+  set name(name: string) {
+    this.props.name = name
+    this.props.slug = Slug.createFromText(name)
+    this.touch()
   }
 
   get slug() {
@@ -28,6 +35,11 @@ export class Category extends Entity<CategoryProps> {
   get isActive() {
     return this.props.isActive
   }
+
+  set isActive(isActive: boolean) {
+    this.props.isActive = isActive
+    this.touch()
+  }
   
   get createdAt() {
     return this.props.createdAt
@@ -37,12 +49,17 @@ export class Category extends Entity<CategoryProps> {
     return this.props.updatedAt
   }
 
+  private touch() {
+    this.props.updatedAt = new Date()
+  }
+
   static create(
-    props: Optional<CategoryProps, 'createdAt'>,
+    props: Optional<CategoryProps, 'createdAt' | 'slug'>,
     id?: UniqueEntityID
   ) {
     const category = new Category({
       ...props,
+      slug: props.slug ?? Slug.createFromText(props.name),
       createdAt: new Date()
     }, id)
 
