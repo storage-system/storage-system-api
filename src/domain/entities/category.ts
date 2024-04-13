@@ -1,7 +1,7 @@
-import { Slug } from "./value-objects/slug"
-import { Entity } from "@/core/entities/entity"
-import { Optional } from "@/core/types/optional"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
+import { Slug } from './value-objects/slug'
+import { Entity } from '@/core/entities/entity'
+import { Optional } from '@/core/types/optional'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 interface CategoryProps {
   name: string
@@ -40,7 +40,7 @@ export class Category extends Entity<CategoryProps> {
     this.props.isActive = isActive
     this.touch()
   }
-  
+
   get createdAt() {
     return this.props.createdAt
   }
@@ -55,13 +55,16 @@ export class Category extends Entity<CategoryProps> {
 
   static create(
     props: Optional<CategoryProps, 'createdAt' | 'slug'>,
-    id?: UniqueEntityID
+    id?: UniqueEntityID,
   ) {
-    const category = new Category({
-      ...props,
-      slug: props.slug ?? Slug.createFromText(props.name),
-      createdAt: new Date()
-    }, id)
+    const category = new Category(
+      {
+        ...props,
+        slug: props.slug ?? Slug.createFromText(props.name),
+        createdAt: new Date(),
+      },
+      id,
+    )
 
     return category
   }

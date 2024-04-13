@@ -1,6 +1,6 @@
-import { Entity } from "@/core/entities/entity"
-import { Optional } from "@/core/types/optional"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
+import { Entity } from '@/core/entities/entity'
+import { Optional } from '@/core/types/optional'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 interface CompanyProps {
   name: string
@@ -58,12 +58,15 @@ export class Company extends Entity<CompanyProps> {
 
   static create(
     props: Optional<CompanyProps, 'createdAt'>,
-    id?: UniqueEntityID
+    id?: UniqueEntityID,
   ) {
-    const company = new Company({
-      ...props,
-      createdAt: new Date()
-    }, id)
+    const company = new Company(
+      {
+        ...props,
+        createdAt: new Date(),
+      },
+      id,
+    )
 
     return company
   }
