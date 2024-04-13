@@ -1,5 +1,5 @@
-import { CategoriesRepository } from "@/domain/application/repositories/categories-repository";
-import { Category } from "@/domain/enterprise/entities/category";
+import { CategoriesRepository } from '@/domain/application/repositories/categories-repository'
+import { Category } from '@/domain/enterprise/entities/category'
 
 export class InMemoryCategoriesRepository implements CategoriesRepository {
   public items: Category[] = []
@@ -16,6 +16,12 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
 
   async create(category: Category) {
     this.items.push(category)
+  }
+
+  async save(category: Category) {
+    const itemIndex = this.items.findIndex((item) => item.id === category.id)
+
+    this.items[itemIndex] = category
   }
 
   async delete(category: Category) {
