@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto"
+import { Entity } from "../../core/entities/entity"
 
 interface CompanyProps {
   name: string
@@ -8,20 +8,24 @@ interface CompanyProps {
   responsible: string
 }
 
-export class Company {
-  public id: string
-  public name: string
-  public email: string
-  public contact: string
-  public createdAt: Date
-  public responsible: string
+export class Company extends Entity<CompanyProps> {
+  get name() {
+    return this.props.name
+  }
 
-  constructor(props: CompanyProps, id?: string) {
-    this.name = props.name,
-    this.email = props.email
-    this.contact = props.contact,
-    this.responsible = props.responsible
-    this.createdAt = new Date()
-    this.id = id ?? randomUUID()
+  get email() {
+    return this.props.email
+  }
+
+  get contact() {
+    return this.props.contact
+  }
+
+  get createdAt() {
+    return this.props.createdAt
+  }
+
+  get responsible() {
+    return this.props.responsible
   }
 }

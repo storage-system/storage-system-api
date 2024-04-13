@@ -1,5 +1,5 @@
-import { randomUUID } from "crypto"
 import { Slug } from "./value-objects/slug"
+import { Entity } from "../../core/entities/entity"
 
 interface CategoryProps {
   name: string
@@ -8,18 +8,20 @@ interface CategoryProps {
   isActive: boolean
 }
 
-export class Category {
-  public id: string
-  public name: string
-  public slug: Slug
-  public companyId: string
-  public isActive: boolean
+export class Category extends Entity<CategoryProps> {
+  get name() {
+    return this.props.name
+  }
 
-  constructor(props: CategoryProps, id?: string) {
-    this.name = props.name,
-    this.slug = props.slug
-    this.companyId = props.companyId,
-    this.isActive = props.isActive
-    this.id = id ?? randomUUID()
+  get slug() {
+    return this.props.slug
+  }
+
+  get companyId() {
+    return this.props.companyId
+  }
+
+  get isActive() {
+    return this.props.isActive
   }
 }
