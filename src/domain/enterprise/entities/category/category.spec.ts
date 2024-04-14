@@ -1,12 +1,13 @@
 import { Category } from './category'
-import { Slug } from './value-objects/slug'
+import { Slug } from '../value-objects/slug'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 describe('Category Entity', () => {
   it('should create a category with provided props', () => {
     const props = {
       name: 'category-01',
       slug: Slug.createFromText('Test Category'),
-      companyId: 'company-01',
+      companyId: new UniqueEntityID('company-01'),
       isActive: true,
     }
 
@@ -22,7 +23,7 @@ describe('Category Entity', () => {
     const props = {
       name: 'Test Category',
       slug: Slug.createFromText('Test Category'),
-      companyId: '123',
+      companyId: new UniqueEntityID('company-01'),
       isActive: true,
       createdAt: new Date(),
     }
@@ -39,7 +40,7 @@ describe('Category Entity', () => {
     const props = {
       name: 'Test Category',
       slug: Slug.createFromText('Test Category'),
-      companyId: '123',
+      companyId: new UniqueEntityID('company-01'),
       isActive: true,
       createdAt: new Date(),
     }

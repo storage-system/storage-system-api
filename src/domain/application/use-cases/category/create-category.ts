@@ -1,5 +1,5 @@
-import { Category } from '@/domain/enterprise/entities/category'
-import { CategoriesRepository } from '../repositories/categories-repository'
+import { Category } from '@/domain/enterprise/entities/category/category'
+import { CategoriesRepository } from '../../repositories/categories-repository'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 interface CreateCategoryUseCaseRequest {

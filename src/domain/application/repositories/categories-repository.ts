@@ -1,5 +1,5 @@
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
-import { Category } from '@/domain/enterprise/entities/category'
+import { Category } from '@/domain/enterprise/entities/category/category'
 
 export interface CategoriesRepository {
   findById(id: string): Promise<Category | null>

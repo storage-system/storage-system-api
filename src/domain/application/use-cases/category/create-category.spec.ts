@@ -1,6 +1,6 @@
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { CreateCategoryUseCase } from './create-category'
-import { Category } from '@/domain/enterprise/entities/category'
+import { Category } from '@/domain/enterprise/entities/category/category'
 
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let sut: CreateCategoryUseCase
