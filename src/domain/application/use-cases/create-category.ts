@@ -15,7 +15,7 @@ interface CreateCategoryUseCaseResponse {
 export class CreateCategoryUseCase {
   constructor(private categoriesRepository: CategoriesRepository) { }
 
-  async exucute({
+  async execute({
     name,
     companyId,
     isActive,

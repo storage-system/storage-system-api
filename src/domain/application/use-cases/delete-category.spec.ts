@@ -17,7 +17,7 @@ describe('Create Category', () => {
 
     await inMemoryCategoriesRepository.create(newCategory)
 
-    await sut.exucute({
+    await sut.execute({
       categoryId: 'category-01',
     })
 

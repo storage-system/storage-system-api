@@ -21,7 +21,7 @@ describe('Edit Category', () => {
 
     await inMemoryCategoriesRepository.create(newCategory)
 
-    await sut.exucute({
+    await sut.execute({
       companyId: 'company-01',
       categoryId: 'category-01',
       name: 'category-update-01',
@@ -44,7 +44,7 @@ describe('Edit Category', () => {
     await inMemoryCategoriesRepository.create(newCategory)
 
     expect(() => {
-      return sut.exucute({
+      return sut.execute({
         categoryId: 'category-01',
         companyId: 'company-02',
         name: 'category-update-01',

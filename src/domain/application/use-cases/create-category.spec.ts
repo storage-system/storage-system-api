@@ -12,7 +12,7 @@ describe('Create Category', () => {
   })
 
   it('should be able to create a category', async () => {
-    const { category } = await sut.exucute({
+    const { category } = await sut.execute({
       name: 'category-01',
       companyId: 'company-01',
       isActive: true,

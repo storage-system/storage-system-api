@@ -12,7 +12,7 @@ interface EditCategoryUseCaseResponse { }
 export class EditCategoryUseCase {
   constructor(private categoriesRepository: CategoriesRepository) { }
 
-  async exucute({
+  async execute({
     name,
     isActive,
     categoryId,

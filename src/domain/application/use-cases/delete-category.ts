@@ -9,7 +9,7 @@ interface DeleteCategoryUseCaseResponse { }
 export class DeleteCategoryUseCase {
   constructor(private categoriesRepository: CategoriesRepository) { }
 
-  async exucute({
+  async execute({
     categoryId,
   }: DeleteCategoryUseCaseRequest): Promise<DeleteCategoryUseCaseResponse> {
     const category = await this.categoriesRepository.findById(categoryId)
