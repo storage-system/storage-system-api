@@ -6,15 +6,15 @@ describe('Pagination Unit Test', () => {
       total: 1,
       items: [1],
       perPage: 5,
-      currentPage: 1,
+      page: 1,
     }
 
-    const pagination = new Pagination<number>(
-      expected.total,
-      expected.items,
-      expected.perPage,
-      expected.currentPage,
-    )
+    const pagination = new Pagination<number>({
+      total: expected.total,
+      items: expected.items,
+      perPage: expected.perPage,
+      page: expected.page,
+    })
 
     expect(pagination.map((item) => item)).toEqual(expected)
   })

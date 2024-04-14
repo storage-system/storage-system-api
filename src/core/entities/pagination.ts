@@ -1,33 +1,56 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+export type SearchParams<T> = {
+  filters?: T
+  page: number
+  perPage: number
+}
+
+export interface PaginationProps<T> {
+  total?: number
+  perPage: number
+  items?: Array<T>
+  page: number
+}
+
 export class Pagination<T> {
-  #total: number
+  /**
+   * @var total
+   */
+  total?: number
 
-  #items: Array<T>
+  /**
+   * @var items
+   */
+  items: Array<T>
 
-  #perPage: number
+  /**
+   * @var perPage
+   */
+  perPage: number
 
-  #currentPage: number
+  /**
+   * @var page
+   */
+  page: number
 
-  constructor(
-    public readonly total: number,
-    public readonly items: Array<T>,
-    public readonly perPage: number,
-    public readonly currentPage: number,
-  ) {
-    this.#total = total
-    this.#items = items
-    this.#perPage = perPage
-    this.#currentPage = currentPage
+  /**
+   * Class constructor
+   * @param props
+   */
+  constructor(props: PaginationProps<T>) {
+    this.total = props.total ?? 0
+    this.items = props.items ?? []
+    this.perPage = props.perPage
+    this.page = props.page
   }
 
-  public map<R>(mapperFn: (t: T) => R): Pagination<any> {
-    const aNewList = this.#items.map((_item: T): R => mapperFn(_item))
+  map<R>(mapperFn: (t: T) => R): Pagination<unknown> {
+    const aNewList = this.items.map(mapperFn)
 
-    return new Pagination<any>(
-      this.#total,
-      aNewList,
-      this.#perPage,
-      this.#currentPage,
-    )
+    return new Pagination<unknown>({
+      total: this.total,
+      items: aNewList,
+      perPage: this.perPage,
+      page: this.page,
+    })
   }
 }
