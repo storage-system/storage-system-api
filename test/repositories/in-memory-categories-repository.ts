@@ -1,3 +1,4 @@
+import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { CategoriesRepository } from '@/domain/application/repositories/categories-repository'
 import { Category } from '@/domain/enterprise/entities/category'
 
@@ -12,6 +13,17 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     }
 
     return category
+  }
+
+  async findAll({ page, perPage }: PaginationProps<Category>) {
+    const items = this.items.slice((page - 1) * perPage, page * perPage)
+
+    return new Pagination({
+      total: this.items.length,
+      items,
+      perPage,
+      page,
+    })
   }
 
   async create(category: Category) {
