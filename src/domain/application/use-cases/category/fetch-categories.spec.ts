@@ -28,10 +28,10 @@ describe('Fetch Categories Use Case', () => {
     })
 
     expect(result).toBeDefined()
-    expect(result.items).toHaveLength(1)
-    expect(result.total).toBe(1)
-    expect(result.page).toBe(1)
-    expect(result.perPage).toBe(10)
+    expect(result.value?.items).toHaveLength(1)
+    expect(result.value?.total).toBe(1)
+    expect(result.value?.page).toBe(1)
+    expect(result.value?.perPage).toBe(10)
   })
 
   it('should get an occurrence with 5 items per page', async () => {
@@ -41,10 +41,10 @@ describe('Fetch Categories Use Case', () => {
     })
 
     expect(result).toBeDefined()
-    expect(result.items).toHaveLength(1)
-    expect(result.total).toBe(1)
-    expect(result.page).toBe(1)
-    expect(result.perPage).toBe(5)
+    expect(result.value?.items).toHaveLength(1)
+    expect(result.value?.total).toBe(1)
+    expect(result.value?.page).toBe(1)
+    expect(result.value?.perPage).toBe(5)
   })
 
   it('should get an occurrence on page 2', async () => {
@@ -54,9 +54,9 @@ describe('Fetch Categories Use Case', () => {
     })
 
     expect(result).toBeDefined()
-    expect(result.items).toHaveLength(0)
-    expect(result.total).toBe(1)
-    expect(result.page).toBe(2)
-    expect(result.perPage).toBe(10)
+    expect(result.value?.items).toHaveLength(0)
+    expect(result.value?.total).toBe(1)
+    expect(result.value?.page).toBe(2)
+    expect(result.value?.perPage).toBe(10)
   })
 })

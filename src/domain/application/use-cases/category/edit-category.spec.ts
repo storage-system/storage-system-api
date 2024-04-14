@@ -2,6 +2,8 @@ import { makeCategory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { EditCategoryUseCase } from './edit-category'
+import { NotAllowedError } from '../errors/not-allowed-error'
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
 
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let sut: EditCategoryUseCase
@@ -34,7 +36,19 @@ describe('Edit Category', () => {
     })
   })
 
-  it('should not be able to edit a question from another company', async () => {
+  it('should not be able to edit a category that does not exist', async () => {
+    const result = await sut.execute({
+      categoryId: 'category-01',
+      companyId: 'company-01',
+      name: 'category-01',
+      isActive: true,
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+  })
+
+  it('should not be able to edit a category from another company', async () => {
     const newCategory = makeCategory(
       {
         companyId: new UniqueEntityID('company-01')
@@ -43,13 +57,14 @@ describe('Edit Category', () => {
 
     await inMemoryCategoriesRepository.create(newCategory)
 
-    expect(() => {
-      return sut.execute({
-        categoryId: 'category-01',
-        companyId: 'company-02',
-        name: 'category-update-01',
-        isActive: true,
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      categoryId: 'category-01',
+      companyId: 'company-02',
+      name: 'category-update-01',
+      isActive: true,
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })

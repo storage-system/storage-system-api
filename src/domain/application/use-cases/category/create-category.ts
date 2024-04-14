@@ -1,6 +1,7 @@
 import { Category } from '@/domain/enterprise/entities/category/category'
 import { CategoriesRepository } from '../../repositories/categories-repository'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Either, right } from '@/core/either'
 
 interface CreateCategoryUseCaseRequest {
   name: string
@@ -8,9 +9,7 @@ interface CreateCategoryUseCaseRequest {
   isActive: boolean
 }
 
-interface CreateCategoryUseCaseResponse {
-  category: Category
-}
+type CreateCategoryUseCaseResponse = Either<null, { category: Category }>
 
 export class CreateCategoryUseCase {
   constructor(private categoriesRepository: CategoriesRepository) { }
@@ -28,8 +27,8 @@ export class CreateCategoryUseCase {
 
     await this.categoriesRepository.create(category)
 
-    return {
+    return right({
       category,
-    }
+    })
   }
 }

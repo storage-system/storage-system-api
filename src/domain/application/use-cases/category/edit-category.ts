@@ -1,4 +1,7 @@
+import { Either, left, right } from '@/core/either'
 import { CategoriesRepository } from '../../repositories/categories-repository'
+import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { NotAllowedError } from '../errors/not-allowed-error'
 
 interface EditCategoryUseCaseRequest {
   name: string
@@ -7,7 +10,7 @@ interface EditCategoryUseCaseRequest {
   isActive: boolean
 }
 
-interface EditCategoryUseCaseResponse { }
+type EditCategoryUseCaseResponse = Either<ResourceNotFoundError | NotAllowedError, {}>
 
 export class EditCategoryUseCase {
   constructor(private categoriesRepository: CategoriesRepository) { }
@@ -21,11 +24,11 @@ export class EditCategoryUseCase {
     const category = await this.categoriesRepository.findById(categoryId)
 
     if (!category) {
-      throw new Error('Category not found.')
+      return left(new ResourceNotFoundError())
     }
 
     if (companyId !== category.companyId.toString()) {
-      throw new Error('Not allowed.')
+      return left(new NotAllowedError())
     }
 
     category.name = name
@@ -33,6 +36,6 @@ export class EditCategoryUseCase {
 
     await this.categoriesRepository.save(category)
 
-    return {}
+    return right({})
   }
 }
