@@ -1,5 +1,5 @@
 import { Category } from './category'
-import { Slug } from '../value-objects/slug'
+import { Slug } from '../slug/slug'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 describe('Category Entity', () => {

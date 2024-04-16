@@ -1,6 +1,6 @@
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
-import { CategoriesRepository } from '@/domain/application/repositories/categories-repository'
-import { Category } from '@/domain/enterprise/entities/category/category'
+import { CategoriesRepository } from '@/domain/application/category/categories-repository'
+import { Category } from '@/domain/enterprise/category/category'
 
 export class InMemoryCategoriesRepository implements CategoriesRepository {
   public items: Category[] = []

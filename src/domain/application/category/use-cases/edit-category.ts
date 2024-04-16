@@ -1,7 +1,7 @@
 import { Either, left, right } from '@/core/either'
-import { CategoriesRepository } from '../../repositories/categories-repository'
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
-import { NotAllowedError } from '../errors/not-allowed-error'
+import { CategoriesRepository } from '../categories-repository'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface EditCategoryUseCaseRequest {
   name: string

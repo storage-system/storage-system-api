@@ -1,5 +1,5 @@
-import { Category } from '@/domain/enterprise/entities/category/category'
-import { CategoriesRepository } from '../../repositories/categories-repository'
+import { Category } from '@/domain/enterprise/category/category'
+import { CategoriesRepository } from '../categories-repository'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Either, right } from '@/core/either'
 

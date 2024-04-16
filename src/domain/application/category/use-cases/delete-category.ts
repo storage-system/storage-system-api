@@ -1,6 +1,6 @@
 import { Either, left, right } from '@/core/either'
-import { CategoriesRepository } from '../../repositories/categories-repository'
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { CategoriesRepository } from '../categories-repository'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface DeleteCategoryUseCaseRequest {
   categoryId: string

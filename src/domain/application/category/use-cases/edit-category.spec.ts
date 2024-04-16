@@ -1,9 +1,9 @@
 import { makeCategory } from 'test/factories/make-category'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { EditCategoryUseCase } from './edit-category'
-import { NotAllowedError } from '../errors/not-allowed-error'
-import { ResourceNotFoundError } from '../errors/resource-not-found-error'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let sut: EditCategoryUseCase
