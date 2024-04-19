@@ -10,10 +10,10 @@ datasource db {
 model Company {
   id          String    @id @default(uuid())
   name        String
-  email       String
+  email       String    @unique
   contact     String
   responsible String
-  createdAt   DateTime
+  password    String
   updatedAt   DateTime?
 
   categories Category[]
