@@ -2,6 +2,7 @@ import { Category } from '@/domain/enterprise/category/category'
 import { CategoriesRepository } from '../categories-repository'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Either, right } from '@/core/either'
+import { Injectable } from '@nestjs/common'
 
 interface FetchCategoriesUseCaseRequest {
   page: number
@@ -10,6 +11,7 @@ interface FetchCategoriesUseCaseRequest {
 
 type FetchCategoriesUseCaseResponse = Either<null, PaginationProps<Category>>
 
+@Injectable()
 export class FetchCategoriesUseCase {
   constructor(private categoriesRepository: CategoriesRepository) { }
 
