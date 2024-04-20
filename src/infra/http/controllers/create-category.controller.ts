@@ -1,10 +1,10 @@
-import { CurrentCompany } from '@/auth/current-company-decorator'
-import { CompanyPayload } from '@/auth/jwt.strategy'
+import { CurrentCompany } from '@/infra/auth/current-company-decorator'
+import { CompanyPayload } from '@/infra/auth/jwt.strategy'
 import { Slug } from '@/domain/enterprise/slug/slug'
-import { ZodValidationPipe } from '@/pipes/zod-validation-pipe'
-import { PrismaService } from '@/prisma/prisma.service'
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import { PrismaService } from '@/infra/prisma/prisma.service'
 import { Body, Controller, NotFoundException, Post, UseGuards } from '@nestjs/common'
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { z } from 'zod'
 
 const createCategoryBodySchema = z.object({
