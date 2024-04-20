@@ -1,10 +1,9 @@
 import { CurrentCompany } from '@/infra/auth/current-company-decorator'
 import { CompanyPayload } from '@/infra/auth/jwt.strategy'
-import { Slug } from '@/domain/enterprise/slug/slug'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { Body, Controller, NotFoundException, Post, UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create-category'
 import { z } from 'zod'
 
 const createCategoryBodySchema = z.object({
@@ -19,7 +18,7 @@ type CreateCategoryBodySchema = z.infer<typeof createCategoryBodySchema>
 @Controller('/categories')
 @UseGuards(JwtAuthGuard)
 export class CreateCategoryController {
-  constructor(private prisma: PrismaService) { }
+  constructor(private createCategory: CreateCategoryUseCase) { }
 
   @Post()
   async handle(
@@ -34,16 +33,10 @@ export class CreateCategoryController {
       throw new NotFoundException('Company not found');
     }
 
-    const slug = Slug.convertToSlug(name)
-
-    await this.prisma.category.create({
-      data: {
-        name,
-        slug,
-        isActive,
-        companyId: companyId,
-        createdAt: new Date(),
-      },
+    await this.createCategory.execute({
+      name,
+      isActive,
+      companyId,
     })
   }
 }
