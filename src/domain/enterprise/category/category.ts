@@ -9,8 +9,8 @@ export interface CategoryProps {
   companyId: UniqueEntityID
   isActive: boolean
   createdAt: Date
-  updatedAt?: Date
-  deletedAt?: Date
+  updatedAt?: Date | null
+  deletedAt?: Date | null
 }
 
 export class Category extends Entity<CategoryProps> {
@@ -47,6 +47,10 @@ export class Category extends Entity<CategoryProps> {
 
   get updatedAt() {
     return this.props.updatedAt
+  }
+
+  get deletedAt() {
+    return this.props.deletedAt
   }
 
   private touch() {
