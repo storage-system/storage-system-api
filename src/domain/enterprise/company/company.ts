@@ -5,6 +5,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 interface CompanyProps {
   name: string
   email: string
+  password: string
   contact: string
   responsible: string
   createdAt: Date
@@ -23,6 +24,10 @@ export class Company extends Entity<CompanyProps> {
 
   get email() {
     return this.props.email
+  }
+
+  get password() {
+    return this.props.password
   }
 
   set email(email: string) {
