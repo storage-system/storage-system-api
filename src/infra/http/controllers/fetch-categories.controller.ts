@@ -1,5 +1,5 @@
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { Controller, Get, Query, UseGuards } from '@nestjs/common'
+import { BadRequestException, Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { FetchCategoriesUseCase } from '@/domain/application/category/use-cases/fetch-categories'
 import { Pagination } from '@/core/entities/pagination'
@@ -32,7 +32,7 @@ export class FetchCategoriesController {
     })
 
     if (result.isLeft()) {
-      throw new Error()
+      throw new BadRequestException()
     }
 
     const { total, items } = result.value;

@@ -1,7 +1,7 @@
 import { CurrentCompany } from '@/infra/auth/current-company-decorator'
 import { CompanyPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { Body, Controller, NotFoundException, Post, UseGuards } from '@nestjs/common'
+import { BadRequestException, Body, Controller, NotFoundException, Post, UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create-category'
 import { z } from 'zod'
@@ -33,10 +33,14 @@ export class CreateCategoryController {
       throw new NotFoundException('Company not found');
     }
 
-    await this.createCategory.execute({
+    const result = await this.createCategory.execute({
       name,
       isActive,
       companyId,
     })
+
+    if (result.isLeft()) {
+      throw new BadRequestException()
+    }
   }
 }

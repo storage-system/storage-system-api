@@ -1,7 +1,10 @@
+import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
 import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create-company'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import {
+  BadRequestException,
   Body,
+  ConflictException,
   Controller,
   HttpCode,
   Post,
@@ -38,7 +41,14 @@ export class CreateAccountController {
     })
 
     if (result.isLeft()) {
-      throw new Error()
+      const error = result.value
+
+      switch (error.constructor) {
+        case CompanyAlreadyExistsError:
+          throw new ConflictException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
   }
 }
