@@ -6,9 +6,12 @@ import { CreateCategoryController } from "./controllers/create-category.controll
 import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create-category";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/fetch-categories";
 import { FetchCategoriesController } from "./controllers/fetch-categories.controller";
+import { AuthenticateCompanyUseCase } from "@/domain/application/authenticate/authenticate-company";
+import { CreateCompanyUseCase } from "@/domain/application/company/use-cases/create-company";
+import { CryptographyModule } from "../cryptography/cryptography.module";
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CryptographyModule],
   controllers: [
     CreateAccountController,
     AuthenticateController,
@@ -16,6 +19,8 @@ import { FetchCategoriesController } from "./controllers/fetch-categories.contro
     FetchCategoriesController,
   ],
   providers: [
+    CreateCompanyUseCase,
+    AuthenticateCompanyUseCase,
     CreateCategoryUseCase,
     FetchCategoriesUseCase,
   ]
