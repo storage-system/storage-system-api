@@ -2,7 +2,7 @@ import { Entity } from '@/core/entities/entity'
 import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-interface CompanyProps {
+export interface CompanyProps {
   name: string
   email: string
   password: string
