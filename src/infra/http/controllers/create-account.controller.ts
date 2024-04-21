@@ -1,5 +1,6 @@
 import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
 import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create-company'
+import { Public } from '@/infra/auth/public'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import {
   BadRequestException,
@@ -23,6 +24,7 @@ const createAccountBodySchema = z.object({
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
 @Controller('/accounts')
+@Public()
 export class CreateAccountController {
   constructor(private createCompany: CreateCompanyUseCase) { }
 

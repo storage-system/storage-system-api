@@ -1,6 +1,5 @@
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { BadRequestException, Controller, Get, Query, UseGuards } from '@nestjs/common'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { BadRequestException, Controller, Get, Query } from '@nestjs/common'
 import { FetchCategoriesUseCase } from '@/domain/application/category/use-cases/fetch-categories'
 import { Pagination } from '@/core/entities/pagination'
 import { CategoryPresenter } from '../presenters/category-presenter'
@@ -16,7 +15,6 @@ const paramsValidationPìpe = new ZodValidationPipe(fetchCategoriesParamsSchema)
 type FetchCategoriesQuerySchema = z.infer<typeof fetchCategoriesParamsSchema>
 
 @Controller('/categories')
-@UseGuards(JwtAuthGuard)
 export class FetchCategoriesController {
   constructor(private fetchCategories: FetchCategoriesUseCase) { }
 

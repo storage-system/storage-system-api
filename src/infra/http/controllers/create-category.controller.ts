@@ -1,8 +1,7 @@
 import { CurrentCompany } from '@/infra/auth/current-company-decorator'
 import { CompanyPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { BadRequestException, Body, Controller, NotFoundException, Post, UseGuards } from '@nestjs/common'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { BadRequestException, Body, Controller, NotFoundException, Post } from '@nestjs/common'
 import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create-category'
 import { z } from 'zod'
 
@@ -16,7 +15,6 @@ const bodyValidationPipe = new ZodValidationPipe(createCategoryBodySchema)
 type CreateCategoryBodySchema = z.infer<typeof createCategoryBodySchema>
 
 @Controller('/categories')
-@UseGuards(JwtAuthGuard)
 export class CreateCategoryController {
   constructor(private createCategory: CreateCategoryUseCase) { }
 

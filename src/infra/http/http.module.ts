@@ -9,7 +9,6 @@ import { FetchCategoriesController } from "./controllers/fetch-categories.contro
 import { AuthenticateCompanyUseCase } from "@/domain/application/authenticate/authenticate-company";
 import { CreateCompanyUseCase } from "@/domain/application/company/use-cases/create-company";
 import { CryptographyModule } from "../cryptography/cryptography.module";
-
 @Module({
   imports: [DatabaseModule, CryptographyModule],
   controllers: [
