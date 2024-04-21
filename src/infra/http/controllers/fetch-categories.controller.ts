@@ -33,13 +33,9 @@ export class FetchCategoriesController {
       throw new BadRequestException()
     }
 
-    const { total, items } = result.value;
-
     return new Pagination({
-      page,
-      perPage,
-      total,
-      items: items?.map(CategoryPresenter.toHTTP)
+      ...result.value,
+      items: result.value.items?.map(CategoryPresenter.toHTTP)
     })
   }
 }
