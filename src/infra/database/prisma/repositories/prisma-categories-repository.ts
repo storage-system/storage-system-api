@@ -42,6 +42,20 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     })
   }
 
+  async findBySlug(slug: string): Promise<Category | null> {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        slug,
+      }
+    })
+
+    if (!category) {
+      return null
+    }
+
+    return PrismaCategoryMapper.toDomain(category)
+  }
+
   async create(category: Category): Promise<void> {
     const data = PrismaCategoryMapper.toPersistence(category)
 

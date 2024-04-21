@@ -1,9 +1,10 @@
 import { CurrentCompany } from '@/infra/auth/current-company-decorator'
 import { CompanyPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { BadRequestException, Body, Controller, NotFoundException, Post } from '@nestjs/common'
+import { BadRequestException, Body, ConflictException, Controller, NotFoundException, Post } from '@nestjs/common'
 import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create-category'
 import { z } from 'zod'
+import { CategoryAlreadyExistsError } from '@/core/errors/category-already-exists-error'
 
 const createCategoryBodySchema = z.object({
   name: z.string(),
@@ -38,7 +39,14 @@ export class CreateCategoryController {
     })
 
     if (result.isLeft()) {
-      throw new BadRequestException()
+      const error = result.value
+
+      switch (error.constructor) {
+        case CategoryAlreadyExistsError:
+          throw new ConflictException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
   }
 }

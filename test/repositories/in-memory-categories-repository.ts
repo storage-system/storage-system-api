@@ -26,6 +26,16 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     })
   }
 
+  async findBySlug(slug: string): Promise<Category | null> {
+    const item = this.items.find((item) => item.slug.value === slug)
+
+    if (!item) {
+      return null
+    }
+
+    return item
+  }
+
   async create(category: Category) {
     this.items.push(category)
   }
