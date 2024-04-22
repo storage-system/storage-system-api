@@ -12,7 +12,6 @@ const createCategoryBodySchema = z.object({
 })
 
 const bodyValidationPipe = new ZodValidationPipe(createCategoryBodySchema)
-
 type CreateCategoryBodySchema = z.infer<typeof createCategoryBodySchema>
 
 @Controller('/categories')
@@ -24,7 +23,7 @@ export class CreateCategoryController {
     @Body(bodyValidationPipe) body: CreateCategoryBodySchema,
     @CurrentCompany() company: CompanyPayload
   ) {
-    const { name, isActive } = createCategoryBodySchema.parse(body)
+    const { name, isActive } = body
 
     const companyId = company.sub
 

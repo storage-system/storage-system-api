@@ -11,7 +11,6 @@ const fetchCategoriesParamsSchema = z.object({
 })
 
 const paramsValidationPìpe = new ZodValidationPipe(fetchCategoriesParamsSchema)
-
 type FetchCategoriesQuerySchema = z.infer<typeof fetchCategoriesParamsSchema>
 
 @Controller('/categories')

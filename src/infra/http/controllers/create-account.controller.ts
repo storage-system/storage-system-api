@@ -21,6 +21,7 @@ const createAccountBodySchema = z.object({
   password: z.string(),
 })
 
+const bodyValidationPipe = new ZodValidationPipe(createAccountBodySchema)
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
 @Controller('/accounts')
@@ -30,9 +31,8 @@ export class CreateAccountController {
 
   @Post()
   @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(createAccountBodySchema))
-  async handle(@Body() body: CreateAccountBodySchema) {
-    const { name, email, password, contact, responsible } = createAccountBodySchema.parse(body)
+  async handle(@Body(bodyValidationPipe) body: CreateAccountBodySchema) {
+    const { name, email, password, contact, responsible } = body
 
     const result = await this.createCompany.execute({
       name,

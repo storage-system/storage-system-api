@@ -22,7 +22,6 @@ const editCategoryBodySchema = z.object({
 })
 
 const bodyValidationPipe = new ZodValidationPipe(editCategoryBodySchema)
-
 type EditCategoryBodySchema = z.infer<typeof editCategoryBodySchema>
 
 @Controller('/categories/:id')
