@@ -9,6 +9,8 @@ import { FetchCategoriesController } from "./controllers/fetch-categories.contro
 import { AuthenticateCompanyUseCase } from "@/domain/application/authenticate/authenticate-company";
 import { CreateCompanyUseCase } from "@/domain/application/company/use-cases/create-company";
 import { CryptographyModule } from "../cryptography/cryptography.module";
+import { DeleteCategoryController } from "./controllers/delete-category.controller";
+import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete-category";
 @Module({
   imports: [DatabaseModule, CryptographyModule],
   controllers: [
@@ -16,12 +18,14 @@ import { CryptographyModule } from "../cryptography/cryptography.module";
     AuthenticateController,
     CreateCategoryController,
     FetchCategoriesController,
+    DeleteCategoryController,
   ],
   providers: [
     CreateCompanyUseCase,
     AuthenticateCompanyUseCase,
     CreateCategoryUseCase,
     FetchCategoriesUseCase,
+    DeleteCategoryUseCase,
   ]
 })
 export class HttpModule { }
