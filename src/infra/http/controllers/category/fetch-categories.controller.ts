@@ -2,7 +2,7 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { BadRequestException, Controller, Get, Query } from '@nestjs/common'
 import { FetchCategoriesUseCase } from '@/domain/application/category/use-cases/fetch-categories'
 import { Pagination } from '@/core/entities/pagination'
-import { CategoryPresenter } from '../presenters/category-presenter'
+import { CategoryPresenter } from '../../presenters/category-presenter'
 import { z } from 'zod'
 
 const fetchCategoriesParamsSchema = z.object({
