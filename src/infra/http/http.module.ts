@@ -11,6 +11,8 @@ import { CreateCompanyUseCase } from "@/domain/application/company/use-cases/cre
 import { CryptographyModule } from "../cryptography/cryptography.module";
 import { DeleteCategoryController } from "./controllers/delete-category.controller";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete-category";
+import { EditCategoryController } from "./controllers/edit-category.controller";
+import { EditCategoryUseCase } from "@/domain/application/category/use-cases/edit-category";
 @Module({
   imports: [DatabaseModule, CryptographyModule],
   controllers: [
@@ -19,6 +21,7 @@ import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/d
     CreateCategoryController,
     FetchCategoriesController,
     DeleteCategoryController,
+    EditCategoryController,
   ],
   providers: [
     CreateCompanyUseCase,
@@ -26,6 +29,7 @@ import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/d
     CreateCategoryUseCase,
     FetchCategoriesUseCase,
     DeleteCategoryUseCase,
+    EditCategoryUseCase,
   ]
 })
 export class HttpModule { }
