@@ -1,18 +1,9 @@
 import { CurrentCompany } from '@/infrastructure/auth/current-company-decorator'
 import { CompanyPayload } from '@/infrastructure/auth/jwt.strategy'
-import { ZodValidationPipe } from '@/infrastructure/http/pipes/zod-validation-pipe'
 import { BadRequestException, Body, ConflictException, Controller, NotFoundException, Post } from '@nestjs/common'
 import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create-category'
-import { z } from 'zod'
 import { CategoryAlreadyExistsError } from '@/core/errors/category-already-exists-error'
-
-const createCategoryBodySchema = z.object({
-  name: z.string(),
-  isActive: z.boolean(),
-})
-
-const bodyValidationPipe = new ZodValidationPipe(createCategoryBodySchema)
-type CreateCategoryBodySchema = z.infer<typeof createCategoryBodySchema>
+import { CreateCategoryBodySchema, bodyValidationPipe } from './dto/create-category.dto'
 
 @Controller('/categories')
 export class CreateCategoryController {

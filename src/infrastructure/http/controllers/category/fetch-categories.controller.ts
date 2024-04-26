@@ -1,17 +1,8 @@
-import { ZodValidationPipe } from '@/infrastructure/http/pipes/zod-validation-pipe'
 import { BadRequestException, Controller, Get, Query } from '@nestjs/common'
 import { FetchCategoriesUseCase } from '@/domain/application/category/use-cases/fetch-categories'
 import { Pagination } from '@/core/entities/pagination'
 import { CategoryPresenter } from '../../presenters/category-presenter'
-import { z } from 'zod'
-
-const fetchCategoriesParamsSchema = z.object({
-  page: z.coerce.number().default(1),
-  perPage: z.coerce.number().default(10)
-})
-
-const paramsValidationPìpe = new ZodValidationPipe(fetchCategoriesParamsSchema)
-type FetchCategoriesQuerySchema = z.infer<typeof fetchCategoriesParamsSchema>
+import { FetchCategoriesQuerySchema, fetchCategoriesParamsSchema, paramsValidationPìpe } from './dto/fetch-categories.dto'
 
 @Controller('/categories')
 export class FetchCategoriesController {
