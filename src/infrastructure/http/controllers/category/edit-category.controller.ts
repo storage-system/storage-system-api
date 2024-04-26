@@ -8,11 +8,11 @@ import {
   Param,
   Patch,
 } from '@nestjs/common'
-import { CompanyPayload } from '@/infra/auth/jwt.strategy'
-import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import { CompanyPayload } from '@/infrastructure/auth/jwt.strategy'
+import { ZodValidationPipe } from '@/infrastructure/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { EditCategoryUseCase } from '@/domain/application/category/use-cases/edit-category'
-import { CurrentCompany } from '@/infra/auth/current-company-decorator'
+import { CurrentCompany } from '@/infrastructure/auth/current-company-decorator'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 

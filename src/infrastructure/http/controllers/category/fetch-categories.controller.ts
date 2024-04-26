@@ -1,4 +1,4 @@
-import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import { ZodValidationPipe } from '@/infrastructure/http/pipes/zod-validation-pipe'
 import { BadRequestException, Controller, Get, Query } from '@nestjs/common'
 import { FetchCategoriesUseCase } from '@/domain/application/category/use-cases/fetch-categories'
 import { Pagination } from '@/core/entities/pagination'

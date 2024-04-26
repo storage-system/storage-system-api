@@ -1,7 +1,7 @@
 import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
 import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create-company'
-import { Public } from '@/infra/auth/public'
-import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import { Public } from '@/infrastructure/auth/public'
+import { ZodValidationPipe } from '@/infrastructure/http/pipes/zod-validation-pipe'
 import {
   BadRequestException,
   Body,

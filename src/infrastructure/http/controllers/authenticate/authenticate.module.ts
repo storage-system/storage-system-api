@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { CryptographyModule } from "@/infra/cryptography/cryptography.module";
-import { DatabaseModule } from "@/infra/database/database.module";
+import { CryptographyModule } from "@/infrastructure/cryptography/cryptography.module";
+import { DatabaseModule } from "@/infrastructure/database/database.module";
 import { AuthenticateController } from "./authenticate.controller";
 import { AuthenticateCompanyUseCase } from "@/domain/application/authenticate/authenticate-company";
 

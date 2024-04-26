@@ -1,12 +1,12 @@
-import { AppModule } from "@/infra/app.module"
-import { DatabaseModule } from "@/infra/database/database.module"
+import { AppModule } from "@/infrastructure/app.module"
+import { DatabaseModule } from "@/infrastructure/database/database.module"
 import { INestApplication } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { Test } from "@nestjs/testing"
 import { CategoryFactory } from "test/factories/make-category"
 import { CompanyFactory } from "test/factories/make-company"
 import request from 'supertest'
-import { PrismaService } from "@/infra/database/prisma/prisma.service"
+import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
 
 describe('Edit category (E2E)', () => {
   let app: INestApplication

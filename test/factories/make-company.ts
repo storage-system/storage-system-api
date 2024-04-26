@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Company, CompanyProps } from '@/domain/enterprise/company/company'
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { PrismaCompanyMapper } from '@/infra/database/prisma/mappers/prisma-company-mapper'
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { PrismaCompanyMapper } from '@/infrastructure/database/prisma/mappers/prisma-company-mapper'
 
 export function makeCompany(
   override: Partial<CompanyProps> = {},
