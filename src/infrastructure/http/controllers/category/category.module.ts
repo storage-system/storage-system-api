@@ -1,8 +1,5 @@
 import { Module } from "@nestjs/common";
-import { CreateCategoryController } from "./create-category.controller";
-import { DeleteCategoryController } from "./delete-category.controller";
-import { FetchCategoriesController } from "./fetch-categories.controller";
-import { EditCategoryController } from "./edit-category.controller";
+import { CategoryController } from "./category.controller";
 import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create-category";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/fetch-categories";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete-category";
@@ -12,10 +9,7 @@ import { DatabaseModule } from "@/infrastructure/database/database.module";
 @Module({
   imports: [DatabaseModule],
   controllers: [
-    CreateCategoryController,
-    FetchCategoriesController,
-    DeleteCategoryController,
-    EditCategoryController,
+    CategoryController,
   ],
   providers: [
     CreateCategoryUseCase,
