@@ -1,7 +1,6 @@
 import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
 import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create-company'
 import { Public } from '@/infrastructure/auth/public'
-import { ZodValidationPipe } from '@/infrastructure/http/pipes/zod-validation-pipe'
 import {
   BadRequestException,
   Body,
@@ -10,18 +9,7 @@ import {
   HttpCode,
   Post,
 } from '@nestjs/common'
-import { z } from 'zod'
-
-const createAccountBodySchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  contact: z.string(),
-  responsible: z.string(),
-  password: z.string(),
-})
-
-const bodyValidationPipe = new ZodValidationPipe(createAccountBodySchema)
-type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
+import { CreateAccountBodySchema, bodyValidationPipe } from './dto/create-account.dto'
 
 @Controller('/accounts')
 @Public()
@@ -30,7 +18,7 @@ export class CreateAccountController {
 
   @Post()
   @HttpCode(201)
-  async handle(@Body(bodyValidationPipe) body: CreateAccountBodySchema) {
+  async create(@Body(bodyValidationPipe) body: CreateAccountBodySchema) {
     const { name, email, password, contact, responsible } = body
 
     const result = await this.createCompany.execute({
