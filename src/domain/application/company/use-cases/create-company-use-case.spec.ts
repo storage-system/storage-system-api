@@ -1,5 +1,5 @@
 import { FakeHasher } from "test/cryptography/fake-hasher"
-import { CreateCompanyUseCase } from "./create-company"
+import { CreateCompanyUseCase } from "./create-company-use-case"
 import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository"
 
 let inMemoryCompaniesRepository: InMemoryCompaniesRepository

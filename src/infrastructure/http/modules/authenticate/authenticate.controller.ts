@@ -5,7 +5,7 @@ import {
   Post,
   UnauthorizedException,
 } from '@nestjs/common'
-import { AuthenticateCompanyUseCase } from '@/domain/application/authenticate/authenticate-company'
+import { AuthenticateCompanyUseCase } from '@/domain/application/authenticate/authenticate-company-use-case'
 import { WrongCredentialsError } from '@/core/errors/wrong-credentials-error'
 import { Public } from '@/infrastructure/auth/public'
 import { AuthenticateBodySchema, bodyValidationPipe } from './dto/authenticate.dto'
@@ -13,13 +13,13 @@ import { AuthenticateBodySchema, bodyValidationPipe } from './dto/authenticate.d
 @Controller('/sessions')
 @Public()
 export class AuthenticateController {
-  constructor(private authenticateCompany: AuthenticateCompanyUseCase) { }
+  constructor(private authenticateCompanyUseCase: AuthenticateCompanyUseCase) { }
 
   @Post()
   async handle(@Body(bodyValidationPipe) body: AuthenticateBodySchema) {
     const { email, password } = body
 
-    const result = await this.authenticateCompany.execute({
+    const result = await this.authenticateCompanyUseCase.execute({
       email,
       password,
     })

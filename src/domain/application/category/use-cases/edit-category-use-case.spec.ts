@@ -1,6 +1,6 @@
 import { makeCategory } from 'test/factories/make-category'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { EditCategoryUseCase } from './edit-category'
+import { EditCategoryUseCase } from './edit-category-use-case'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'

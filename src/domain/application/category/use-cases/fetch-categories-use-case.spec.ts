@@ -1,7 +1,7 @@
 import { makeCategory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { FetchCategoriesUseCase } from './fetch-categories'
+import { FetchCategoriesUseCase } from './fetch-categories-use-case'
 
 let inMemoryCategoriesRepository: InMemoryCategoriesRepository
 let sut: FetchCategoriesUseCase

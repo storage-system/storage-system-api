@@ -1,5 +1,5 @@
 import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
-import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create-company'
+import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create-company-use-case'
 import { Public } from '@/infrastructure/auth/public'
 import {
   BadRequestException,
@@ -14,14 +14,14 @@ import { CreateAccountBodySchema, bodyValidationPipe } from './dto/create-accoun
 @Controller('/accounts')
 @Public()
 export class CreateAccountController {
-  constructor(private createCompany: CreateCompanyUseCase) { }
+  constructor(private createCompanyUseCase: CreateCompanyUseCase) { }
 
   @Post()
   @HttpCode(201)
   async create(@Body(bodyValidationPipe) body: CreateAccountBodySchema) {
     const { name, email, password, contact, responsible } = body
 
-    const result = await this.createCompany.execute({
+    const result = await this.createCompanyUseCase.execute({
       name,
       email,
       password,

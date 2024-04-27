@@ -1,26 +1,26 @@
-import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create-category";
+import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create-category-use-case";
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, HttpCode, MethodNotAllowedException, NotFoundException, Param, Patch, Post, Query } from "@nestjs/common";
 import { CreateCategoryBodySchema, bodyValidationPipe } from "./dto/create-category.dto";
 import { CurrentCompany } from "@/infrastructure/auth/current-company-decorator";
 import { CompanyPayload } from "@/infrastructure/auth/jwt.strategy";
 import { CategoryAlreadyExistsError } from "@/core/errors/category-already-exists-error";
-import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/fetch-categories";
+import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/fetch-categories-use-case";
 import { FetchCategoriesQuerySchema, fetchCategoriesParamsSchema, paramsValidationPìpe } from "./dto/fetch-categories.dto";
 import { Pagination } from "@/core/entities/pagination";
 import { CategoryPresenter } from "../../presenters/category-presenter";
-import { EditCategoryUseCase } from "@/domain/application/category/use-cases/edit-category";
+import { EditCategoryUseCase } from "@/domain/application/category/use-cases/edit-category-use-case";
 import { EditCategoryBodySchema } from "./dto/edit-category.dto";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { NotAllowedError } from "@/core/errors/not-allowed-error";
-import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete-category";
+import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete-category-use-case";
 
 @Controller('/categories')
-export class CategoryController{
+export class CategoryController {
   constructor(
-    private createCategory: CreateCategoryUseCase,
-    private fetchCategories: FetchCategoriesUseCase,
-    private editCategory: EditCategoryUseCase,
-    private deleteCategory: DeleteCategoryUseCase,
+    private createCategoryUseCase: CreateCategoryUseCase,
+    private fetchCategoriesUseCase: FetchCategoriesUseCase,
+    private editCategoryUseCase: EditCategoryUseCase,
+    private deleteCategoryUseCase: DeleteCategoryUseCase,
   ) { }
 
   @Post()
@@ -36,7 +36,7 @@ export class CategoryController{
       throw new NotFoundException('Company not found');
     }
 
-    const result = await this.createCategory.execute({
+    const result = await this.createCategoryUseCase.execute({
       name,
       isActive,
       companyId,
@@ -60,7 +60,7 @@ export class CategoryController{
   ) {
     const { page, perPage } = fetchCategoriesParamsSchema.parse(query)
 
-    const result = await this.fetchCategories.execute({
+    const result = await this.fetchCategoriesUseCase.execute({
       page,
       perPage
     })
@@ -85,7 +85,7 @@ export class CategoryController{
     const { name, isActive } = body
     const companyId = company.sub
 
-    const result = await this.editCategory.execute({
+    const result = await this.editCategoryUseCase.execute({
       name,
       isActive,
       categoryId,
@@ -110,7 +110,7 @@ export class CategoryController{
   async delete(
     @Param('id') categoryId: string,
   ) {
-    const result = await this.deleteCategory.execute({
+    const result = await this.deleteCategoryUseCase.execute({
       categoryId,
     })
 

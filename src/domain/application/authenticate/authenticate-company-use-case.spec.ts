@@ -1,7 +1,7 @@
 import { FakeEncrypter } from "test/cryptography/fake-encrypter"
 import { FakeHasher } from "test/cryptography/fake-hasher"
 import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository"
-import { AuthenticateCompanyUseCase } from "./authenticate-company"
+import { AuthenticateCompanyUseCase } from "./authenticate-company-use-case"
 import { makeCompany } from "test/factories/make-company"
 
 

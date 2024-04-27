@@ -1,4 +1,4 @@
-import { DeleteCategoryUseCase } from './delete-category'
+import { DeleteCategoryUseCase } from './delete-category-use-case'
 import { makeCategory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'

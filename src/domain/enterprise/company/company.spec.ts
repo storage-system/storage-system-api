@@ -5,6 +5,7 @@ describe('Company Entity', () => {
     const props = {
       name: 'Company 01',
       email: 'test@example.com',
+      password: '123456',
       contact: '123456789',
       responsible: 'John Doe',
     }
