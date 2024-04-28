@@ -75,4 +75,13 @@ export class Company extends Entity<CompanyProps> {
 
     return company
   }
+
+  update(aCompany: Partial<CompanyProps>) {
+    this.props.name = aCompany.name ?? this.name
+    this.props.email = aCompany.email ?? this.email
+    this.props.contact = aCompany.contact ?? this.contact
+    this.props.responsible = aCompany.responsible ?? this.responsible
+
+    this.touch()
+  }
 }
