@@ -33,8 +33,10 @@ export class EditCategoryUseCase {
       return left(new NotAllowedError())
     }
 
-    category.name = name
-    category.isActive = isActive
+    category.update({
+      name,
+      isActive,
+    })
 
     await this.categoriesRepository.save(category)
 

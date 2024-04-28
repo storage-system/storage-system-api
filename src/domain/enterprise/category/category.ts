@@ -72,4 +72,11 @@ export class Category extends Entity<CategoryProps> {
 
     return category
   }
+
+  update(aCategory: Partial<CategoryProps>) {
+    this.props.name = aCategory.name ?? this.name
+    this.props.isActive = aCategory.isActive ?? this.isActive
+
+    this.touch()
+  }
 }
