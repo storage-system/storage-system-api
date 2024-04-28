@@ -1,18 +1,18 @@
-import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create-category-use-case";
+import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create/create-category-use-case";
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, HttpCode, MethodNotAllowedException, NotFoundException, Param, Patch, Post, Query } from "@nestjs/common";
 import { CreateCategoryBodySchema, bodyValidationPipe } from "./dto/create-category.dto";
 import { CurrentCompany } from "@/infrastructure/auth/current-company-decorator";
 import { CompanyPayload } from "@/infrastructure/auth/jwt.strategy";
 import { CategoryAlreadyExistsError } from "@/core/errors/category-already-exists-error";
-import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/fetch-categories-use-case";
+import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
 import { FetchCategoriesQuerySchema, fetchCategoriesParamsSchema, paramsValidationPìpe } from "./dto/fetch-categories.dto";
 import { Pagination } from "@/core/entities/pagination";
 import { CategoryPresenter } from "../../presenters/category-presenter";
-import { EditCategoryUseCase } from "@/domain/application/category/use-cases/edit-category-use-case";
+import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
 import { EditCategoryBodySchema } from "./dto/edit-category.dto";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { NotAllowedError } from "@/core/errors/not-allowed-error";
-import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete-category-use-case";
+import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
 
 @Controller('/categories')
 export class CategoryController {

@@ -1,5 +1,5 @@
 import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
-import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create-company-use-case'
+import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create/create-company-use-case'
 import { Public } from '@/infrastructure/auth/public'
 import {
   BadRequestException,

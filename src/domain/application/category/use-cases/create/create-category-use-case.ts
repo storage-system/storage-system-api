@@ -1,5 +1,5 @@
 import { Category } from '@/domain/enterprise/category/category'
-import { CategoriesRepository } from '../categories-repository'
+import { CategoriesRepository } from '../../categories-repository'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Either, left, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'

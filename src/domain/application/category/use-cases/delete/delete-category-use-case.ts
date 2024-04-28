@@ -1,5 +1,5 @@
 import { Either, left, right } from '@/core/either'
-import { CategoriesRepository } from '../categories-repository'
+import { CategoriesRepository } from '../../categories-repository'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { Injectable } from '@nestjs/common'
 
