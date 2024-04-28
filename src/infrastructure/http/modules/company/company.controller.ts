@@ -21,23 +21,12 @@ export class CreateAccountController {
   async create(@Body(bodyValidationPipe) body: CreateAccountBodySchema) {
     const { name, email, password, contact, responsible } = body
 
-    const result = await this.createCompanyUseCase.execute({
+    return await this.createCompanyUseCase.execute({
       name,
       email,
       password,
       contact,
       responsible,
     })
-
-    if (result.isLeft()) {
-      const error = result.value
-
-      switch (error.constructor) {
-        case CompanyAlreadyExistsError:
-          throw new ConflictException(error.message)
-        default:
-          throw new BadRequestException(error.message)
-      }
-    }
   }
 }
