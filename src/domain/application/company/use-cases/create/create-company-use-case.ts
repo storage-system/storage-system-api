@@ -1,4 +1,4 @@
-import { Either, left, right } from '@/core/either'
+import { Either, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 import { HashGenerator } from '../../../cryptography/hash-generator'
 import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
@@ -43,7 +43,6 @@ export class CreateCompanyUseCase {
 
     if (companyWithSameEmail) {
       notification.appendAnError(new CompanyAlreadyExistsError(email))
-      return left(notification)
     }
 
     const hashedPassword = await this.hashGenerator.hash(password)
@@ -56,11 +55,11 @@ export class CreateCompanyUseCase {
       password: hashedPassword,
     })
 
-    await this.companiesRepository.create(company)
-
     if (notification.hasErrors()) {
       throw new NotificationException('Erro ao criar empresa', notification)
     }
+
+    await this.companiesRepository.create(company)
 
     return right({
       company,
