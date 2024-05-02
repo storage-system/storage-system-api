@@ -9,5 +9,5 @@ const createAccountBodySchema = z.object({
   password: z.string(),
 })
 
-export const bodyValidationPipe = new ZodValidationPipe(createAccountBodySchema)
+export const createAccountBodyValidationPipe = new ZodValidationPipe(createAccountBodySchema)
 export type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>

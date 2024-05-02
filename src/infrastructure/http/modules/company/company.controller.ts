@@ -9,7 +9,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common'
-import { CreateAccountBodySchema, bodyValidationPipe } from './dto/create-account.dto'
+import { CreateAccountBodySchema, createAccountBodyValidationPipe } from './dto/create-account.dto'
 import { EditCompanyBodySchema, editCompanyBodyValidationPipe } from './dto/edit-company.dto'
 import { EditCompanyUseCase } from '@/domain/application/company/use-cases/update/edit-company-use-case'
 
@@ -23,7 +23,7 @@ export class CompanyController {
 
   @Post()
   @HttpCode(201)
-  async create(@Body(bodyValidationPipe) body: CreateAccountBodySchema) {
+  async create(@Body(createAccountBodyValidationPipe) body: CreateAccountBodySchema) {
     const { name, email, password, contact, responsible } = body
 
      await this.createCompanyUseCase.execute({
