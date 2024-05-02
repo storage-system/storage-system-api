@@ -22,11 +22,36 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     return PrismaCompanyMapper.toDomain(company)
   }
 
+  async findById(id: string): Promise<Company | null> {
+    const company = await this.prisma.company.findUnique({
+      where: {
+        id,
+      }
+    })
+
+    if (!company) {
+      return null
+    }
+
+    return PrismaCompanyMapper.toDomain(company)
+  }
+
   async create(company: Company): Promise<void> {
     const data = PrismaCompanyMapper.toPersistence(company)
 
     await this.prisma.company.create({
       data,
+    })
+  }
+
+  async save(company: Company): Promise<void> {
+    const data = PrismaCompanyMapper.toPersistence(company)
+
+    await this.prisma.company.update({
+      where: {
+        id: data.id,
+      },
+      data
     })
   }
 }
