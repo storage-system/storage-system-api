@@ -14,7 +14,6 @@ import { EditCompanyBodySchema, editCompanyBodyValidationPipe } from './dto/edit
 import { EditCompanyUseCase } from '@/domain/application/company/use-cases/update/edit-company-use-case'
 
 @Controller('/accounts')
-@Public()
 export class CompanyController {
   constructor(
     private createCompanyUseCase: CreateCompanyUseCase,
@@ -22,6 +21,7 @@ export class CompanyController {
   ) { }
 
   @Post()
+  @Public()
   @HttpCode(201)
   async create(@Body(createAccountBodyValidationPipe) body: CreateAccountBodySchema) {
     const { name, email, password, contact, responsible } = body
