@@ -11,7 +11,7 @@ interface AuthenticateCompanyUseCaseRequest {
 }
 
 type AuthenticateCompanyUseCaseResponse = {
-    accessToken: string
+  accessToken: string
 }
 
 @Injectable()

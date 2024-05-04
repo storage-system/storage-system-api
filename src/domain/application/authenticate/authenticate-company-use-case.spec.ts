@@ -25,20 +25,22 @@ describe('Authenticate Company', () => {
   })
 
   it('should be able to authenticate a company', async () => {
+    const passwordMock = '123456'
+
     const company = makeCompany({
       email: 'johndoeeletronics@example.com',
-      password: await fakeHasher.hash('123456'),
+      password: await fakeHasher.hash(passwordMock),
     })
 
     inMemoryCompaniesRepository.items.push(company)
 
     const result = await sut.execute({
       email: company.email,
-      password: '123456',
+      password: passwordMock,
     })
 
-    expect(result.isRight()).toBe(true)
-    expect(result.value).toEqual({
+    expect(result.accessToken).toBeTruthy()
+    expect(result).toEqual({
       accessToken: expect.any(String),
     })
   })
