@@ -1,10 +1,7 @@
-import { Either, right } from '@/core/either'
-import { NotAllowedError } from '@/core/errors/not-allowed-error'
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { Injectable } from '@nestjs/common'
 import { CompaniesRepository } from '../../companies-repository'
-import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import ResourceNotFoundException from '@/core/exception/not-found-exception'
 
 interface EditCompanyUseCaseRequest {
   name: string | undefined
@@ -13,8 +10,6 @@ interface EditCompanyUseCaseRequest {
   responsible: string | undefined
   companyId: string
 }
-
-type EditCompanyUseCaseResponse = Either<ResourceNotFoundError | NotAllowedError, {}>
 
 @Injectable()
 export class EditCompanyUseCase {
@@ -26,7 +21,7 @@ export class EditCompanyUseCase {
     contact,
     responsible,
     companyId,
-  }: EditCompanyUseCaseRequest): Promise<EditCompanyUseCaseResponse> {
+  }: EditCompanyUseCaseRequest): Promise<void> {
     const company = await this.companiesRepository.findById(companyId)
 
     if (!company) {
@@ -41,7 +36,5 @@ export class EditCompanyUseCase {
     })
 
     await this.companiesRepository.save(company)
-
-    return right({})
   }
 }

@@ -2,7 +2,6 @@ import { InMemoryCompaniesRepository } from "test/repositories/in-memory-compani
 import { EditCompanyUseCase } from "./edit-company-use-case";
 import { makeCompany } from "test/factories/make-company";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 
 let inMemoryCompaniesRepository: InMemoryCompaniesRepository
 let sut: EditCompanyUseCase
@@ -36,15 +35,16 @@ describe('Edit Company', () => {
   })
 
   it('should not be able to edit a company that does not exist', async () => {
-    const result = await sut.execute({
-      companyId: 'company-id-01',
+    const companyId = 'company-id-01'
+    const nonExistentCompanyUpdate = {
+      companyId,
       name: 'company-01',
       contact: 'contact-01',
       email: 'email-01@example.com',
       responsible: 'responsible-01'
-    })
+    }
 
-    expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+    await expect(sut.execute(nonExistentCompanyUpdate))
+      .rejects.toThrowError(`Empresa com ID ${companyId} não foi encontrado`)
   })
 })
