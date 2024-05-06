@@ -2,24 +2,29 @@ import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-catego
 import { CreateCategoryUseCase } from './create-category-use-case'
 import { Category } from '@/domain/enterprise/category/category'
 
-let inMemoryCategoriesRepository: InMemoryCategoriesRepository
-let sut: CreateCategoryUseCase
+let repository: InMemoryCategoriesRepository
+let useCase: CreateCategoryUseCase
 
 describe('Create Category', () => {
   beforeEach(() => {
-    inMemoryCategoriesRepository = new InMemoryCategoriesRepository()
-    sut = new CreateCategoryUseCase(inMemoryCategoriesRepository)
+    repository = new InMemoryCategoriesRepository()
+    useCase = new CreateCategoryUseCase(repository)
+  })
+
+  it('dependencies should be defined', (): void => {
+    expect(repository).toBeDefined()
+    expect(useCase).toBeDefined()
   })
 
   it('should be able to create a category', async () => {
-    const result = await sut.execute({
+    const result = await useCase.execute({
       name: 'category-01',
       companyId: 'company-01',
       isActive: true,
     })
 
     expect(result.isRight()).toBeTruthy()
-    expect(inMemoryCategoriesRepository.items[0]).toBeInstanceOf(Category)
+    expect(repository.items[0]).toBeInstanceOf(Category)
   })
 
   it('should not be able to create a category if it exist', async () => {
@@ -29,10 +34,10 @@ describe('Create Category', () => {
       isActive: true,
     }
 
-    await sut.execute(categoryMock)
-    const result = await sut.execute(categoryMock)
+    await useCase.execute(categoryMock)
+    const result = await useCase.execute(categoryMock)
 
     expect(result.isLeft()).toBe(true)
-    expect(inMemoryCategoriesRepository.items).toHaveLength(1)
+    expect(repository.items).toHaveLength(1)
   })
 })

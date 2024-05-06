@@ -4,24 +4,30 @@ import { InMemoryCompaniesRepository } from "test/repositories/in-memory-compani
 import { AuthenticateCompanyUseCase } from "./authenticate-company-use-case"
 import { makeCompany } from "test/factories/make-company"
 
-
-let inMemoryCompaniesRepository: InMemoryCompaniesRepository
+let repository: InMemoryCompaniesRepository
 let fakeHasher: FakeHasher
 let encrypter: FakeEncrypter
 
-let sut: AuthenticateCompanyUseCase
+let useCase: AuthenticateCompanyUseCase
 
 describe('Authenticate Company', () => {
   beforeEach(() => {
-    inMemoryCompaniesRepository = new InMemoryCompaniesRepository()
+    repository = new InMemoryCompaniesRepository()
     fakeHasher = new FakeHasher()
     encrypter = new FakeEncrypter()
 
-    sut = new AuthenticateCompanyUseCase(
-      inMemoryCompaniesRepository,
+    useCase = new AuthenticateCompanyUseCase(
+      repository,
       fakeHasher,
       encrypter,
     )
+  })
+
+  it('dependencies should be defined', (): void => {
+    expect(repository).toBeDefined()
+    expect(fakeHasher).toBeDefined()
+    expect(encrypter).toBeDefined()
+    expect(useCase).toBeDefined()
   })
 
   it('should be able to authenticate a company', async () => {
@@ -32,9 +38,9 @@ describe('Authenticate Company', () => {
       password: await fakeHasher.hash(passwordMock),
     })
 
-    inMemoryCompaniesRepository.items.push(company)
+    repository.items.push(company)
 
-    const result = await sut.execute({
+    const result = await useCase.execute({
       email: company.email,
       password: passwordMock,
     })

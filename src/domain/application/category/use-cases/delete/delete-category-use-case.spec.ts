@@ -3,24 +3,29 @@ import { makeCategory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 
-let inMemoryCategoriesRepository: InMemoryCategoriesRepository
-let sut: DeleteCategoryUseCase
+let repository: InMemoryCategoriesRepository
+let useCase: DeleteCategoryUseCase
 
 describe('Create Category', () => {
   beforeEach(() => {
-    inMemoryCategoriesRepository = new InMemoryCategoriesRepository()
-    sut = new DeleteCategoryUseCase(inMemoryCategoriesRepository)
+    repository = new InMemoryCategoriesRepository()
+    useCase = new DeleteCategoryUseCase(repository)
+  })
+
+  it('dependencies should be defined', (): void => {
+    expect(repository).toBeDefined()
+    expect(useCase).toBeDefined()
   })
 
   it('should be able to delete a category', async () => {
     const newCategory = makeCategory({}, new UniqueEntityID('category-01'))
 
-    await inMemoryCategoriesRepository.create(newCategory)
+    await repository.create(newCategory)
 
-    await sut.execute({
+    await useCase.execute({
       categoryId: 'category-01',
     })
 
-    expect(inMemoryCategoriesRepository.items).toHaveLength(0)
+    expect(repository.items).toHaveLength(0)
   })
 })

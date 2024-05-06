@@ -3,13 +3,18 @@ import { EditCompanyUseCase } from "./edit-company-use-case";
 import { makeCompany } from "test/factories/make-company";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 
-let inMemoryCompaniesRepository: InMemoryCompaniesRepository
-let sut: EditCompanyUseCase
+let repository: InMemoryCompaniesRepository
+let useCase: EditCompanyUseCase
 
 describe('Edit Company', () => {
   beforeEach(() => {
-    inMemoryCompaniesRepository = new InMemoryCompaniesRepository()
-    sut = new EditCompanyUseCase(inMemoryCompaniesRepository)
+    repository = new InMemoryCompaniesRepository()
+    useCase = new EditCompanyUseCase(repository)
+  })
+
+  it('dependencies should be defined', (): void => {
+    expect(useCase).toBeDefined()
+    expect(repository).toBeDefined()
   })
 
   it('should be able to edit a company', async () => {
@@ -17,7 +22,7 @@ describe('Edit Company', () => {
 
     const newCompany = makeCompany({}, new UniqueEntityID(companyId))
 
-    await inMemoryCompaniesRepository.create(newCompany)
+    await repository.create(newCompany)
 
     const updateCompany = {
       name: 'company-02',
@@ -27,9 +32,9 @@ describe('Edit Company', () => {
       companyId,
     }
 
-    await sut.execute(updateCompany)
+    await useCase.execute(updateCompany)
 
-    expect(inMemoryCompaniesRepository.items[0]).toMatchObject({
+    expect(repository.items[0]).toMatchObject({
       name: updateCompany.name,
     })
   })
@@ -44,7 +49,7 @@ describe('Edit Company', () => {
       responsible: 'responsible-01'
     }
 
-    await expect(sut.execute(nonExistentCompanyUpdate))
+    await expect(useCase.execute(nonExistentCompanyUpdate))
       .rejects.toThrowError(`Empresa com ID ${companyId} não foi encontrado`)
   })
 })

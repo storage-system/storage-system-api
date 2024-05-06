@@ -5,13 +5,18 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
-let inMemoryCategoriesRepository: InMemoryCategoriesRepository
-let sut: EditCategoryUseCase
+let repository: InMemoryCategoriesRepository
+let useCase: EditCategoryUseCase
 
 describe('Edit Category', () => {
   beforeEach(() => {
-    inMemoryCategoriesRepository = new InMemoryCategoriesRepository()
-    sut = new EditCategoryUseCase(inMemoryCategoriesRepository)
+    repository = new InMemoryCategoriesRepository()
+    useCase = new EditCategoryUseCase(repository)
+  })
+
+  it('dependencies should be defined', (): void => {
+    expect(repository).toBeDefined()
+    expect(useCase).toBeDefined()
   })
 
   it('should be able to edit a category', async () => {
@@ -21,23 +26,23 @@ describe('Edit Category', () => {
       },
       new UniqueEntityID('category-01'))
 
-    await inMemoryCategoriesRepository.create(newCategory)
+    await repository.create(newCategory)
 
-    await sut.execute({
+    await useCase.execute({
       companyId: 'company-01',
       categoryId: 'category-01',
       name: 'category-update-01',
       isActive: true,
     })
 
-    expect(inMemoryCategoriesRepository.items[0]).toMatchObject({
+    expect(repository.items[0]).toMatchObject({
       name: 'category-update-01',
       isActive: true,
     })
   })
 
   it('should not be able to edit a category that does not exist', async () => {
-    const result = await sut.execute({
+    const result = await useCase.execute({
       categoryId: 'category-01',
       companyId: 'company-01',
       name: 'category-01',
@@ -55,9 +60,9 @@ describe('Edit Category', () => {
       },
       new UniqueEntityID('category-01'))
 
-    await inMemoryCategoriesRepository.create(newCategory)
+    await repository.create(newCategory)
 
-    const result = await sut.execute({
+    const result = await useCase.execute({
       categoryId: 'category-01',
       companyId: 'company-02',
       name: 'category-update-01',

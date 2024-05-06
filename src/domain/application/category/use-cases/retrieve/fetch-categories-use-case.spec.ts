@@ -3,13 +3,13 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { FetchCategoriesUseCase } from './fetch-categories-use-case'
 
-let inMemoryCategoriesRepository: InMemoryCategoriesRepository
-let sut: FetchCategoriesUseCase
+let repository: InMemoryCategoriesRepository
+let useCase: FetchCategoriesUseCase
 
 describe('Fetch Categories Use Case', () => {
   beforeEach(async () => {
-    inMemoryCategoriesRepository = new InMemoryCategoriesRepository()
-    sut = new FetchCategoriesUseCase(inMemoryCategoriesRepository)
+    repository = new InMemoryCategoriesRepository()
+    useCase = new FetchCategoriesUseCase(repository)
 
     const newCategory = makeCategory(
       {
@@ -18,11 +18,16 @@ describe('Fetch Categories Use Case', () => {
       new UniqueEntityID('category-01'),
     )
 
-    await inMemoryCategoriesRepository.create(newCategory)
+    await repository.create(newCategory)
+  })
+
+  it('dependencies should be defined', (): void => {
+    expect(repository).toBeDefined()
+    expect(useCase).toBeDefined()
   })
 
   it('should be able to fetch categories', async () => {
-    const result = await sut.execute({
+    const result = await useCase.execute({
       page: 1,
       perPage: 10,
     })
@@ -35,7 +40,7 @@ describe('Fetch Categories Use Case', () => {
   })
 
   it('should get an occurrence with 5 items per page', async () => {
-    const result = await sut.execute({
+    const result = await useCase.execute({
       page: 1,
       perPage: 5,
     })
@@ -48,7 +53,7 @@ describe('Fetch Categories Use Case', () => {
   })
 
   it('should get an occurrence on page 2', async () => {
-    const result = await sut.execute({
+    const result = await useCase.execute({
       page: 2,
       perPage: 10,
     })
