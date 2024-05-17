@@ -42,15 +42,14 @@ describe('Edit Category', () => {
   })
 
   it('should not be able to edit a category that does not exist', async () => {
-    const result = await useCase.execute({
+    const response = useCase.execute({
       categoryId: 'category-01',
       companyId: 'company-01',
       name: 'category-01',
       isActive: true,
     })
 
-    expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+    expect(response).rejects.toThrow(`Categoria com ID category-01 não foi encontrado`)
   })
 
   it('should not be able to edit a category from another company', async () => {
@@ -62,14 +61,13 @@ describe('Edit Category', () => {
 
     await repository.create(newCategory)
 
-    const result = await useCase.execute({
+    const response = useCase.execute({
       categoryId: 'category-01',
       companyId: 'company-02',
       name: 'category-update-01',
       isActive: true,
     })
 
-    expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(NotAllowedError)
+    expect(response).rejects.toThrow('Unauthorized')
   })
 })

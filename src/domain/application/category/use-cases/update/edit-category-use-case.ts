@@ -36,7 +36,7 @@ export class EditCategoryUseCase {
     }
 
     if (companyId !== category.companyId.toString()) {
-      throw new NotAuthorizedException('Sem permissão', notification);
+      throw new NotAuthorizedException('Unauthorized', notification);
     }
 
     category.update({
