@@ -6,11 +6,11 @@
   "rules": {
     "no-useless-constructor": "off",
     "prettier/prettier": [
-      "error", 
+      "error",
       {
         "endOfLine": "off"
       }
-  ]
+    ]
   },
   "env": {
     "vitest-globals/env": true
