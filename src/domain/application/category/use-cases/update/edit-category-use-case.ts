@@ -1,8 +1,12 @@
-import { Either, left, right } from '@/core/either'
+import { Either, right } from '@/core/either'
 import { CategoriesRepository } from '../../categories-repository'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { Injectable } from '@nestjs/common'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import NotAuthorizedException from '@/core/exception/not-authorized-exception'
+import { Notification } from '@/core/validation/notification'
 
 interface EditCategoryUseCaseRequest {
   name: string
@@ -23,14 +27,16 @@ export class EditCategoryUseCase {
     categoryId,
     companyId,
   }: EditCategoryUseCaseRequest): Promise<EditCategoryUseCaseResponse> {
+    const notification = Notification.create()
+
     const category = await this.categoriesRepository.findById(categoryId)
 
     if (!category) {
-      return left(new ResourceNotFoundError())
+      throw ResourceNotFoundException.with('Categoria', new UniqueEntityID(categoryId));
     }
 
     if (companyId !== category.companyId.toString()) {
-      return left(new NotAllowedError())
+      throw new NotAuthorizedException('Sem permissão', notification);
     }
 
     category.update({

@@ -85,25 +85,12 @@ export class CategoryController {
     const { name, isActive } = body
     const companyId = company.sub
 
-    const result = await this.editCategoryUseCase.execute({
+    return await this.editCategoryUseCase.execute({
       name,
       isActive,
       categoryId,
       companyId,
     })
-
-    if (result.isLeft()) {
-      const error = result.value
-
-      switch (error.constructor) {
-        case ResourceNotFoundError:
-          throw new NotFoundException(error.message)
-        case NotAllowedError:
-          throw new MethodNotAllowedException(error.message)
-        default:
-          throw new BadRequestException(error.message)
-      }
-    }
   }
 
   @Delete('/:id')
