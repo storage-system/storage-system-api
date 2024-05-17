@@ -1,7 +1,9 @@
-import { Either, left, right } from '@/core/either'
+import { Either, right } from '@/core/either'
 import { CategoriesRepository } from '../../categories-repository'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { Injectable } from '@nestjs/common'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import ResourceNotFoundException from '@/core/exception/not-found-exception'
 
 interface DeleteCategoryUseCaseRequest {
   categoryId: string
@@ -19,7 +21,7 @@ export class DeleteCategoryUseCase {
     const category = await this.categoriesRepository.findById(categoryId)
 
     if (!category) {
-      return left(new ResourceNotFoundError())
+      throw ResourceNotFoundException.with('Categoria', new UniqueEntityID(categoryId));
     }
 
     await this.categoriesRepository.delete(category)

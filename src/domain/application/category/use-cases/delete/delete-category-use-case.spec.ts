@@ -28,4 +28,12 @@ describe('Create Category', () => {
 
     expect(repository.items).toHaveLength(0)
   })
+
+  it('should not be able to delete a category that does not exist', async () => {
+    const response = useCase.execute({
+      categoryId: 'category-01',
+    })
+
+    expect(response).rejects.toThrow(`Categoria com ID category-01 não foi encontrado`)
+  })
 })
