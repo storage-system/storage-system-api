@@ -5,6 +5,8 @@ import { Either, left, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 import { CategoryAlreadyExistsError } from '@/core/errors/category-already-exists-error'
 import { Slug } from '@/domain/enterprise/slug/slug'
+import NotificationException from '@/core/exception/notification-exception'
+import { Notification } from '@/core/validation/notification'
 
 interface CreateCategoryUseCaseRequest {
   name: string
@@ -23,10 +25,12 @@ export class CreateCategoryUseCase {
     companyId,
     isActive,
   }: CreateCategoryUseCaseRequest): Promise<CreateCategoryUseCaseResponse> {
+    const notification = Notification.create()
+
     const existingCategory = await this.categoriesRepository.findBySlug(Slug.convertToSlug(name));
 
     if (existingCategory) {
-      return left(new CategoryAlreadyExistsError(name));
+      throw new NotificationException(`Category "${name}" already exists.`, notification)
     }
 
     const category = Category.create({

@@ -35,9 +35,8 @@ describe('Create Category', () => {
     }
 
     await useCase.execute(categoryMock)
-    const result = await useCase.execute(categoryMock)
+    const response = useCase.execute(categoryMock)
 
-    expect(result.isLeft()).toBe(true)
-    expect(repository.items).toHaveLength(1)
+    expect(response).rejects.toThrow(`Category "${categoryMock.name}" already exists.`)
   })
 })
