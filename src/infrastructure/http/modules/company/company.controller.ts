@@ -26,7 +26,7 @@ export class CompanyController {
   async create(@Body(createAccountBodyValidationPipe) body: CreateAccountBodySchema) {
     const { name, email, password, contact, responsible } = body
 
-     await this.createCompanyUseCase.execute({
+    await this.createCompanyUseCase.execute({
       name,
       email,
       password,

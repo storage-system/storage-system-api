@@ -42,18 +42,9 @@ export class CategoryController {
   ) {
     const { page, perPage } = fetchCategoriesParamsSchema.parse(query)
 
-    const result = await this.fetchCategoriesUseCase.execute({
+    return await this.fetchCategoriesUseCase.execute({
       page,
       perPage
-    })
-
-    if (result.isLeft()) {
-      throw new BadRequestException()
-    }
-
-    return new Pagination({
-      ...result.value,
-      items: result.value.items?.map(CategoryPresenter.toHTTP)
     })
   }
 
