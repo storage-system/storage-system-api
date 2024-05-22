@@ -40,7 +40,7 @@ export class CategoryController {
   async list(
     @Query(paramsValidationPìpe) query: FetchCategoriesQuerySchema,
   ) {
-    const { page, perPage } = fetchCategoriesParamsSchema.parse(query)
+    const { page, perPage } = query
 
     return await this.fetchCategoriesUseCase.execute({
       page,
