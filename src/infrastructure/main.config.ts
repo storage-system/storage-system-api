@@ -4,6 +4,8 @@ import { ResourceNotFoundExceptionFilter } from './exceptions/resource-not-found
 import { WrongCredentialsExceptionFilter } from './exceptions/wrong-credentials-exception.filter'
 
 export function MainConfig(app: INestApplication) {
+  app.enableCors();
+  
   app.useGlobalFilters(
     new NotificationExceptionFilter(),
     new ResourceNotFoundExceptionFilter(),
