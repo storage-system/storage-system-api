@@ -12,7 +12,8 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
   async findById(id: string): Promise<Category | null> {
     const category = await this.prisma.category.findUnique({
       where: {
-        id
+        id,
+        deletedAt: null
       }
     })
 
@@ -25,6 +26,9 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 
   async findAll(params: PaginationProps<Category>): Promise<Pagination<Category>> {
     const categories = await this.prisma.category.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: {
         slug: 'asc'
       },
@@ -46,6 +50,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     const category = await this.prisma.category.findUnique({
       where: {
         slug,
+        deletedAt: null,
       }
     })
 
@@ -78,9 +83,13 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
   async delete(category: Category) {
     const data = PrismaCategoryMapper.toPersistence(category)
 
-    await this.prisma.category.delete({
+    await this.prisma.category.update({
       where: {
         id: data.id,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date()
       }
     })
   }

@@ -1,12 +1,10 @@
 import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create/create-category-use-case";
-import { BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from "@nestjs/common";
 import { CreateCategoryBodySchema, bodyValidationPipe } from "./dto/create-category.dto";
 import { CurrentCompany } from "@/infrastructure/auth/current-company-decorator";
 import { CompanyPayload } from "@/infrastructure/auth/jwt.strategy";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
-import { FetchCategoriesQuerySchema, fetchCategoriesParamsSchema, paramsValidationPìpe } from "./dto/fetch-categories.dto";
-import { Pagination } from "@/core/entities/pagination";
-import { CategoryPresenter } from "../../presenters/category-presenter";
+import { FetchCategoriesQuerySchema, paramsValidationPìpe } from "./dto/fetch-categories.dto";
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
 import { EditCategoryBodySchema } from "./dto/edit-category.dto";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
