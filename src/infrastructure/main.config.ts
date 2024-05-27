@@ -5,7 +5,7 @@ import { WrongCredentialsExceptionFilter } from './exceptions/wrong-credentials-
 
 export function MainConfig(app: INestApplication) {
   app.enableCors();
-  
+  app.setGlobalPrefix('/api')
   app.useGlobalFilters(
     new NotificationExceptionFilter(),
     new ResourceNotFoundExceptionFilter(),
