@@ -43,6 +43,10 @@ export class AuthenticateCompanyUseCase {
 
     const accessToken = await this.encrypter.encrypt({
       sub: company.id.toString(),
+      name: company.name,
+      email: company.email,
+      contact: company.contact,
+      responsible: company.responsible,
     })
 
     return {
