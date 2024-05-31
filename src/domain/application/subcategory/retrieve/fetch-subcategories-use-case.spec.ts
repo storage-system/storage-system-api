@@ -1,15 +1,16 @@
 import { makeCategory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { FetchCategoriesUseCase } from './fetch-categories-use-case'
+import { InMemorySubcategoriesRepository } from 'test/repositories/in-memory-subcategories-repository'
+import { FetchSubcategoriesUseCase } from './fetch-subcategories-use-case'
+import { makeSubcategory } from 'test/factories/make-subcategory'
 
-let repository: InMemoryCategoriesRepository
-let useCase: FetchCategoriesUseCase
+let repository: InMemorySubcategoriesRepository
+let useCase: FetchSubcategoriesUseCase
 
-describe('Fetch Categories Use Case', () => {
+describe('Fetch Subcategories Use Case', () => {
   beforeEach(async () => {
-    repository = new InMemoryCategoriesRepository()
-    useCase = new FetchCategoriesUseCase(repository)
+    repository = new InMemorySubcategoriesRepository()
+    useCase = new FetchSubcategoriesUseCase(repository)
 
     const newCategory = makeCategory(
       {
@@ -18,7 +19,14 @@ describe('Fetch Categories Use Case', () => {
       new UniqueEntityID('category-01'),
     )
 
-    await repository.create(newCategory)
+    const newSubcategory = makeSubcategory(
+      {
+        categoryId: new UniqueEntityID(newCategory.id.toString()),
+      },
+      new UniqueEntityID('subcategory-01'),
+    )
+
+    await repository.create(newSubcategory)
   })
 
   it('dependencies should be defined', (): void => {
@@ -26,7 +34,7 @@ describe('Fetch Categories Use Case', () => {
     expect(useCase).toBeDefined()
   })
 
-  it('should be able to fetch categories', async () => {
+  it('should be able to fetch subcategories', async () => {
     const result = await useCase.execute({
       page: 1,
       perPage: 10,
@@ -39,7 +47,7 @@ describe('Fetch Categories Use Case', () => {
     expect(result.perPage).toBe(10)
   })
 
-  it('should get an category with 5 items per page', async () => {
+  it('should get an subcategories with 5 items per page', async () => {
     const result = await useCase.execute({
       page: 1,
       perPage: 5,
@@ -52,7 +60,7 @@ describe('Fetch Categories Use Case', () => {
     expect(result.perPage).toBe(5)
   })
 
-  it('should get an category on page 2', async () => {
+  it('should get an subcategories on page 2', async () => {
     const result = await useCase.execute({
       page: 2,
       perPage: 10,
