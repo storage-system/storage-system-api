@@ -7,6 +7,8 @@ export interface CategoryProps {
   name: string
   slug: Slug
   companyId: UniqueEntityID
+  parentId?: UniqueEntityID
+  children?: Category[]
   isActive: boolean
   createdAt: Date
   updatedAt?: Date | null
