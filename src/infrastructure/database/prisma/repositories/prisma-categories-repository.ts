@@ -41,7 +41,11 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
       skip: (params.page - 1) * params.perPage
     })
 
-    const totalCategories = await this.prisma.category.count()
+    const totalCategories = await this.prisma.category.count({
+      where: {
+        deletedAt: null,
+      }
+    })
 
     return new Pagination({
       page: params.page,
