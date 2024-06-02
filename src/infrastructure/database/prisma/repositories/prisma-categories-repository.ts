@@ -29,9 +29,14 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
       where: {
         deletedAt: null,
       },
-      orderBy: {
-        slug: 'asc'
-      },
+      orderBy: [
+        {
+          isActive: 'desc',
+        },
+        {
+          slug: 'asc',
+        },
+      ],
       take: params.perPage,
       skip: (params.page - 1) * params.perPage
     })
