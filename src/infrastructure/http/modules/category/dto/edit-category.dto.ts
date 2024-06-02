@@ -2,9 +2,9 @@ import { ZodValidationPipe } from "@/infrastructure/http/pipes/zod-validation-pi
 import { z } from "zod"
 
 const editCategoryBodySchema = z.object({
-  name: z.string(),
-  isActive: z.boolean()
+  name: z.string().optional(),
+  isActive: z.boolean().optional()
 })
 
-export const bodyValidationPipe = new ZodValidationPipe(editCategoryBodySchema)
+export const editCategoryBodyValidationPipe = new ZodValidationPipe(editCategoryBodySchema)
 export type EditCategoryBodySchema = z.infer<typeof editCategoryBodySchema>

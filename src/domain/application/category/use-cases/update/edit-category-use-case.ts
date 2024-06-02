@@ -9,10 +9,10 @@ import NotAuthorizedException from '@/core/exception/not-authorized-exception'
 import { Notification } from '@/core/validation/notification'
 
 interface EditCategoryUseCaseRequest {
-  name: string
+  name?: string
+  isActive?: boolean
   categoryId: string
   companyId: string
-  isActive: boolean
 }
 
 type EditCategoryUseCaseResponse = Either<ResourceNotFoundError | NotAllowedError, {}>

@@ -6,7 +6,7 @@ import { CompanyPayload } from "@/infrastructure/auth/jwt.strategy";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
 import { FetchCategoriesQuerySchema, paramsValidationPìpe } from "./dto/fetch-categories.dto";
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
-import { EditCategoryBodySchema } from "./dto/edit-category.dto";
+import { EditCategoryBodySchema, editCategoryBodyValidationPipe } from "./dto/edit-category.dto";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
 
 @Controller('/categories')
@@ -49,7 +49,7 @@ export class CategoryController {
   @Patch('/:id')
   @HttpCode(204)
   async update(
-    @Body(bodyValidationPipe) body: EditCategoryBodySchema,
+    @Body(editCategoryBodyValidationPipe) body: EditCategoryBodySchema,
     @CurrentCompany() company: CompanyPayload,
     @Param('id') categoryId: string,
   ) {
