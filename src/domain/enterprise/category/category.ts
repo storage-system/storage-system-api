@@ -65,9 +65,9 @@ export class Category extends Entity<CategoryProps> {
   ) {
     const category = new Category(
       {
-        ...props,
         slug: props.slug ?? Slug.createFromText(props.name),
         createdAt: new Date(),
+        ...props,
       },
       id,
     )
