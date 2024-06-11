@@ -4,7 +4,6 @@ import { CreateCategoryDTO } from "./dto/create-category.dto";
 import { CurrentCompany } from "@/infrastructure/auth/current-company-decorator";
 import { CompanyPayload } from "@/infrastructure/auth/jwt.strategy";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
-import { FetchCategoriesQuerySchema, paramsValidationPìpe } from "./dto/fetch-categories.dto";
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
 import { EditCategoryDTO } from "./dto/edit-category.dto";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
