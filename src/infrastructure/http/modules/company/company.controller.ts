@@ -9,10 +9,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common'
-import { CreateAccountBodySchema, createAccountBodyValidationPipe } from './dto/create-account.dto'
-import { EditCompanyBodySchema, editCompanyBodyValidationPipe } from './dto/edit-company.dto'
+import { CreateAccountDTO } from './dto/create-account.dto'
+import { EditCompanyDTO } from './dto/edit-company.dto'
 import { EditCompanyUseCase } from '@/domain/application/company/use-cases/update/edit-company-use-case'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Accounts')
 @Controller('/accounts')
 export class CompanyController {
   constructor(
@@ -23,7 +25,7 @@ export class CompanyController {
   @Post()
   @Public()
   @HttpCode(201)
-  async create(@Body(createAccountBodyValidationPipe) body: CreateAccountBodySchema) {
+  async create(@Body() body: CreateAccountDTO) {
     const { name, email, password, contact, responsible } = body
 
     await this.createCompanyUseCase.execute({
@@ -38,7 +40,7 @@ export class CompanyController {
   @Patch('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async update(
-    @Body(editCompanyBodyValidationPipe) body: EditCompanyBodySchema,
+    @Body() body: EditCompanyDTO,
     @Param('id') companyId: string
   ) {
     const { name, email, contact, responsible } = body

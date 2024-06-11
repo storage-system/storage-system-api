@@ -1,5 +1,5 @@
-import { ZodValidationPipe } from "@/infrastructure/http/pipes/zod-validation-pipe"
-import { z } from "zod"
+import { createZodDto } from "nestjs-zod"
+import { z } from "nestjs-zod/z"
 
 const createAccountBodySchema = z.object({
   name: z.string(),
@@ -9,5 +9,5 @@ const createAccountBodySchema = z.object({
   password: z.string(),
 })
 
-export const createAccountBodyValidationPipe = new ZodValidationPipe(createAccountBodySchema)
-export type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
+
+export class CreateAccountDTO extends createZodDto(createAccountBodySchema) {}

@@ -1,5 +1,5 @@
-import { ZodValidationPipe } from "@/infrastructure/http/pipes/zod-validation-pipe";
-import { z } from "zod";
+import { createZodDto } from "nestjs-zod";
+import { z } from "nestjs-zod/z"
 
 const editCompanyBodySchema = z.object({
   name: z.string().optional(),
@@ -8,5 +8,4 @@ const editCompanyBodySchema = z.object({
   responsible: z.string().optional()
 })
 
-export const editCompanyBodyValidationPipe = new ZodValidationPipe(editCompanyBodySchema)
-export type EditCompanyBodySchema = z.infer<typeof editCompanyBodySchema>
+export class EditCompanyDTO extends createZodDto(editCompanyBodySchema) {}

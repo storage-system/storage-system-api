@@ -5,15 +5,17 @@ import {
 } from '@nestjs/common'
 import { AuthenticateCompanyUseCase } from '@/domain/application/authenticate/authenticate-company-use-case'
 import { Public } from '@/infrastructure/auth/public'
-import { AuthenticateBodySchema, bodyValidationPipe } from './dto/authenticate.dto'
+import { AuthenticateDTO } from './dto/authenticate.dto'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Authenticate')
 @Controller('/sessions')
 @Public()
 export class AuthenticateController {
   constructor(private authenticateCompanyUseCase: AuthenticateCompanyUseCase) { }
 
   @Post()
-  async handle(@Body(bodyValidationPipe) body: AuthenticateBodySchema) {
+  async handle(@Body() body: AuthenticateDTO) {
     const { email, password } = body
 
     const result = await this.authenticateCompanyUseCase.execute({

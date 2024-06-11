@@ -1,14 +1,17 @@
 import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create/create-category-use-case";
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from "@nestjs/common";
-import { CreateCategoryBodySchema, bodyValidationPipe } from "./dto/create-category.dto";
+import { CreateCategoryDTO } from "./dto/create-category.dto";
 import { CurrentCompany } from "@/infrastructure/auth/current-company-decorator";
 import { CompanyPayload } from "@/infrastructure/auth/jwt.strategy";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
 import { FetchCategoriesQuerySchema, paramsValidationPìpe } from "./dto/fetch-categories.dto";
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
-import { EditCategoryBodySchema, editCategoryBodyValidationPipe } from "./dto/edit-category.dto";
+import { EditCategoryDTO } from "./dto/edit-category.dto";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
+import { ApiTags } from "@nestjs/swagger";
+import { ParsePositiveIntPipe } from "../../pipes/parse-positive-int.pipe";
 
+@ApiTags('Category')
 @Controller('/categories')
 export class CategoryController {
   constructor(
@@ -20,7 +23,7 @@ export class CategoryController {
 
   @Post()
   async create(
-    @Body(bodyValidationPipe) body: CreateCategoryBodySchema,
+    @Body() body: CreateCategoryDTO,
     @CurrentCompany() company: CompanyPayload
   ) {
     const { name, isActive } = body
@@ -36,20 +39,19 @@ export class CategoryController {
 
   @Get()
   async list(
-    @Query(paramsValidationPìpe) query: FetchCategoriesQuerySchema,
+    @Query('page', new ParsePositiveIntPipe(1)) page: number = 1,
+    @Query('perPage', new ParsePositiveIntPipe(10)) perPage: number = 10,
   ) {
-    const { page, perPage } = query
-
     return await this.fetchCategoriesUseCase.execute({
       page,
-      perPage
+      perPage,
     })
   }
 
   @Patch('/:id')
   @HttpCode(204)
   async update(
-    @Body(editCategoryBodyValidationPipe) body: EditCategoryBodySchema,
+    @Body() body: EditCategoryDTO,
     @CurrentCompany() company: CompanyPayload,
     @Param('id') categoryId: string,
   ) {

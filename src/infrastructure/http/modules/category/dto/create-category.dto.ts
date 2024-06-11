@@ -1,10 +1,9 @@
-import { ZodValidationPipe } from "@/infrastructure/http/pipes/zod-validation-pipe"
-import { z } from "zod"
+import { createZodDto } from "nestjs-zod"
+import { z } from "nestjs-zod/z"
 
 export const createCategoryBodySchema = z.object({
   name: z.string(),
   isActive: z.boolean(),
 })
 
-export const bodyValidationPipe = new ZodValidationPipe(createCategoryBodySchema)
-export type CreateCategoryBodySchema = z.infer<typeof createCategoryBodySchema>
+export class CreateCategoryDTO extends createZodDto(createCategoryBodySchema) {}
