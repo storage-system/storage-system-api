@@ -8,10 +8,11 @@ export interface UserProps {
   email: string
   password: string
   phone: string
+  role: UserRole
+  companyId?: UniqueEntityID
   createdAt: Date
   updatedAt?: Date
   deletedAt?: Date
-  role: UserRole
 }
 
 export class User extends Entity<UserProps> {
@@ -31,18 +32,12 @@ export class User extends Entity<UserProps> {
     return this.props.phone
   }
 
-  set phone(phone: string) {
-    this.props.phone = phone
-    this.touch()
-  }
-
   get role() {
     return this.props.role
   }
 
-  set role(role: UserRole) {
-    this.props.role = role
-    this.touch()
+  public get companyId(): UniqueEntityID | undefined {
+    return this.props.companyId;
   }
 
   get createdAt() {
@@ -77,12 +72,17 @@ export class User extends Entity<UserProps> {
     return user
   }
 
+  public assignCompany(companyId: UniqueEntityID) {
+    this.props.companyId = companyId
+  }
+
   update(anUser: Partial<UserProps>) {
     this.props.name = anUser.name ?? this.name
     this.props.email = anUser.email ?? this.email
     this.props.password = anUser.password ?? this.password
     this.props.phone = anUser.phone ?? this.phone
     this.props.role = anUser.role ?? this.role
+    this.props.companyId = anUser.companyId ?? this.companyId
 
     this.touch()
   }
