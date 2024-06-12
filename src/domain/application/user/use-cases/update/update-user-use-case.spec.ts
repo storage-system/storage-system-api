@@ -2,6 +2,7 @@ import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { UpdateUserUseCase } from "./update-user-use-case";
 import { makeUser } from "test/factories/make-user";
+import { faker } from "@faker-js/faker";
 
 let repository: InMemoryUsersRepository
 let useCase: UpdateUserUseCase
@@ -18,7 +19,9 @@ describe('Update User', () => {
   })
 
   it('should be able to edit an user', async () => {
-    const userId = 'user-id-01'
+    const userId = faker.string.alphanumeric({
+      length: 8
+    })
 
     const newUser = makeUser({}, new UniqueEntityID(userId))
 
@@ -37,7 +40,9 @@ describe('Update User', () => {
   })
 
   it('should not be able to edit an user that does not exist', async () => {
-    const userId = 'user-id-01'
+    const userId = faker.string.alphanumeric({
+      length: 8
+    })
 
     const nonExistentUserUpdate = {
       userId,

@@ -6,7 +6,7 @@ import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-catego
 let repository: InMemoryCategoriesRepository
 let useCase: DeleteCategoryUseCase
 
-describe('Create Category', () => {
+describe('Delete Category', () => {
   beforeEach(() => {
     repository = new InMemoryCategoriesRepository()
     useCase = new DeleteCategoryUseCase(repository)
