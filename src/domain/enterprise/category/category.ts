@@ -38,11 +38,6 @@ export class Category extends Entity<CategoryProps> {
     return this.props.isActive
   }
 
-  set isActive(isActive: boolean) {
-    this.props.isActive = isActive
-    this.touch()
-  }
-
   get createdAt() {
     return this.props.createdAt
   }

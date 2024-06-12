@@ -36,11 +36,6 @@ export class Subcategory extends Entity<SubcategoryProps> {
     return this.props.isActive
   }
 
-  set isActive(isActive: boolean) {
-    this.props.isActive = isActive
-    this.touch()
-  }
-
   get createdAt() {
     return this.props.createdAt
   }

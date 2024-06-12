@@ -17,11 +17,6 @@ export class Company extends Entity<CompanyProps> {
     return this.props.name
   }
 
-  set name(name: string) {
-    this.props.name = name
-    this.touch()
-  }
-
   get email() {
     return this.props.email
   }
@@ -30,18 +25,8 @@ export class Company extends Entity<CompanyProps> {
     return this.props.password
   }
 
-  set email(email: string) {
-    this.props.email = email
-    this.touch()
-  }
-
   get contact() {
     return this.props.contact
-  }
-
-  set contact(contact: string) {
-    this.props.contact = contact
-    this.touch()
   }
 
   get createdAt() {
@@ -50,11 +35,6 @@ export class Company extends Entity<CompanyProps> {
 
   get responsible() {
     return this.props.responsible
-  }
-
-  set responsible(responsible: string) {
-    this.props.responsible = responsible
-    this.touch()
   }
 
   private touch() {
