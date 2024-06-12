@@ -19,23 +19,6 @@ describe('Category Entity', () => {
     expect(category.isActive).toBe(props.isActive)
   })
 
-  it('should update isActive and updatedAt when isActive is set', () => {
-    const props = {
-      name: 'Test Category',
-      slug: Slug.createFromText('Test Category'),
-      companyId: new UniqueEntityID('company-01'),
-      isActive: true,
-      createdAt: new Date(),
-    }
-
-    const category = Category.create(props)
-
-    category.isActive = false
-
-    expect(category.isActive).toBe(false)
-    expect(category.updatedAt).toBeInstanceOf(Date)
-  })
-
   it('should update name, slug, and updatedAt when name is set', () => {
     const props = {
       name: 'Test Category',

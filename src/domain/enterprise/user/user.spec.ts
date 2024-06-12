@@ -29,18 +29,6 @@ describe('User Entity', () => {
     expect(user.deletedAt).toBeUndefined()
   })
 
-  it('should update the updatedAt property when a property is changed', () => {
-    const user = User.create(userProps)
-    const oldUpdatedAt = user.updatedAt
-
-    const mockedName = faker.person.fullName()
-
-    user.name = mockedName
-
-    expect(user.name).toBe(mockedName)
-    expect(user.updatedAt).not.toBe(oldUpdatedAt)
-  })
-
   it('should correctly update properties using the update method', () => {
     const user = User.create(userProps)
     const oldUpdatedAt = user.updatedAt

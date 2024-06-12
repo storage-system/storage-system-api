@@ -19,18 +19,8 @@ export class User extends Entity<UserProps> {
     return this.props.name
   }
 
-  set name(name: string) {
-    this.props.name = name
-    this.touch()
-  }
-
   get email() {
     return this.props.email
-  }
-
-  set email(email: string) {
-    this.props.email = email
-    this.touch()
   }
 
   get password() {
