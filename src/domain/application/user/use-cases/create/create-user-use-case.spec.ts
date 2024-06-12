@@ -10,7 +10,7 @@ let fakeHasher: FakeHasher
 
 let useCase: CreateUserUseCase
 
-describe('Create Company', () => {
+describe('Create User', () => {
   beforeEach(() => {
     repository = new InMemoryUsersRepository()
     fakeHasher = new FakeHasher()
