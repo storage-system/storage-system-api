@@ -16,10 +16,10 @@ export class PrismaUsersRepository implements UsersRepository {
           deletedAt: null,
         },
         take: params.perPage,
-        skip: (params.perPage - 1) * params.perPage,
+        skip: (params.page - 1) * params.perPage,
         orderBy: {
           createdAt: 'desc'
-        }
+        },
       })),
       this.prisma.user.count({
         where: {
