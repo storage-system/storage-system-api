@@ -29,7 +29,6 @@ export class UserController {
   }
   
   @Get()
-  @Public()
   async list(
     @Query('page', new ParsePositiveIntPipe(1)) page: number = 1,
     @Query('perPage', new ParsePositiveIntPipe(10)) perPage: number = 10,
@@ -41,7 +40,6 @@ export class UserController {
   }
   
   @Patch('/:id')
-  @Public()
   @HttpCode(204)
   async update(
     @Body() body: UpdateUserDTO,
@@ -54,7 +52,6 @@ export class UserController {
   }
 
   @Delete('/:id')
-  @Public()
   async delete(
     @Param('id') userId: string,
   ) {

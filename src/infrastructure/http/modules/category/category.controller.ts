@@ -1,8 +1,8 @@
 import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create/create-category-use-case";
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from "@nestjs/common";
 import { CreateCategoryDTO } from "./dto/create-category.dto";
-import { CurrentCompany } from "@/infrastructure/auth/current-company-decorator";
-import { CompanyPayload } from "@/infrastructure/auth/jwt.strategy";
+import { CurrentUser } from "@/infrastructure/auth/current-user-decorator";
+import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
 import { EditCategoryDTO } from "./dto/edit-category.dto";
@@ -23,11 +23,11 @@ export class CategoryController {
   @Post()
   async create(
     @Body() body: CreateCategoryDTO,
-    @CurrentCompany() company: CompanyPayload
+    @CurrentUser() user: UserPayload
   ) {
     const { name, isActive } = body
 
-    const companyId = company.sub
+    const companyId = user.sub
 
     return await this.createCategoryUseCase.execute({
       name,
@@ -51,11 +51,11 @@ export class CategoryController {
   @HttpCode(204)
   async update(
     @Body() body: EditCategoryDTO,
-    @CurrentCompany() company: CompanyPayload,
+    @CurrentUser() user: UserPayload,
     @Param('id') categoryId: string,
   ) {
     const { name, isActive } = body
-    const companyId = company.sub
+    const companyId = user.sub
 
     return await this.editCategoryUseCase.execute({
       name,

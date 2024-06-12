@@ -4,24 +4,29 @@ import { INestApplication } from "@nestjs/common"
 import { UserFactory } from "test/factories/make-user"
 import { AppModule } from "@/infrastructure/app.module"
 import { DatabaseModule } from "@/infrastructure/database/database.module"
+import { AuthenticateFactory } from 'test/factories/make-authenticate'
 
 describe('Fetch users (E2E)', () => {
   let app: INestApplication
   let userFactory: UserFactory
+  let authenticateFactory: AuthenticateFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory],
+      providers: [UserFactory, AuthenticateFactory],
     }).compile()
     app = moduleRef.createNestApplication()
 
     userFactory = moduleRef.get(UserFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactory)
 
     await app.init()
   })
 
   test('[GET] /users', async () => {
+    const accessToken = await authenticateFactory.makePrismaAuthenticate()
+
     await Promise.all([
       userFactory.makePrismaUser(),
       userFactory.makePrismaUser(),
@@ -29,12 +34,12 @@ describe('Fetch users (E2E)', () => {
 
     const response = await request(app.getHttpServer())
       .get('/users')
-      .send()
+      .set('Authorization', `Bearer ${accessToken}`)
 
     expect(response.statusCode).toBe(200)
 
-    expect(response.body.items).toHaveLength(2)
-    expect(response.body.total).toBe(2)
+    expect(response.body.items).toHaveLength(3)
+    expect(response.body.total).toBe(3)
     expect(response.body.page).toBe(1)
     expect(response.body.perPage).toBe(10)
   })
