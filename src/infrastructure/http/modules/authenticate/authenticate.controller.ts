@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  HttpCode,
+  HttpStatus,
   Post,
 } from '@nestjs/common'
-import { AuthenticateCompanyUseCase } from '@/domain/application/authenticate/authenticate-company-use-case'
+import { AuthenticateUseCase } from '@/domain/application/authenticate/authenticate-use-case'
 import { Public } from '@/infrastructure/auth/public'
 import { AuthenticateDTO } from './dto/authenticate.dto'
 import { ApiTags } from '@nestjs/swagger'
@@ -12,13 +14,14 @@ import { ApiTags } from '@nestjs/swagger'
 @Controller('/sessions')
 @Public()
 export class AuthenticateController {
-  constructor(private authenticateCompanyUseCase: AuthenticateCompanyUseCase) { }
+  constructor(private authenticateUseCase: AuthenticateUseCase) { }
 
   @Post()
+  @HttpCode(HttpStatus.OK)
   async handle(@Body() body: AuthenticateDTO) {
     const { email, password } = body
 
-    const result = await this.authenticateCompanyUseCase.execute({
+    const result = await this.authenticateUseCase.execute({
       email,
       password,
     })

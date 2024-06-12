@@ -1,6 +1,8 @@
+import { UserRole } from '@/domain/enterprise/user/user-types'
 import { AppModule } from '@/infrastructure/app.module'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { INestApplication } from '@nestjs/common'
+import { faker } from '@faker-js/faker'
+import { HttpStatus, INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import { hash } from 'bcryptjs'
 import request from 'supertest'
@@ -24,24 +26,24 @@ describe('Authenticate (E2E)', () => {
   test('[POST] /sessions', async () => {
     const passwordMock = '123456'
 
-    const companyMock = {
-      name: 'John Doe Eletronics',
-      email: 'johndoeeletronics@example.com',
-      contact: '99 99999 9999',
-      responsible: 'John Doe',
+    const userMock = {
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
       password: await hash(passwordMock, 8),
+      phone: faker.phone.number(),
+      role: UserRole.MEMBER,
     }
 
-    await prisma.company.create({
-      data: companyMock,
+    await prisma.user.create({
+      data: userMock,
     })
 
     const response = await request(app.getHttpServer()).post('/sessions').send({
-      email: companyMock.email,
+      email: userMock.email,
       password: passwordMock,
     })
 
-    expect(response.statusCode).toBe(201)
+    expect(response.statusCode).toBe(HttpStatus.OK)
     expect(response.body).toEqual({
       access_token: expect.any(String),
     })

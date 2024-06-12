@@ -1,22 +1,22 @@
 import { FakeEncrypter } from "test/cryptography/fake-encrypter"
 import { FakeHasher } from "test/cryptography/fake-hasher"
-import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository"
-import { AuthenticateCompanyUseCase } from "./authenticate-company-use-case"
-import { makeCompany } from "test/factories/make-company"
+import { AuthenticateUseCase } from "./authenticate-use-case"
+import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository"
+import { makeUser } from "test/factories/make-user"
 
-let repository: InMemoryCompaniesRepository
+let repository: InMemoryUsersRepository
 let fakeHasher: FakeHasher
 let encrypter: FakeEncrypter
 
-let useCase: AuthenticateCompanyUseCase
+let useCase: AuthenticateUseCase
 
-describe('Authenticate Company', () => {
+describe('Authenticate User', () => {
   beforeEach(() => {
-    repository = new InMemoryCompaniesRepository()
+    repository = new InMemoryUsersRepository()
     fakeHasher = new FakeHasher()
     encrypter = new FakeEncrypter()
 
-    useCase = new AuthenticateCompanyUseCase(
+    useCase = new AuthenticateUseCase(
       repository,
       fakeHasher,
       encrypter,
@@ -30,18 +30,18 @@ describe('Authenticate Company', () => {
     expect(useCase).toBeDefined()
   })
 
-  it('should be able to authenticate a company', async () => {
+  it('should be able to authenticate an user', async () => {
     const passwordMock = '123456'
 
-    const company = makeCompany({
+    const user = makeUser({
       email: 'johndoeeletronics@example.com',
       password: await fakeHasher.hash(passwordMock),
     })
 
-    repository.items.push(company)
+    repository.items.push(user)
 
     const result = await useCase.execute({
-      email: company.email,
+      email: user.email,
       password: passwordMock,
     })
 

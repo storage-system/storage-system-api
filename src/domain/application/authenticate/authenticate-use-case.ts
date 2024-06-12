@@ -1,23 +1,22 @@
-import { Either, right } from '@/core/either'
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { Encrypter } from '../cryptography/encrypter'
-import { CompaniesRepository } from '../company/companies-repository'
 import WrongCredentialsException from '@/core/exception/wrong-credentials-exception'
+import { UsersRepository } from '../user/users-repository'
 
-interface AuthenticateCompanyUseCaseRequest {
+interface AuthenticateUseCaseRequest {
   email: string
   password: string
 }
 
-type AuthenticateCompanyUseCaseResponse = {
+type AuthenticateUseCaseResponse = {
   accessToken: string
 }
 
 @Injectable()
-export class AuthenticateCompanyUseCase {
+export class AuthenticateUseCase {
   constructor(
-    private companiesRepository: CompaniesRepository,
+    private usersRepository: UsersRepository,
     private hashComparer: HashComparer,
     private encrypter: Encrypter,
   ) { }
@@ -25,16 +24,16 @@ export class AuthenticateCompanyUseCase {
   async execute({
     email,
     password,
-  }: AuthenticateCompanyUseCaseRequest): Promise<AuthenticateCompanyUseCaseResponse> {
-    const company = await this.companiesRepository.findByEmail(email)
+  }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
+    const user = await this.usersRepository.findByEmail(email)
 
-    if (!company) {
+    if (!user) {
       throw new NotFoundException('Credenciais inválidas')
     }
 
     const isPasswordValid = await this.hashComparer.compare(
       password,
-      company.password,
+      user.password,
     )
 
     if (!isPasswordValid) {
@@ -42,11 +41,11 @@ export class AuthenticateCompanyUseCase {
     }
 
     const accessToken = await this.encrypter.encrypt({
-      sub: company.id.toString(),
-      name: company.name,
-      email: company.email,
-      contact: company.contact,
-      responsible: company.responsible,
+      sub: user.id.toString(),
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
     })
 
     return {
