@@ -1,11 +1,11 @@
 import { Either, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 import { HashGenerator } from '../../../cryptography/hash-generator'
-import { CompanyAlreadyExistsError } from '@/core/errors/company-already-exists-error'
 import { CompaniesRepository } from '../../companies-repository'
 import { Company } from '@/domain/enterprise/company/company'
 import { Notification } from '@/core/validation/notification'
 import NotificationException from '@/core/exception/notification-exception'
+import { AlreadyExistsError } from '@/core/errors/already-exists-error'
 
 interface CreateCompanyUseCaseRequest {
   name: string
@@ -42,7 +42,7 @@ export class CreateCompanyUseCase {
       await this.companiesRepository.findByEmail(email)
 
     if (companyWithSameEmail) {
-      notification.appendAnError(new CompanyAlreadyExistsError(email))
+      notification.appendAnError(new AlreadyExistsError('Company', email))
     }
 
     const hashedPassword = await this.hashGenerator.hash(password)
