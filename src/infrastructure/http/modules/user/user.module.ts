@@ -7,6 +7,7 @@ import { ListUsersUseCase } from "@/domain/application/user/use-cases/retrieve/l
 import { UpdateUserUseCase } from "@/domain/application/user/use-cases/update/update-user-use-case";
 import { DeleteUserUseCase } from "@/domain/application/user/use-cases/delete/delete-user-use-case";
 import { UserController } from "./user.controller";
+import { AssignCompanyUseCase } from "@/domain/application/user/use-cases/assign-company/assign-company-use-case";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -18,6 +19,7 @@ import { UserController } from "./user.controller";
     ListUsersUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
+    AssignCompanyUseCase,
   ]
 })
 export class UserModule { }
