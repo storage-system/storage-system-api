@@ -10,7 +10,6 @@ import { AuthenticateFactory } from 'test/factories/make-authenticate'
 describe('Delete user (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let userFactory: UserFactory
   let authenticateFactory: AuthenticateFactory
 
   beforeAll(async () => {
@@ -20,27 +19,24 @@ describe('Delete user (E2E)', () => {
     }).compile()
     app = moduleRef.createNestApplication()
 
-    prisma = moduleRef.get(PrismaService)
-    userFactory = moduleRef.get(UserFactory)
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
-
     await app.init()
+
+    prisma = moduleRef.get(PrismaService)
+    authenticateFactory = moduleRef.get(AuthenticateFactory)
   })
 
   test('[DELETE] /users/:id', async () => {
-    const accessToken = await authenticateFactory.makePrismaAuthenticate()
-
-    const user = await userFactory.makePrismaUser()
+    const { accessToken, userId } = await authenticateFactory.makePrismaAuthenticate()
 
     const response = await request(app.getHttpServer())
-      .delete(`/users/${user.id}`)
+      .delete(`/users/${userId}`)
       .set('Authorization', `Bearer ${accessToken}`)
 
     expect(response.statusCode).toBe(HttpStatus.OK)
 
     const userOnDatabase = await prisma.user.findFirst({
       where: {
-        id: user.id.toString(),
+        id: userId.toString(),
         deletedAt: null,
       }
     })

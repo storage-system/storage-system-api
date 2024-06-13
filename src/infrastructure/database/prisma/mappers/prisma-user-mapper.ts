@@ -10,6 +10,7 @@ export class PrismaUserMapper {
       email: raw.email,
       password: raw.password,
       phone: raw.phone,
+      companyId: !!raw.companyId ? new UniqueEntityID(raw.companyId) : undefined,
       role: raw.role as UserRole,
     }, new UniqueEntityID(raw.id))
   }
@@ -21,6 +22,7 @@ export class PrismaUserMapper {
       email: user.email,
       password: user.password,
       phone: user.phone,
+      companyId: user.companyId?.toString(),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       deletedAt: user.deletedAt,

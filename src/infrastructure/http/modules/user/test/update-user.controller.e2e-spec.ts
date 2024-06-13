@@ -10,7 +10,6 @@ import { AuthenticateFactory } from 'test/factories/make-authenticate'
 describe('Update user (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let userFactory: UserFactory
   let authenticateFactory: AuthenticateFactory
 
   beforeAll(async () => {
@@ -21,23 +20,20 @@ describe('Update user (E2E)', () => {
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
-    userFactory = moduleRef.get(UserFactory)
     authenticateFactory = moduleRef.get(AuthenticateFactory)
 
     await app.init()
   })
 
   test('[PATCH] /users/:id', async () => {
-    const accessToken = await authenticateFactory.makePrismaAuthenticate()
-
-    const user = await userFactory.makePrismaUser()
+    const { accessToken, userId } = await authenticateFactory.makePrismaAuthenticate()
 
     const updateUser = {
       name: 'user-updated-01',
     }
 
     const response = await request(app.getHttpServer())
-      .patch(`/users/${user.id}`)
+      .patch(`/users/${userId}`)
       .send(updateUser)
       .set('Authorization', `Bearer ${accessToken}`)
 

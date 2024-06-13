@@ -25,7 +25,7 @@ describe('Fetch users (E2E)', () => {
   })
 
   test('[GET] /users', async () => {
-    const accessToken = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken } = await authenticateFactory.makePrismaAuthenticate()
 
     await Promise.all([
       userFactory.makePrismaUser(),
