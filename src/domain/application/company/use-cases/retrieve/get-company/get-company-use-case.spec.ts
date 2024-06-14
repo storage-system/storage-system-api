@@ -12,7 +12,7 @@ describe('List Users By Company Use Case', () => {
   beforeEach(async () => {
     companiesRepository = new InMemoryCompaniesRepository()
     usersRepository = new InMemoryUsersRepository()
-    useCase = new GetCompanyUseCase(companiesRepository)
+    useCase = new GetCompanyUseCase(companiesRepository, usersRepository)
   })
 
   it('dependencies should be defined', (): void => {
@@ -20,23 +20,42 @@ describe('List Users By Company Use Case', () => {
     expect(useCase).toBeDefined()
   })
 
-  it('should be able to list users by company', async () => {
-    const user = makeUser()
-    await usersRepository.create(user)
-
+  it('should be able to retrieve company details without users', async () => {
     const company = makeCompany()
     await companiesRepository.create(company)
 
-    user.assignCompany(company.id)
+    const result = await useCase.execute({
+      companyId: company.id.toString()
+    })
+    
+    expect(result.id).toBe(company.id.toString())
+    expect(result.name).toBe(company.name)
+    expect(result.users).toEqual([])
+  })
 
-    console.log("company", company)
+  it('should be able to retrieve company details with users', async () => {
+    const user = makeUser()
+    await usersRepository.create(user)
 
-    console.log('items', companiesRepository.items)
+    const company = makeCompany({ users: [user.id.toString()] })
+    await companiesRepository.create(company)
 
     const result = await useCase.execute({
       companyId: company.id.toString()
     })
 
-    console.log('result', result)
+    expect(result.id).toBe(company.id.toString())
+    expect(result.name).toBe(company.name)
+    expect(result.users).toHaveLength(1)
+    expect(result.users[0].id).toBe(user.id.toString())
+    expect(result.users[0].name).toBe(user.name)
+  })
+
+  it('should throw error if company not found', async () => {
+    const invalidCompanyId = 'invalid-id'
+
+    const response = useCase.execute({ companyId: invalidCompanyId })
+
+    expect(response).rejects.toThrow(`Empresa com ID invalid-id não foi encontrado`)
   })
 })

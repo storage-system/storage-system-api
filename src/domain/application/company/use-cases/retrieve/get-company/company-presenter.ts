@@ -11,6 +11,7 @@ export class CompanyPresenter {
   createdAt: Date
   updatedAt?: Date
   users: {
+    id: string
     name: string
     email: string
     phone: string
@@ -36,6 +37,7 @@ export class CompanyPresenter {
     this.updatedAt = aCompanyProps.updatedAt;
     this.users = anUserProps.length > 0
       ? anUserProps.map((user) => ({
+          id: user.id.toString(),
           name: user.name,
           email: user.email,
           phone: user.phone,
