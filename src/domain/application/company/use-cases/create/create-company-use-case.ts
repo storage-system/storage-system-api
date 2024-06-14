@@ -12,6 +12,7 @@ interface CreateCompanyUseCaseRequest {
   email: string
   contact: string
   responsible: string
+  users: string[]
   password: string
 }
 
@@ -34,6 +35,7 @@ export class CreateCompanyUseCase {
     email,
     contact,
     responsible,
+    users,
     password,
   }: CreateCompanyUseCaseRequest): Promise<CreateCompanyUseCaseResponse> {
     const notification = Notification.create()
@@ -52,6 +54,7 @@ export class CreateCompanyUseCase {
       email,
       contact,
       responsible,
+      users,
       password: hashedPassword,
     })
 

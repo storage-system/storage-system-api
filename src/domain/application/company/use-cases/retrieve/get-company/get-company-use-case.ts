@@ -2,21 +2,21 @@ import { Injectable } from '@nestjs/common'
 import { CompaniesRepository } from '../../../companies-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Company } from '@/domain/enterprise/company/company'
+import { UsersRepository } from '@/domain/application/user/users-repository'
+import { CompanyPresenter } from './company-presenter'
 
 interface GetCompanyUseCaseRequest {
   companyId: string
 }
 
-type GetCompanyUseCaseResponse = {
-  company: Company
-}
+type GetCompanyUseCaseResponse = CompanyPresenter
 
 
 @Injectable()
 export class GetCompanyUseCase {
   constructor(
     private companiesRepository: CompaniesRepository,
+    private usersRepository: UsersRepository,
   ) { }
 
   async execute({
@@ -28,8 +28,15 @@ export class GetCompanyUseCase {
       throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(companyId));
     }
 
-    return {
-      company
-    }
+    const users = company?.users && company?.users?.length > 0
+      ? await this.usersRepository.findByIds(
+        company.users.map((user) => user)
+        )
+      : [];
+
+    return CompanyPresenter.fromAggregate(
+      company,
+      users
+    )
   }
 }

@@ -8,6 +8,13 @@ export abstract class Entity<Props> {
     return this._id
   }
 
+  public toJSON(): Required<{ id: string } & Props> {
+    return {
+      id: this.id,
+      ...this.props
+    } as Required<{ id: string } & Props>;
+  }
+
   protected constructor(props: Props, id?: UniqueEntityID) {
     this.props = props
     this._id = id ?? new UniqueEntityID()

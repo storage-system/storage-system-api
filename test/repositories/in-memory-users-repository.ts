@@ -40,6 +40,12 @@ export class InMemoryUsersRepository implements UsersRepository {
     return user
   }
 
+  async findByIds([ids]: string[]): Promise<User[]> {
+    const users = this.items.filter((user) => ids.includes(user.id.toString()))
+
+    return users
+  }
+
   async create(user: User): Promise<void> {
     this.items.push(user)
   }

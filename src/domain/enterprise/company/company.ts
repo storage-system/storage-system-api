@@ -8,6 +8,7 @@ export interface CompanyProps {
   password: string
   contact: string
   responsible: string
+  users: string[]
   createdAt: Date
   updatedAt?: Date
 }
@@ -37,6 +38,14 @@ export class Company extends Entity<CompanyProps> {
     return this.props.responsible
   }
 
+  get users() {
+    return this.props.users
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt
+  }
+
   private touch() {
     this.props.updatedAt = new Date()
   }
@@ -61,6 +70,7 @@ export class Company extends Entity<CompanyProps> {
     this.props.email = aCompany.email ?? this.email
     this.props.contact = aCompany.contact ?? this.contact
     this.props.responsible = aCompany.responsible ?? this.responsible
+    this.props.users = aCompany.users ?? this.users
 
     this.touch()
   }

@@ -43,7 +43,7 @@ model Company {
   updatedAt DateTime? @updatedAt @map("updated_at")
 
   categories Category[]
-  User       User[]
+  users      User[]
 
   @@map("companies")
 }

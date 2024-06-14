@@ -5,11 +5,14 @@ import { Company, CompanyProps } from '@/domain/enterprise/company/company'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { PrismaCompanyMapper } from '@/infrastructure/database/prisma/mappers/prisma-company-mapper'
+import { makeUser } from './make-user'
 
 export function makeCompany(
   override: Partial<CompanyProps> = {},
   id?: UniqueEntityID,
 ) {
+  const user = makeUser()
+
   const company = Company.create(
     {
       name: faker.company.name(),
@@ -17,6 +20,7 @@ export function makeCompany(
       password: faker.internet.password(),
       contact: faker.phone.number(),
       responsible: faker.person.fullName(),
+      users: [user.id.toString()],
       ...override,
     },
     id,

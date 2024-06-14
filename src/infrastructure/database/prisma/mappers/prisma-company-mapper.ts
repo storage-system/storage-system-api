@@ -1,15 +1,26 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { Replace } from '@/core/replace';
 import { Company } from '@/domain/enterprise/company/company';
-import { Prisma, Company as PrismaCompany } from '@prisma/client'
+import { Prisma, Company as PrismaCompany, User as PrismaUser } from '@prisma/client'
 
 export class PrismaCompanyMapper {
-  static toDomain(raw: PrismaCompany): Company {
+  static toDomain(
+    raw: Replace<
+      PrismaCompany,
+      {
+        users: {
+          id: string
+        }[];
+      }
+    >
+  ): Company {
     return Company.create({
       name: raw.name,
       email: raw.email,
       password: raw.password,
       contact: raw.contact,
       responsible: raw.responsible,
+      users: raw.users.map((user) => user.id),
     }, new UniqueEntityID(raw.id))
   }
 

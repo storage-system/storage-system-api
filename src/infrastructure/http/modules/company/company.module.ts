@@ -5,6 +5,7 @@ import { DatabaseModule } from "@/infrastructure/database/database.module";
 import { CompanyController } from "./company.controller";
 import { CryptographyModule } from "@/infrastructure/cryptography/cryptography.module";
 import { EditCompanyUseCase } from "@/domain/application/company/use-cases/update/edit-company-use-case";
+import { GetCompanyUseCase } from "@/domain/application/company/use-cases/retrieve/get-company/get-company-use-case";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -14,6 +15,7 @@ import { EditCompanyUseCase } from "@/domain/application/company/use-cases/updat
   providers: [
     CreateCompanyUseCase,
     EditCompanyUseCase,
+    GetCompanyUseCase,
   ]
 })
 export class CompanyModule { }

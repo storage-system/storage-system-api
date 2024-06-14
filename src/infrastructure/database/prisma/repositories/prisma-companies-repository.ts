@@ -12,7 +12,14 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     const company = await this.prisma.company.findUnique({
       where: {
         email,
-      }
+      },
+      include: {
+        users: {
+          select: {
+            id: true
+          }
+        }
+      },
     })
 
     if (!company) {
@@ -26,6 +33,9 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     const company = await this.prisma.company.findUnique({
       where: {
         id,
+      },
+      include: {
+        users: true
       }
     })
 

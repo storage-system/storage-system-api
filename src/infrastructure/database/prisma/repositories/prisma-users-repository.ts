@@ -70,6 +70,18 @@ export class PrismaUsersRepository implements UsersRepository {
     return PrismaUserMapper.toDomain(user)
   }
 
+  async findByIds(ids: string[]): Promise<User[]> {
+    const anUsers = await this.prisma.user.findMany({
+      where: {
+        id: {
+          in: ids
+        }
+      }
+    })
+
+    return anUsers.map((anUser) => PrismaUserMapper.toDomain(anUser))
+  }
+
   async create(user: User): Promise<void> {
     const data = PrismaUserMapper.toPersistence(user)
 
