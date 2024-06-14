@@ -9,7 +9,6 @@ export class UserPresenter {
       email: user.email,
       phone: user.phone,
       role: user.role,
-      companyId: user.companyId?.toString(),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     }

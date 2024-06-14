@@ -1,8 +1,9 @@
-import { Pagination, PaginationProps } from "@/core/entities/pagination";
+import { Pagination } from "@/core/entities/pagination";
 import { User } from "@/domain/enterprise/user/user";
+import { ListUsersCommand } from "./use-cases/retrieve/list/list-users-command";
 
 export abstract class UsersRepository {
-  abstract findAll(params: PaginationProps<User>): Promise<Pagination<User>>
+  abstract findAll(params: ListUsersCommand): Promise<Pagination<User>>
   abstract findAllUnpaged(): Promise<User[]>
   abstract findByEmail(email: string): Promise<User | null>
   abstract findById(id: string): Promise<User | null>

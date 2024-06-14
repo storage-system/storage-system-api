@@ -4,16 +4,18 @@ import { UsersRepository } from "@/domain/application/user/users-repository";
 import { PaginationProps, Pagination } from "@/core/entities/pagination";
 import { User } from "@/domain/enterprise/user/user";
 import { PrismaUserMapper } from "../mappers/prisma-user-mapper";
+import { ListUsersCommand } from "@/domain/application/user/use-cases/retrieve/list/list-users-command";
 
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private prisma: PrismaService) { }
 
-  async findAll(params: PaginationProps<User>): Promise<Pagination<User>> {
+  async findAll(params: ListUsersCommand): Promise<Pagination<User>> {
     const [users, count] = await this.prisma.$transaction([
       this.prisma.user.findMany(({
         where: {
           deletedAt: null,
+          companyId: params.companyId,
         },
         take: params.perPage,
         skip: (params.page - 1) * params.perPage,

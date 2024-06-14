@@ -3,11 +3,7 @@ import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Injectable } from '@nestjs/common'
 import { UsersRepository } from '../../../users-repository'
 import { UserPresenter } from '@/infrastructure/http/presenters/user-presenter'
-
-interface ListUsersUseCaseRequest {
-  page: number
-  perPage: number
-}
+import { ListUsersCommand } from './list-users-command'
 
 type ListUsersUseCaseResponse = PaginationProps<UserPresenter>
 
@@ -15,14 +11,8 @@ type ListUsersUseCaseResponse = PaginationProps<UserPresenter>
 export class ListUsersUseCase {
   constructor(private usersRepository: UsersRepository) { }
 
-  async execute({
-    page,
-    perPage,
-  }: ListUsersUseCaseRequest): Promise<ListUsersUseCaseResponse> {
-    const users = await this.usersRepository.findAll({
-      page,
-      perPage,
-    })
+  async execute(query: ListUsersCommand): Promise<ListUsersUseCaseResponse> {
+    const users = await this.usersRepository.findAll(query)
 
     return new Pagination({
       total: users.total,
