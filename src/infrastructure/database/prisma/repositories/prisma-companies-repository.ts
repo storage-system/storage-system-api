@@ -35,7 +35,11 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
         id,
       },
       include: {
-        users: true
+        users: {
+          select: {
+            id: true
+          }
+        },
       }
     })
 
