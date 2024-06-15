@@ -40,13 +40,16 @@ export class AuthenticateUseCase {
       throw new WrongCredentialsException('Credenciais Inválidas')
     }
 
-    const accessToken = await this.encrypter.encrypt({
+    const accessTokenPayload = {
       sub: user.id.toString(),
       name: user.name,
       email: user.email,
       phone: user.phone,
+      companyId: user.companyId?.toString(),
       role: user.role,
-    })
+    };
+
+    const accessToken = await this.encrypter.encrypt(accessTokenPayload)
 
     return {
       accessToken,

@@ -28,9 +28,9 @@ export class CreateUserUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private hashGenerator: HashGenerator,
-  ) {}
+  ) { }
 
-  async execute({ name, email, password, phone, role}: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+  async execute({ name, email, password, phone, role }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
     const notification = Notification.create()
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email)

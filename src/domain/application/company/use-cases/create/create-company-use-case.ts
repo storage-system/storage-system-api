@@ -12,7 +12,7 @@ interface CreateCompanyUseCaseRequest {
   email: string
   contact: string
   responsible: string
-  users: string[]
+  users: string[] | undefined
   password: string
 }
 
@@ -54,7 +54,7 @@ export class CreateCompanyUseCase {
       email,
       contact,
       responsible,
-      users,
+      users: users ?? [],
       password: hashedPassword,
     })
 
