@@ -1,19 +1,18 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { User, UserProps } from './user'
-import { UserRole } from './user-types'
-import { faker } from '@faker-js/faker'
+import { UserRoles } from './user-types'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 describe('User Entity', () => {
   let userProps: Omit<UserProps, 'createdAt' | 'updatedAt' | 'deletedAt'>
-  
+
   beforeEach(() => {
     userProps = {
       name: 'John Doe',
       email: 'john@example.com',
       password: 'secure-password',
       phone: '1234567890',
-      role: UserRole.MEMBER,
+      role: UserRoles.MEMBER,
     }
   })
 
@@ -38,7 +37,7 @@ describe('User Entity', () => {
       name: 'Jane Doe',
       email: 'jane@example.com',
       phone: '0987654321',
-      role: UserRole.ADMIN,
+      role: UserRoles.ADMIN,
     }
 
     user.update(updatedProps)

@@ -1,5 +1,5 @@
 import { User, UserProps } from '@/domain/enterprise/user/user';
-import { UserRole } from '@/domain/enterprise/user/user-types';
+import { UserRoles } from '@/domain/enterprise/user/user-types';
 import { Company, CompanyProps } from '@/domain/enterprise/company/company';
 
 export class CompanyPresenter {
@@ -15,7 +15,7 @@ export class CompanyPresenter {
     name: string
     email: string
     phone: string
-    role: UserRole
+    role: UserRoles
     createdAt: Date
     updatedAt?: Date
   }[]
@@ -23,10 +23,10 @@ export class CompanyPresenter {
   constructor(
     aCompanyProps: CompanyProps & { id: string },
     anUserProps: Required<
-    {
-      id: string;
-    } & UserProps
-  >[],
+      {
+        id: string;
+      } & UserProps
+    >[],
   ) {
     this.id = aCompanyProps.id.toString();
     this.name = aCompanyProps.name;
@@ -37,13 +37,13 @@ export class CompanyPresenter {
     this.updatedAt = aCompanyProps.updatedAt;
     this.users = anUserProps.length > 0
       ? anUserProps.map((user) => ({
-          id: user.id.toString(),
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-          role: user.role,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
+        id: user.id.toString(),
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       })) : [];
   }
 

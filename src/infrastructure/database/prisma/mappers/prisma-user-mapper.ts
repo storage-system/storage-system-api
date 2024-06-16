@@ -1,6 +1,6 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { User } from '@/domain/enterprise/user/user';
-import { UserRole } from '@/domain/enterprise/user/user-types';
+import { UserRoles } from '@/domain/enterprise/user/user-types';
 import { Prisma, User as PrismaUser } from '@prisma/client'
 
 export class PrismaUserMapper {
@@ -11,7 +11,7 @@ export class PrismaUserMapper {
       password: raw.password,
       phone: raw.phone,
       companyId: !!raw.companyId ? new UniqueEntityID(raw.companyId) : undefined,
-      role: raw.role as UserRole,
+      role: raw.role as UserRoles,
     }, new UniqueEntityID(raw.id))
   }
 

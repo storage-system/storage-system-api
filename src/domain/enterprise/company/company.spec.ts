@@ -8,6 +8,7 @@ describe('Company Entity', () => {
       password: '123456',
       contact: '123456789',
       responsible: 'John Doe',
+      users: []
     }
     const company = Company.create(props)
 

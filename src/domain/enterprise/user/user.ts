@@ -1,14 +1,14 @@
 import { Entity } from '@/core/entities/entity'
 import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { UserRole } from './user-types'
+import { UserRoles } from './user-types'
 
 export interface UserProps {
   name: string
   email: string
   password: string
   phone: string
-  role: UserRole
+  role: UserRoles
   companyId?: UniqueEntityID
   createdAt: Date
   updatedAt?: Date

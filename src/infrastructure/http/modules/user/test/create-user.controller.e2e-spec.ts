@@ -1,4 +1,4 @@
-import { UserRole } from '@/domain/enterprise/user/user-types'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { AppModule } from '@/infrastructure/app.module'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { faker } from '@faker-js/faker'
@@ -30,7 +30,7 @@ describe('Create user (E2E)', () => {
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRole.MEMBER,
+      role: UserRoles.MEMBER,
     }
 
     const response = await request(app.getHttpServer())

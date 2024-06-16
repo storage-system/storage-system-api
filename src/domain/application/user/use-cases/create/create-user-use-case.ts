@@ -1,6 +1,6 @@
 import { Either, right } from "@/core/either"
 import { User } from "@/domain/enterprise/user/user"
-import { UserRole } from "@/domain/enterprise/user/user-types"
+import { UserRoles } from "@/domain/enterprise/user/user-types"
 import { UsersRepository } from "../../users-repository"
 import { Injectable } from "@nestjs/common"
 import { Notification } from "@/core/validation/notification"
@@ -13,7 +13,7 @@ interface CreateUserUseCaseRequest {
   email: string
   password: string
   phone: string
-  role: UserRole
+  role: UserRoles
 }
 
 type CreateUserUseCaseResponse = Either<

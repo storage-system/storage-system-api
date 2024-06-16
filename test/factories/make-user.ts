@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { User, UserProps } from '@/domain/enterprise/user/user'
-import { UserRole } from '@/domain/enterprise/user/user-types'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { PrismaUserMapper } from '@/infrastructure/database/prisma/mappers/prisma-user-mapper'
@@ -19,7 +19,7 @@ export function makeUser(
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRole.MEMBER,
+      role: UserRoles.MEMBER,
       ...override,
     },
     id,

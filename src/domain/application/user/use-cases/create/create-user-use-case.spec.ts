@@ -1,7 +1,7 @@
 import { FakeHasher } from "test/cryptography/fake-hasher"
 import { CreateUserUseCase } from "./create-user-use-case"
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository"
-import { UserRole } from "@/domain/enterprise/user/user-types"
+import { UserRoles } from "@/domain/enterprise/user/user-types"
 import { faker } from "@faker-js/faker"
 import { makeUser } from "test/factories/make-user"
 
@@ -33,7 +33,7 @@ describe('Create User', () => {
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRole.MEMBER
+      role: UserRoles.MEMBER
     })
 
     expect(result.isRight()).toBe(true)
@@ -52,7 +52,7 @@ describe('Create User', () => {
       email: faker.internet.email(),
       password: passwordMocked,
       phone: faker.phone.number(),
-      role: UserRole.MEMBER
+      role: UserRoles.MEMBER
     })
 
     const hashedPassword = await fakeHasher.hash(passwordMocked)
@@ -72,7 +72,7 @@ describe('Create User', () => {
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRole.MEMBER
+      role: UserRoles.MEMBER
     })
 
     expect(response).rejects.toThrow('Erro ao criar usuário')

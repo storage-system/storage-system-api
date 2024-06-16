@@ -28,7 +28,8 @@ describe('Create Company', () => {
       email: 'johndoeeletronics@example.com',
       password: '123456',
       contact: '99 9999 9999',
-      responsible: 'John Doe'
+      responsible: 'John Doe',
+      users: [],
     })
 
     expect(result.isRight()).toBe(true)
@@ -43,7 +44,8 @@ describe('Create Company', () => {
       email: 'johndoeeletronics@example.com',
       password: '123456',
       contact: '99 9999 9999',
-      responsible: 'John Doe'
+      responsible: 'John Doe',
+      users: [],
     })
 
     const hashedPassword = await fakeHasher.hash('123456')
