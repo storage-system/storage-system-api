@@ -1,7 +1,7 @@
 import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create/create-category-use-case";
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from "@nestjs/common";
 import { CreateCategoryDTO } from "./dto/create-category.dto";
-import { CurrentUser } from "@/infrastructure/auth/current-user-decorator";
+import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
 import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
 import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
