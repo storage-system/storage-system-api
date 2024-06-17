@@ -26,6 +26,7 @@ export class PrismaUsersRepository implements UsersRepository {
       this.prisma.user.count({
         where: {
           deletedAt: null,
+          companyId: params.companyId,
         }
       })
     ])

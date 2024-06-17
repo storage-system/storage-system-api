@@ -11,6 +11,8 @@ import { UpdateUserUseCase } from "@/domain/application/user/use-cases/update/up
 import { Public } from "@/infrastructure/auth/public";
 import { AssignCompanyUseCase } from "@/domain/application/user/use-cases/assign-company/assign-company-use-case";
 import { ListUsersParamsDTO } from "./dto/list-users.dto";
+import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
+import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
 
 @ApiTags('Users')
 @Controller('/users')
@@ -29,12 +31,13 @@ export class UserController {
   async create(@Body() body: CreateUserDTO) {
     await this.createUserUseCase.execute(body)
   }
-  
+
   @Get()
   async list(
+    @CurrentUser() user: UserPayload,
     @Query() query: ListUsersParamsDTO
   ) {
-    return await this.listUserUseCase.execute(query)
+    return await this.listUserUseCase.execute({ ...query, companyId: user.companyId })
   }
 
   @Patch('/:id')
