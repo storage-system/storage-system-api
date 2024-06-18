@@ -11,6 +11,7 @@ export interface CompanyProps {
   users: string[]
   createdAt: Date
   updatedAt?: Date
+  deletedAt?: Date
 }
 
 export class Company extends Entity<CompanyProps> {

@@ -3,6 +3,7 @@ import { Public } from '@/infrastructure/auth/public'
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -16,6 +17,9 @@ import { EditCompanyDTO } from './dto/edit-company.dto'
 import { EditCompanyUseCase } from '@/domain/application/company/use-cases/update/edit-company-use-case'
 import { ApiTags } from '@nestjs/swagger'
 import { GetCompanyUseCase } from '@/domain/application/company/use-cases/retrieve/get-company/get-company-use-case'
+import { DeleteCompanyUseCase } from '@/domain/application/company/use-cases/delete/delete-company-use-case'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
 
 @ApiTags('Company')
 @Controller('/company')
@@ -24,6 +28,7 @@ export class CompanyController {
     private createCompanyUseCase: CreateCompanyUseCase,
     private editCompanyUseCase: EditCompanyUseCase,
     private getCompanyUseCase: GetCompanyUseCase,
+    private deleteCompanyUseCase: DeleteCompanyUseCase,
   ) { }
 
   @Post()
@@ -65,6 +70,18 @@ export class CompanyController {
       email,
       contact,
       responsible,
+    })
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(
+    @Param('id') companyId: string,
+    @CurrentUser() user: UserPayload
+  ) {
+    await this.deleteCompanyUseCase.execute({
+      companyId,
+      authorId: user.sub,
     })
   }
 }

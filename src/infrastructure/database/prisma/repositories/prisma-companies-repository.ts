@@ -37,7 +37,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
       include: {
         users: {
           select: {
-            id: true
+            id: true,
           }
         },
       }
@@ -66,6 +66,18 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
         id: data.id,
       },
       data
+    })
+  }
+
+  async delete(companyId: string): Promise<void> {
+    await this.prisma.company.update({
+      where: {
+        id: companyId,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date()
+      }
     })
   }
 }

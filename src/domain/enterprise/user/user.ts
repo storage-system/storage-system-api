@@ -90,4 +90,12 @@ export class User extends Entity<UserProps> {
   static isAdmin(role: UserRoles): boolean {
     return role === UserRoles.ADMIN;
   }
+
+  static isResponsible(role: UserRoles): boolean {
+    return role === UserRoles.RESPONSIBLE
+  }
+
+  static canDeleteCompany(role: UserRoles): boolean {
+    return role === UserRoles.RESPONSIBLE || role === UserRoles.ADMIN
+  }
 }

@@ -33,4 +33,9 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
 
     this.items[itemIndex] = company
   }
+
+  async delete(companyId: string): Promise<void> {
+    const filteredCompanies = this.items.filter((company) => company.id.toString() !== companyId)
+    this.items = filteredCompanies
+  }
 }

@@ -10,6 +10,7 @@ export class CompanyPresenter {
   responsible: string
   createdAt: Date
   updatedAt?: Date
+  deletedAt?: Date
   users: {
     id: string
     name: string
@@ -35,16 +36,17 @@ export class CompanyPresenter {
     this.responsible = aCompanyProps.responsible;
     this.createdAt = aCompanyProps.createdAt;
     this.updatedAt = aCompanyProps.updatedAt;
-    this.users = anUserProps.length > 0
-      ? anUserProps.map((user) => ({
-        id: user.id.toString(),
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      })) : [];
+    this.deletedAt = aCompanyProps.deletedAt,
+      this.users = anUserProps.length > 0
+        ? anUserProps.map((user) => ({
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        })) : [];
   }
 
   static fromAggregate(

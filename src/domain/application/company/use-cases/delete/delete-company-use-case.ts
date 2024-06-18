@@ -8,7 +8,7 @@ import { Notification } from '@/core/validation/notification'
 import NotAuthorizedException from '@/core/exception/not-authorized-exception'
 
 interface EditCompanyUseCaseRequest {
-  userId: string
+  authorId: string
   companyId: string
 }
 
@@ -20,7 +20,7 @@ export class DeleteCompanyUseCase {
   ) { }
 
   async execute({
-    userId,
+    authorId,
     companyId,
   }: EditCompanyUseCaseRequest): Promise<void> {
     const notification = Notification.create()
@@ -31,13 +31,13 @@ export class DeleteCompanyUseCase {
       throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(companyId));
     }
 
-    const user = await this.usersRepository.findById(userId)
+    const author = await this.usersRepository.findById(authorId)
 
-    if (!user) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(userId));
+    if (!author) {
+      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(authorId));
     }
 
-    if (!User.canDeleteCompany(user.role)) {
+    if (!User.canDeleteCompany(author.role)) {
       throw new NotAuthorizedException('User not authorized to delete company', notification);
     }
 

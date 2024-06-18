@@ -21,6 +21,9 @@ export class PrismaCompanyMapper {
       contact: raw.contact,
       responsible: raw.responsible,
       users: raw.users.map((user) => user.id),
+      createdAt: raw.createdAt,
+      updatedAt: raw.deletedAt ?? undefined,
+      deletedAt: raw.deletedAt ?? undefined,
     }, new UniqueEntityID(raw.id))
   }
 
