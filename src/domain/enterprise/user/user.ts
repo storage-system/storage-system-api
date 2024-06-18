@@ -86,4 +86,8 @@ export class User extends Entity<UserProps> {
 
     this.touch()
   }
+
+  static isAdmin(role: UserRoles): boolean {
+    return role === UserRoles.ADMIN;
+  }
 }

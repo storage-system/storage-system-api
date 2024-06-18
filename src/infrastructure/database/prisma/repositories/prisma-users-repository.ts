@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { UsersRepository } from "@/domain/application/user/users-repository";
-import { PaginationProps, Pagination } from "@/core/entities/pagination";
+import { Pagination } from "@/core/entities/pagination";
 import { User } from "@/domain/enterprise/user/user";
 import { PrismaUserMapper } from "../mappers/prisma-user-mapper";
 import { ListUsersCommand } from "@/domain/application/user/use-cases/retrieve/list/list-users-command";
@@ -10,31 +10,31 @@ import { ListUsersCommand } from "@/domain/application/user/use-cases/retrieve/l
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private prisma: PrismaService) { }
 
-  async findAll(params: ListUsersCommand): Promise<Pagination<User>> {
+  async findAll({ page, perPage, companyId }: ListUsersCommand): Promise<Pagination<User>> {
     const [users, count] = await this.prisma.$transaction([
-      this.prisma.user.findMany(({
+      this.prisma.user.findMany({
         where: {
           deletedAt: null,
-          companyId: params.companyId,
+          companyId: companyId,
         },
-        take: params.perPage,
-        skip: (params.page - 1) * params.perPage,
+        take: perPage,
+        skip: (page - 1) * perPage,
         orderBy: {
           createdAt: 'desc'
         },
-      })),
+      }),
       this.prisma.user.count({
         where: {
           deletedAt: null,
-          companyId: params.companyId,
+          companyId: companyId,
         }
       })
     ])
 
     return new Pagination({
       total: count,
-      page: params.page,
-      perPage: params.perPage,
+      page,
+      perPage,
       items: users.map(PrismaUserMapper.toDomain)
     })
   }

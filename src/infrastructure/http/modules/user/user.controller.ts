@@ -10,9 +10,9 @@ import { ListUsersUseCase } from "@/domain/application/user/use-cases/retrieve/l
 import { UpdateUserUseCase } from "@/domain/application/user/use-cases/update/update-user-use-case";
 import { Public } from "@/infrastructure/auth/public";
 import { AssignCompanyUseCase } from "@/domain/application/user/use-cases/assign-company/assign-company-use-case";
-import { ListUsersParamsDTO } from "./dto/list-users.dto";
 import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
 import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
+import { QueryParamsDTO } from "../query-params/query-params.dto";
 
 @ApiTags('Users')
 @Controller('/users')
@@ -35,9 +35,13 @@ export class UserController {
   @Get()
   async list(
     @CurrentUser() user: UserPayload,
-    @Query() query: ListUsersParamsDTO
+    @Query() query: QueryParamsDTO
   ) {
-    return await this.listUserUseCase.execute({ ...query, companyId: user.companyId })
+    return await this.listUserUseCase.execute({
+      ...query,
+      companyId: user.companyId,
+      role: user.role,
+    })
   }
 
   @Patch('/:id')
