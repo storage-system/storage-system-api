@@ -16,12 +16,9 @@ interface CreateCompanyUseCaseRequest {
   password: string
 }
 
-type CreateCompanyUseCaseResponse = Either<
-  Notification,
-  {
-    company: Company
-  }
->
+type CreateCompanyUseCaseResponse = {
+  companyId: string
+}
 
 @Injectable()
 export class CreateCompanyUseCase {
@@ -64,8 +61,8 @@ export class CreateCompanyUseCase {
 
     await this.companiesRepository.create(company)
 
-    return right({
-      company,
-    })
+    return {
+      companyId: company.id.toString()
+    }
   }
 }

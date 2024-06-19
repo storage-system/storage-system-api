@@ -39,7 +39,7 @@ export class CompanyController {
   async create(@Body() body: CreateAccountDTO) {
     const { name, email, password, contact, responsible, users } = body
 
-    await this.createCompanyUseCase.execute({
+    return await this.createCompanyUseCase.execute({
       name,
       email,
       password,

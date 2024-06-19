@@ -23,7 +23,7 @@ describe('Create Company', () => {
   })
 
   it('should be able to create a new company', async () => {
-    const result = await useCase.execute({
+    const response = await useCase.execute({
       name: 'John Doe Eletronics',
       email: 'johndoeeletronics@example.com',
       password: '123456',
@@ -32,14 +32,14 @@ describe('Create Company', () => {
       users: [],
     })
 
-    expect(result.isRight()).toBe(true)
-    expect(result.value).toEqual({
-      company: repository.items[0],
+    expect(response).toBeTruthy()
+    expect(response).toEqual({
+      companyId: repository.items[0].id.toString(),
     })
   })
 
   it('should hash company password upon registration', async () => {
-    const result = await useCase.execute({
+    const response = await useCase.execute({
       name: 'John Doe Eletronics',
       email: 'johndoeeletronics@example.com',
       password: '123456',
@@ -50,7 +50,7 @@ describe('Create Company', () => {
 
     const hashedPassword = await fakeHasher.hash('123456')
 
-    expect(result.isRight()).toBe(true)
+    expect(response).toBeTruthy()
     expect(repository.items[0].password).toEqual(hashedPassword)
   })
 })
