@@ -3,6 +3,8 @@ import { CategoryModule } from "./modules/category/category.module";
 import { CompanyModule } from "./modules/company/company.module";
 import { AuthenticateModule } from "./modules/authenticate/authenticate.module";
 import { UserModule } from "./modules/user/user.module";
+import { APP_GUARD } from "@nestjs/core";
+import { RolesGuard } from "../guards/roles.guard";
 
 @Module({
   imports: [
@@ -10,6 +12,12 @@ import { UserModule } from "./modules/user/user.module";
     CompanyModule,
     CategoryModule,
     UserModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
 export class HttpModule { }

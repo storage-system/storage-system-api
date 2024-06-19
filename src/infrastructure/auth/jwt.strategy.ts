@@ -11,7 +11,7 @@ const tokenPayloadSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   phone: z.string(),
-  role: z.nativeEnum(UserRoles),
+  roles: z.array(z.nativeEnum(UserRoles)),
 });
 
 export type UserPayload = z.infer<typeof tokenPayloadSchema>;

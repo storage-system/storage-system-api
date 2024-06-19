@@ -31,7 +31,7 @@ describe('Authenticate (E2E)', () => {
       email: faker.internet.email(),
       password: await hash(passwordMock, 8),
       phone: faker.phone.number(),
-      role: UserRoles.MEMBER,
+      roles: [UserRoles.MEMBER],
     }
 
     await prisma.user.create({

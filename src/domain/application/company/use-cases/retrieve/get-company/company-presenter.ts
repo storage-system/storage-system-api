@@ -16,7 +16,7 @@ export class CompanyPresenter {
     name: string
     email: string
     phone: string
-    role: UserRoles
+    roles: UserRoles[]
     createdAt: Date
     updatedAt?: Date
   }[]
@@ -43,7 +43,7 @@ export class CompanyPresenter {
           name: user.name,
           email: user.email,
           phone: user.phone,
-          role: user.role,
+          roles: user.roles,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         })) : [];

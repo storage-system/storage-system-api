@@ -21,7 +21,7 @@ model User {
   email    String @unique
   phone    String
   password String
-  role     Role   @default(MEMBER)
+  roles    Role[] @default([MEMBER])
 
   companyId String?  @map("company_id")
   company   Company? @relation(fields: [companyId], references: [id])

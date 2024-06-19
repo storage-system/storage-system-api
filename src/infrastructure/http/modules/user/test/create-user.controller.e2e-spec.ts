@@ -30,7 +30,7 @@ describe('Create user (E2E)', () => {
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRoles.MEMBER,
+      roles: [UserRoles.MEMBER],
     }
 
     const response = await request(app.getHttpServer())

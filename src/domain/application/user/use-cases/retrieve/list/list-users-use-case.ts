@@ -12,9 +12,9 @@ export class ListUsersUseCase {
   constructor(private usersRepository: UsersRepository) { }
 
   async execute(query: ListUsersCommand): Promise<ListUsersUseCaseResponse> {
-    const { role } = query;
+    const { roles } = query;
 
-    if (role && User.isAdmin(role)) {
+    if (roles && User.isAdmin(roles)) {
       query.companyId = undefined;
     }
 

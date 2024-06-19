@@ -8,7 +8,7 @@ export class UserPresenter {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      role: user.role,
+      roles: user.roles,
       companyId: user.companyId?.toString(),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,

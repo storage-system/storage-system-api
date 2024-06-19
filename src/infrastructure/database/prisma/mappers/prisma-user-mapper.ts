@@ -11,7 +11,7 @@ export class PrismaUserMapper {
       password: raw.password,
       phone: raw.phone,
       companyId: !!raw.companyId ? new UniqueEntityID(raw.companyId) : undefined,
-      role: raw.role as UserRoles,
+      roles: raw.roles as UserRoles[],
     }, new UniqueEntityID(raw.id))
   }
 

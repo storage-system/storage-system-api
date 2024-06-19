@@ -40,7 +40,7 @@ export class UserController {
     return await this.listUserUseCase.execute({
       ...query,
       companyId: user.companyId,
-      role: user.role,
+      roles: user.roles,
     })
   }
 

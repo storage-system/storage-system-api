@@ -20,6 +20,8 @@ import { GetCompanyUseCase } from '@/domain/application/company/use-cases/retrie
 import { DeleteCompanyUseCase } from '@/domain/application/company/use-cases/delete/delete-company-use-case'
 import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
 import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
+import { Roles } from '@/infrastructure/decorators/roles.decorator'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
 
 @ApiTags('Company')
 @Controller('/company')
@@ -74,6 +76,7 @@ export class CompanyController {
   }
 
   @Delete('/:id')
+  @Roles(UserRoles.ADMIN)
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
     @Param('id') companyId: string,

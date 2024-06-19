@@ -8,7 +8,7 @@ export interface UserProps {
   email: string
   password: string
   phone: string
-  role: UserRoles
+  roles: UserRoles[]
   companyId?: UniqueEntityID
   createdAt: Date
   updatedAt?: Date
@@ -32,8 +32,8 @@ export class User extends Entity<UserProps> {
     return this.props.phone
   }
 
-  get role() {
-    return this.props.role
+  get roles() {
+    return this.props.roles
   }
 
   public get companyId(): UniqueEntityID | undefined {
@@ -81,21 +81,21 @@ export class User extends Entity<UserProps> {
     this.props.email = anUser.email ?? this.email
     this.props.password = anUser.password ?? this.password
     this.props.phone = anUser.phone ?? this.phone
-    this.props.role = anUser.role ?? this.role
+    this.props.roles = anUser.roles ?? this.roles
     this.props.companyId = anUser.companyId ?? this.companyId
 
     this.touch()
   }
 
-  static isAdmin(role: UserRoles): boolean {
-    return role === UserRoles.ADMIN;
+  static isAdmin(roles: UserRoles[]): boolean {
+    return roles.includes(UserRoles.ADMIN)
   }
 
-  static isResponsible(role: UserRoles): boolean {
-    return role === UserRoles.RESPONSIBLE
+  static isResponsible(roles: UserRoles[]): boolean {
+    return roles.includes(UserRoles.RESPONSIBLE)
   }
 
-  static canDeleteCompany(role: UserRoles): boolean {
-    return role === UserRoles.RESPONSIBLE || role === UserRoles.ADMIN
+  static canDeleteCompany(roles: UserRoles[]): boolean {
+    return this.isResponsible(roles) || this.isAdmin(roles)
   }
 }

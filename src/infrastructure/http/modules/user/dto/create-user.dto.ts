@@ -7,7 +7,7 @@ const createUserBodySchema = z.object({
   email: z.string().email(),
   password: z.string(),
   phone: z.string(),
-  role: z.nativeEnum(UserRoles)
+  roles: z.array(z.nativeEnum(UserRoles)),
 })
 
 

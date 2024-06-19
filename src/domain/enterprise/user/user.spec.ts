@@ -12,7 +12,7 @@ describe('User Entity', () => {
       email: 'john@example.com',
       password: 'secure-password',
       phone: '1234567890',
-      role: UserRoles.MEMBER,
+      roles: [UserRoles.MEMBER],
     }
   })
 
@@ -23,7 +23,7 @@ describe('User Entity', () => {
     expect(user.email).toBe(userProps.email)
     expect(user.password).toBe(userProps.password)
     expect(user.phone).toBe(userProps.phone)
-    expect(user.role).toBe(userProps.role)
+    expect(user.roles).toBe(userProps.roles)
     expect(user.createdAt).toBeInstanceOf(Date)
     expect(user.updatedAt).toBeInstanceOf(Date)
     expect(user.deletedAt).toBeUndefined()
@@ -37,7 +37,7 @@ describe('User Entity', () => {
       name: 'Jane Doe',
       email: 'jane@example.com',
       phone: '0987654321',
-      role: UserRoles.ADMIN,
+      roles: [UserRoles.ADMIN],
     }
 
     user.update(updatedProps)
@@ -45,7 +45,7 @@ describe('User Entity', () => {
     expect(user.name).toBe(updatedProps.name)
     expect(user.email).toBe(updatedProps.email)
     expect(user.phone).toBe(updatedProps.phone)
-    expect(user.role).toBe(updatedProps.role)
+    expect(user.roles).toBe(updatedProps.roles)
     expect(user.updatedAt).not.toBe(oldUpdatedAt)
   })
 

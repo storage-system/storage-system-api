@@ -10,14 +10,14 @@ interface UpdateUserUseCaseRequest {
   email?: string
   password?: string
   phone?: string
-  role?: UserRoles
+  roles?: UserRoles[]
 }
 
 @Injectable()
 export class UpdateUserUseCase {
   constructor(private usersRepository: UsersRepository) { }
 
-  async execute({ userId, name, email, password, phone, role }: UpdateUserUseCaseRequest): Promise<void> {
+  async execute({ userId, name, email, password, phone, roles }: UpdateUserUseCaseRequest): Promise<void> {
     const user = await this.usersRepository.findById(userId)
 
     if (!user) {
@@ -29,7 +29,7 @@ export class UpdateUserUseCase {
       email,
       password,
       phone,
-      role,
+      roles,
     })
 
     await this.usersRepository.save(user)

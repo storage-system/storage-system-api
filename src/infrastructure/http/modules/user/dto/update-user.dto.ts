@@ -7,7 +7,7 @@ const updateUserBodySchema = z.object({
   email: z.string().email().optional(),
   password: z.string().optional(),
   phone: z.string().optional(),
-  role: z.nativeEnum(UserRoles).optional(),
+  roles: z.array(z.nativeEnum(UserRoles)).optional(),
 })
 
 

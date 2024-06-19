@@ -19,7 +19,7 @@ export function makeUser(
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRoles.MEMBER,
+      roles: [UserRoles.MEMBER],
       ...override,
     },
     id,

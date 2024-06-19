@@ -37,7 +37,7 @@ export class DeleteCompanyUseCase {
       throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(authorId));
     }
 
-    if (!User.canDeleteCompany(author.role)) {
+    if (!User.canDeleteCompany(author.roles)) {
       throw new NotAuthorizedException('User not authorized to delete company', notification);
     }
 

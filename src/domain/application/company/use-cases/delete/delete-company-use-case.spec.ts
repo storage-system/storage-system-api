@@ -1,5 +1,4 @@
 import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { DeleteCompanyUseCase } from "./delete-company-use-case";
 import { makeCompany } from "test/factories/make-company";
@@ -25,7 +24,7 @@ describe('Edit Company', () => {
 
   it('should be able to edit a company', async () => {
     const newUser = makeUser({
-      role: UserRoles.ADMIN
+      roles: [UserRoles.ADMIN]
     })
     await usersRepository.create(newUser)
 
@@ -34,7 +33,7 @@ describe('Edit Company', () => {
 
     await useCase.execute({
       companyId: newCompany.id.toString(),
-      userId: newUser.id.toString(),
+      authorId: newUser.id.toString(),
     })
 
     expect(companiesRepository.items.length).toBe(0)
@@ -42,7 +41,7 @@ describe('Edit Company', () => {
 
   it('should not be able to edit a company that does companyId not exist', async () => {
     const newUser = makeUser({
-      role: UserRoles.ADMIN
+      roles: [UserRoles.ADMIN]
     })
     await usersRepository.create(newUser)
 
@@ -50,7 +49,7 @@ describe('Edit Company', () => {
 
     await expect(useCase.execute({
       companyId,
-      userId: newUser.id.toString(),
+      authorId: newUser.id.toString(),
     }))
       .rejects.toThrowError(`Empresa com ID ${companyId} não foi encontrado`)
   })
@@ -59,18 +58,18 @@ describe('Edit Company', () => {
     const newCompany = makeCompany()
     await companiesRepository.create(newCompany)
 
-    const userId = 'non-exists-user-id-01'
+    const authorId = 'non-exists-user-id-01'
 
     await expect(useCase.execute({
       companyId: newCompany.id.toString(),
-      userId,
+      authorId,
     }))
-      .rejects.toThrowError(`Usuário com ID ${userId} não foi encontrado`)
+      .rejects.toThrowError(`Usuário com ID ${authorId} não foi encontrado`)
   })
 
   it('should not be able to edit a company if the user does not have the necessary permissions', async () => {
     const newUser = makeUser({
-      role: UserRoles.MEMBER
+      roles: [UserRoles.MEMBER]
     })
     await usersRepository.create(newUser)
 
@@ -79,7 +78,7 @@ describe('Edit Company', () => {
 
     await expect(useCase.execute({
       companyId: newCompany.id.toString(),
-      userId: newUser.id.toString(),
+      authorId: newUser.id.toString(),
     }))
       .rejects.toThrowError(`User not authorized to delete company`)
   })

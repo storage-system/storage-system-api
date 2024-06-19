@@ -13,7 +13,7 @@ interface CreateUserUseCaseRequest {
   email: string
   password: string
   phone: string
-  role: UserRoles
+  roles: UserRoles[]
 }
 
 type CreateUserUseCaseResponse = Either<
@@ -30,7 +30,7 @@ export class CreateUserUseCase {
     private hashGenerator: HashGenerator,
   ) { }
 
-  async execute({ name, email, password, phone, role }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+  async execute({ name, email, password, phone, roles }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
     const notification = Notification.create()
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
@@ -45,7 +45,7 @@ export class CreateUserUseCase {
       name,
       email,
       phone,
-      role,
+      roles,
       password: hashedPassword,
     })
 

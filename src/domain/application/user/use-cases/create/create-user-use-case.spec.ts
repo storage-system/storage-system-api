@@ -33,7 +33,7 @@ describe('Create User', () => {
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRoles.MEMBER
+      roles: [UserRoles.MEMBER],
     })
 
     expect(result.isRight()).toBe(true)
@@ -52,7 +52,7 @@ describe('Create User', () => {
       email: faker.internet.email(),
       password: passwordMocked,
       phone: faker.phone.number(),
-      role: UserRoles.MEMBER
+      roles: [UserRoles.MEMBER],
     })
 
     const hashedPassword = await fakeHasher.hash(passwordMocked)
@@ -72,7 +72,7 @@ describe('Create User', () => {
         length: 8
       }),
       phone: faker.phone.number(),
-      role: UserRoles.MEMBER
+      roles: [UserRoles.MEMBER],
     })
 
     expect(response).rejects.toThrow('Erro ao criar usuário')
