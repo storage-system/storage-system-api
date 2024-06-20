@@ -9,7 +9,6 @@ import { DeleteUserUseCase } from "@/domain/application/user/use-cases/delete/de
 import { ListUsersUseCase } from "@/domain/application/user/use-cases/retrieve/list/list-users-use-case";
 import { UpdateUserUseCase } from "@/domain/application/user/use-cases/update/update-user-use-case";
 import { Public } from "@/infrastructure/auth/public";
-import { AssignCompanyUseCase } from "@/domain/application/user/use-cases/assign-company/assign-company-use-case";
 import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
 import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
 import { QueryParamsDTO } from "../query-params/query-params.dto";
@@ -22,7 +21,6 @@ export class UserController {
     private listUserUseCase: ListUsersUseCase,
     private updateUserUseCase: UpdateUserUseCase,
     private deleteUserUseCase: DeleteUserUseCase,
-    private assignCompanyUseCase: AssignCompanyUseCase,
   ) { }
 
   @Post()
@@ -53,18 +51,6 @@ export class UserController {
     return await this.updateUserUseCase.execute({
       userId,
       ...body
-    })
-  }
-
-  @Patch('/:userId/assign-company/:companyId')
-  @HttpCode(204)
-  async assignCompany(
-    @Param('userId') userId: string,
-    @Param('companyId') companyId: string,
-  ) {
-    return await this.assignCompanyUseCase.execute({
-      userId,
-      companyId,
     })
   }
 
