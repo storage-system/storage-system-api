@@ -6,7 +6,6 @@ import { ZodValidationPipe } from 'nestjs-zod';
 
 export function MainConfig(app: INestApplication) {
   app.enableCors();
-  app.setGlobalPrefix('/api')
   app.useGlobalPipes(new ZodValidationPipe())
   app.useGlobalFilters(
     new NotificationExceptionFilter(),

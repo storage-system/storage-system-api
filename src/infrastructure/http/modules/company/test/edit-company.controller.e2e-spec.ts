@@ -6,42 +6,38 @@ import { CompanyFactory } from "test/factories/make-company"
 import { HttpStatus, INestApplication } from "@nestjs/common"
 import { DatabaseModule } from "@/infrastructure/database/database.module"
 import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
+import { AuthenticateFactory } from 'test/factories/make-authenticate'
+import { UserFactory } from 'test/factories/make-user'
 
 describe('Edit Company (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let companyFactory: CompanyFactory
-  let jwt: JwtService
+  let authenticateFactory: AuthenticateFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [CompanyFactory],
+      providers: [CompanyFactory, UserFactory, AuthenticateFactory],
     }).compile()
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
-    companyFactory = moduleRef.get(CompanyFactory)
-    jwt = moduleRef.get(JwtService)
+    authenticateFactory = moduleRef.get(AuthenticateFactory)
 
     await app.init()
   })
 
-  test('[PATCH] /accounts/:id', async () => {
-    const company = await companyFactory.makePrismaCompany()
-
-    const accessToken = jwt.sign({ sub: company.id.toString() })
+  test('[PATCH] /companies/:id', async () => {
+    const { accessToken, companyId } = await authenticateFactory.makePrismaAuthenticate()
 
     const updateCategory = {
       name: 'Floricultura Floratta'
     }
 
     const response = await request(app.getHttpServer())
-    .patch(`/accounts/${company.id}`)
-    .set('Authorization', `Bearer ${accessToken}`)
-    .send(updateCategory)
-
-    expect(response.statusCode).toBe(HttpStatus.NO_CONTENT)
+      .patch(`/companies/${companyId}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(updateCategory)
 
     expect(response.statusCode).toBe(HttpStatus.NO_CONTENT)
 

@@ -12,6 +12,8 @@ async function bootstrap() {
   MainConfig(app)
   DocumentConfig(app)
 
+  app.setGlobalPrefix('/api')
+
   await app.listen(port)
 }
 

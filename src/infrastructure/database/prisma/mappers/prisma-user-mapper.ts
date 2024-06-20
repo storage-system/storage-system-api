@@ -23,6 +23,7 @@ export class PrismaUserMapper {
       password: user.password,
       phone: user.phone,
       companyId: user.companyId?.toString(),
+      roles: user.roles,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       deletedAt: user.deletedAt,

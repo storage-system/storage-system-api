@@ -24,7 +24,7 @@ import { Roles } from '@/infrastructure/decorators/roles.decorator'
 import { UserRoles } from '@/domain/enterprise/user/user-types'
 
 @ApiTags('Company')
-@Controller('/company')
+@Controller('/companies')
 export class CompanyController {
   constructor(
     private createCompanyUseCase: CreateCompanyUseCase,

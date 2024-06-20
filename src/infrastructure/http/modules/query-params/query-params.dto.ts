@@ -6,4 +6,4 @@ export const queryParamsDTO = z.object({
   perPage: z.coerce.number().optional().default(10),
 })
 
-export class QueryParamsDTO extends createZodDto(queryParamsDTO) {}
+export class QueryParamsDTO extends createZodDto(queryParamsDTO) { }

@@ -8,10 +8,10 @@ import { UserRoles } from '@/domain/enterprise/user/user-types';
 const tokenPayloadSchema = z.object({
   sub: z.string().uuid(),
   companyId: z.string().uuid().optional(),
-  name: z.string(),
-  email: z.string().email(),
-  phone: z.string(),
-  roles: z.array(z.nativeEnum(UserRoles)),
+  name: z.string().optional(),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  roles: z.array(z.nativeEnum(UserRoles)).optional(),
 });
 
 export type UserPayload = z.infer<typeof tokenPayloadSchema>;
@@ -29,6 +29,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: UserPayload) {
-    return tokenPayloadSchema.parse(payload);
+    return tokenPayloadSchema.parse(payload)
   }
 }

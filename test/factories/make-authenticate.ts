@@ -2,6 +2,7 @@ import { UserFactory } from './make-user'
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { CompanyFactory } from './make-company'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
 
 interface AuthenticateFactoryResponse {
   accessToken: string
