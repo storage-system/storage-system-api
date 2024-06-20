@@ -5,6 +5,8 @@ import { UserFactory } from "test/factories/make-user"
 import { AppModule } from "@/infrastructure/app.module"
 import { DatabaseModule } from "@/infrastructure/database/database.module"
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
+import { CompanyFactory } from 'test/factories/make-company'
+import { MainConfig } from '@/infrastructure/main.config'
 
 describe('Fetch users (E2E)', () => {
   let app: INestApplication
@@ -14,12 +16,13 @@ describe('Fetch users (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, AuthenticateFactory],
+      providers: [CompanyFactory, UserFactory, AuthenticateFactory],
     }).compile()
     app = moduleRef.createNestApplication()
-
     userFactory = moduleRef.get(UserFactory)
     authenticateFactory = moduleRef.get(AuthenticateFactory)
+
+    MainConfig(app)
 
     await app.init()
   })
