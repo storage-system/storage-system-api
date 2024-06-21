@@ -36,9 +36,9 @@ describe('Create User', () => {
       roles: [UserRoles.MEMBER],
     })
 
-    expect(result.isRight()).toBe(true)
-    expect(result.value).toEqual({
-      user: repository.items[0],
+    expect(result.userId).toBeDefined()
+    expect(result).toEqual({
+      userId: repository.items[0].id.toString(),
     })
   })
 
@@ -57,7 +57,7 @@ describe('Create User', () => {
 
     const hashedPassword = await fakeHasher.hash(passwordMocked)
 
-    expect(result.isRight()).toBe(true)
+    expect(result.userId).toBeDefined()
     expect(repository.items[0].password).toEqual(hashedPassword)
   })
 

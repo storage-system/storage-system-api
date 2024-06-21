@@ -16,12 +16,9 @@ interface CreateUserUseCaseRequest {
   roles: UserRoles[]
 }
 
-type CreateUserUseCaseResponse = Either<
-  Notification,
-  {
-    user: User
-  }
->
+type CreateUserUseCaseResponse = {
+  userId: string
+}
 
 @Injectable()
 export class CreateUserUseCase {
@@ -55,8 +52,8 @@ export class CreateUserUseCase {
 
     await this.usersRepository.create(user)
 
-    return right({
-      user,
-    })
+    return {
+      userId: user.id.toString()
+    }
   }
 }
