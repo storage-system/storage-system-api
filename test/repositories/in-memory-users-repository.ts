@@ -21,7 +21,7 @@ export class InMemoryUsersRepository implements UsersRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const user =  this.items.find((user) => user.email === email)
+    const user = this.items.find((user) => user.email === email)
 
     if (!user) {
       return null
@@ -31,12 +31,12 @@ export class InMemoryUsersRepository implements UsersRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    const user =  this.items.find((user) => user.id.toString() === id)
+    const user = this.items.find((user) => user.id.toString() === id)
 
     if (!user) {
       return null
     }
-    
+
     return user
   }
 

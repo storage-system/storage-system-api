@@ -1,18 +1,21 @@
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { CreateCategoryUseCase } from './create-category-use-case'
 import { Category } from '@/domain/enterprise/category/category'
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 
-let repository: InMemoryCategoriesRepository
+let categoriesRepository: InMemoryCategoriesRepository
+let companiesRepository: InMemoryCompaniesRepository
 let useCase: CreateCategoryUseCase
 
 describe('Create Category', () => {
   beforeEach(() => {
-    repository = new InMemoryCategoriesRepository()
-    useCase = new CreateCategoryUseCase(repository)
+    categoriesRepository = new InMemoryCategoriesRepository()
+    companiesRepository = new InMemoryCompaniesRepository()
+    useCase = new CreateCategoryUseCase(categoriesRepository, companiesRepository)
   })
 
   it('dependencies should be defined', (): void => {
-    expect(repository).toBeDefined()
+    expect(categoriesRepository).toBeDefined()
     expect(useCase).toBeDefined()
   })
 
@@ -23,7 +26,7 @@ describe('Create Category', () => {
       isActive: true,
     })
 
-    expect(repository.items[0]).toBeInstanceOf(Category)
+    expect(categoriesRepository.items[0]).toBeInstanceOf(Category)
   })
 
   it('should not be able to create a category if it exist', async () => {

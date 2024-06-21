@@ -26,8 +26,7 @@ export class CategoryController {
     @CurrentUser() user: UserPayload
   ) {
     const { name, isActive } = body
-
-    const companyId = user.sub
+    const companyId = user.companyId
 
     return await this.createCategoryUseCase.execute({
       name,
@@ -51,11 +50,10 @@ export class CategoryController {
   @HttpCode(204)
   async update(
     @Body() body: EditCategoryDTO,
-    @CurrentUser() user: UserPayload,
+    @CurrentUser() { companyId }: UserPayload,
     @Param('id') categoryId: string,
   ) {
     const { name, isActive } = body
-    const companyId = user.sub
 
     return await this.editCategoryUseCase.execute({
       name,

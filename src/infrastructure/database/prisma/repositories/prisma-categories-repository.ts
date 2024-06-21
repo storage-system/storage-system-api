@@ -63,9 +63,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
       }
     })
 
-    if (!category) {
-      return null
-    }
+    if (!category) return null
 
     return PrismaCategoryMapper.toDomain(category)
   }
