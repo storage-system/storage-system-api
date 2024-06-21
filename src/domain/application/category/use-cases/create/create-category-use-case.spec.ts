@@ -2,16 +2,23 @@ import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-catego
 import { CreateCategoryUseCase } from './create-category-use-case'
 import { Category } from '@/domain/enterprise/category/category'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { makeCompany } from 'test/factories/make-company'
+import { Company } from '@/domain/enterprise/company/company'
 
 let categoriesRepository: InMemoryCategoriesRepository
 let companiesRepository: InMemoryCompaniesRepository
 let useCase: CreateCategoryUseCase
 
 describe('Create Category', () => {
-  beforeEach(() => {
+  let company: Company
+
+  beforeEach(async () => {
     categoriesRepository = new InMemoryCategoriesRepository()
     companiesRepository = new InMemoryCompaniesRepository()
     useCase = new CreateCategoryUseCase(categoriesRepository, companiesRepository)
+
+    company = makeCompany()
+    await companiesRepository.create(company)
   })
 
   it('dependencies should be defined', (): void => {
@@ -22,7 +29,7 @@ describe('Create Category', () => {
   it('should be able to create a category', async () => {
     await useCase.execute({
       name: 'category-01',
-      companyId: 'company-01',
+      companyId: company.id.toString(),
       isActive: true,
     })
 
@@ -32,7 +39,7 @@ describe('Create Category', () => {
   it('should not be able to create a category if it exist', async () => {
     const categoryMock = {
       name: 'category-01',
-      companyId: 'company-01',
+      companyId: company.id.toString(),
       isActive: true,
     }
 
