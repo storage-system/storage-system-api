@@ -6,6 +6,7 @@ import { Test } from "@nestjs/testing"
 import { CategoryFactory } from "test/factories/make-category"
 import { CompanyFactory } from "test/factories/make-company"
 import request from 'supertest'
+import { MainConfig } from "@/infrastructure/main.config"
 
 describe('Fetch categories (E2E)', () => {
   let app: INestApplication
@@ -23,6 +24,8 @@ describe('Fetch categories (E2E)', () => {
     companyFactory = moduleRef.get(CompanyFactory)
     categoryFactory = moduleRef.get(CategoryFactory)
     jwt = moduleRef.get(JwtService)
+
+    MainConfig(app)
 
     await app.init()
   })

@@ -7,6 +7,7 @@ import { CategoryFactory } from "test/factories/make-category"
 import { CompanyFactory } from "test/factories/make-company"
 import request from 'supertest'
 import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
+import { MainConfig } from "@/infrastructure/main.config"
 
 describe('Delete category (E2E)', () => {
   let app: INestApplication
@@ -26,6 +27,8 @@ describe('Delete category (E2E)', () => {
     companyFactory = moduleRef.get(CompanyFactory)
     categoryFactory = moduleRef.get(CategoryFactory)
     jwt = moduleRef.get(JwtService)
+
+    MainConfig(app)
 
     await app.init()
   })

@@ -1,6 +1,7 @@
 import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { AppModule } from '@/infrastructure/app.module'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { MainConfig } from '@/infrastructure/main.config'
 import { faker } from '@faker-js/faker'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
@@ -19,6 +20,8 @@ describe('Authenticate (E2E)', () => {
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
+
+    MainConfig(app)
 
     await app.init()
   })

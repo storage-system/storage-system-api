@@ -1,5 +1,6 @@
 import { AppModule } from "@/infrastructure/app.module"
 import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
+import { MainConfig } from "@/infrastructure/main.config"
 import { INestApplication } from "@nestjs/common"
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
@@ -17,10 +18,12 @@ describe('Create Account (E2E)', () => {
 
     prisma = moduleRef.get(PrismaService)
 
+    MainConfig(app)
+
     await app.init()
   })
 
-  test('[POST] /accounts', async () => {
+  test('[POST] /companies', async () => {
     const companyMock = {
       name: 'John Doe Eletronics',
       email: 'johndoeeletronics@example.com',
@@ -29,7 +32,7 @@ describe('Create Account (E2E)', () => {
       password: '123456',
     }
 
-    const response = await request(app.getHttpServer()).post('/accounts').send(companyMock)
+    const response = await request(app.getHttpServer()).post('/companies').send(companyMock)
 
     expect(response.statusCode).toBe(201)
 
