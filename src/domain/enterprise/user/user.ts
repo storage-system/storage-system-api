@@ -72,10 +72,6 @@ export class User extends Entity<UserProps> {
     return user
   }
 
-  public assignCompany(companyId: UniqueEntityID) {
-    this.props.companyId = companyId
-  }
-
   update(anUser: Partial<UserProps>) {
     this.props.name = anUser.name ?? this.name
     this.props.email = anUser.email ?? this.email

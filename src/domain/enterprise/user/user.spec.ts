@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { User, UserProps } from './user'
 import { UserRoles } from './user-types'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 describe('User Entity', () => {
   let userProps: Omit<UserProps, 'createdAt' | 'updatedAt' | 'deletedAt'>
@@ -57,15 +56,5 @@ describe('User Entity', () => {
 
     expect(user.name).toBe('Jane Doe')
     expect(user.password).toBe(oldPassword)
-  })
-
-  it('should correctly update companyId when using assignCompany method', () => {
-    const user = User.create(userProps)
-
-    const companyId = new UniqueEntityID('company-id-01')
-
-    user.assignCompany(companyId)
-
-    expect(user.companyId).toBe(companyId)
   })
 })
