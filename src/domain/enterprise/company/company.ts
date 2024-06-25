@@ -75,4 +75,8 @@ export class Company extends Entity<CompanyProps> {
 
     this.touch()
   }
+
+  public assignCompany(userId: string) {
+    this.users.push(userId)
+  }
 }

@@ -22,6 +22,7 @@ import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
 import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
 import { Roles } from '@/infrastructure/decorators/roles.decorator'
 import { UserRoles } from '@/domain/enterprise/user/user-types'
+import { AssignUserUseCase } from '@/domain/application/company/use-cases/assign-user/assign-user-use-case'
 
 @ApiTags('Company')
 @Controller('/companies')
@@ -31,6 +32,7 @@ export class CompanyController {
     private editCompanyUseCase: EditCompanyUseCase,
     private getCompanyUseCase: GetCompanyUseCase,
     private deleteCompanyUseCase: DeleteCompanyUseCase,
+    private assignUserUseCase: AssignUserUseCase,
   ) { }
 
   @Post()
@@ -72,6 +74,18 @@ export class CompanyController {
       email,
       contact,
       responsible,
+    })
+  }
+
+  @Patch('/:id/assign-user')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async assignUser(
+    @CurrentUser() user: UserPayload,
+    @Param('id') companyId: string
+  ) {
+    await this.assignUserUseCase.execute({
+      companyId,
+      userId: user.sub,
     })
   }
 
