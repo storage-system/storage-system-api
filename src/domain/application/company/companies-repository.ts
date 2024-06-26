@@ -6,4 +6,5 @@ export abstract class CompaniesRepository {
   abstract create(company: Company): Promise<void>
   abstract save(company: Company): Promise<void>
   abstract delete(companyId: string): Promise<void>
+  abstract removeUsers(companyId: string, userIds: string[]): Promise<void>
 }

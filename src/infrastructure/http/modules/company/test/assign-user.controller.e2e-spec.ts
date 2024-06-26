@@ -44,7 +44,6 @@ describe('Assign User (E2E)', () => {
           select: {
             id: true
           },
-
         }
       },
     })

@@ -43,6 +43,10 @@ export class Company extends Entity<CompanyProps> {
     return this.props.users
   }
 
+  set users(userIds: string[]) {
+    this.props.users = userIds
+  }
+
   get updatedAt() {
     return this.props.updatedAt
   }

@@ -38,4 +38,13 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
     const filteredCompanies = this.items.filter((company) => company.id.toString() !== companyId)
     this.items = filteredCompanies
   }
+
+  async removeUsers(companyId: string, userIds: string[]): Promise<void> {
+    const company = this.items.find((company) => company.id.toString() === companyId)
+
+    if (company) {
+      const filteredUsers = company.users.filter((userId) => !userIds.includes(userId))
+      company.users = filteredUsers
+    }
+  }
 }
