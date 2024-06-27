@@ -80,4 +80,17 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
       }
     })
   }
+
+  async removeUsers(companyId: string, userIds: string[]): Promise<void> {
+    await this.prisma.company.update({
+      where: {
+        id: companyId,
+      },
+      data: {
+        users: {
+          deleteMany: userIds.map(id => ({ id }))
+        }
+      }
+    })
+  }
 }

@@ -8,6 +8,7 @@ import { EditCompanyUseCase } from "@/domain/application/company/use-cases/updat
 import { GetCompanyUseCase } from "@/domain/application/company/use-cases/retrieve/get-company/get-company-use-case";
 import { DeleteCompanyUseCase } from "@/domain/application/company/use-cases/delete/delete-company-use-case";
 import { AssignUserUseCase } from "@/domain/application/company/use-cases/assign-user/assign-user-use-case";
+import { RemoveUsersUseCase } from "@/domain/application/company/use-cases/remove-users/remove-users-use-case";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -20,6 +21,7 @@ import { AssignUserUseCase } from "@/domain/application/company/use-cases/assign
     GetCompanyUseCase,
     DeleteCompanyUseCase,
     AssignUserUseCase,
+    RemoveUsersUseCase,
   ]
 })
 export class CompanyModule { }

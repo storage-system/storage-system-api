@@ -23,6 +23,8 @@ import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
 import { Roles } from '@/infrastructure/decorators/roles.decorator'
 import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { AssignUserUseCase } from '@/domain/application/company/use-cases/assign-user/assign-user-use-case'
+import { RemoveUsersUseCase } from '@/domain/application/company/use-cases/remove-users/remove-users-use-case'
+import { RemoveUsersDTO } from './dto/remove-users.dto'
 
 @ApiTags('Company')
 @Controller('/companies')
@@ -33,6 +35,7 @@ export class CompanyController {
     private getCompanyUseCase: GetCompanyUseCase,
     private deleteCompanyUseCase: DeleteCompanyUseCase,
     private assignUserUseCase: AssignUserUseCase,
+    private removeUsersUseCase: RemoveUsersUseCase,
   ) { }
 
   @Post()
@@ -99,6 +102,18 @@ export class CompanyController {
     await this.deleteCompanyUseCase.execute({
       companyId,
       authorId: user.sub,
+    })
+  }
+
+  @Delete('/:id/remove-users')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeUsers(
+    @Param('id') companyId: string,
+    @Body() body: RemoveUsersDTO,
+  ) {
+    await this.removeUsersUseCase.execute({
+      companyId,
+      userIds: body.userIds,
     })
   }
 }
