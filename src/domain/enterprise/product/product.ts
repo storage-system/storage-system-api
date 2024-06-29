@@ -1,0 +1,190 @@
+import { UniqueEntityID } from "@/core/entities/unique-entity-id"
+import { Slug } from "../slug/slug"
+import { Entity } from "@/core/entities/entity"
+import { Optional } from "@/core/types/optional"
+
+export enum StatusProduct {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+}
+
+export interface DimensionsProduct {
+  height: string
+  width: string
+  depth: string
+}
+
+export interface ProductProps {
+  name: string
+  slug: Slug
+  description: string
+
+  originalPrice: number
+  finalPrice: number
+  discountPercentage: number
+
+  quantityInStock: number
+  manufactureDate: Date
+  validityInDays: number
+
+  unitOfMeasure: string
+  weight: number
+  dimensions?: DimensionsProduct
+
+  manufacturer?: string
+  batch?: string
+
+  status: StatusProduct
+  productImage?: string
+
+  companyId: UniqueEntityID
+  categoryId: UniqueEntityID[]
+
+  createdAt: Date
+  updatedAt?: Date | null
+  deletedAt?: Date | null
+}
+
+export class Product extends Entity<ProductProps> {
+  static create(
+    props: Optional<ProductProps, 'createdAt' | 'slug'>,
+    id?: UniqueEntityID,
+  ) {
+    const product = new Product(
+      {
+        slug: props.slug ?? Slug.createFromText(props.name),
+        createdAt: new Date(),
+        ...props,
+      },
+      id,
+    )
+
+    return product
+  }
+
+  update(aProduct: Partial<ProductProps>) {
+    if (aProduct.name && aProduct.name !== this.props.name) {
+      this.props.name = aProduct.name ?? this.name
+      this.props.slug = Slug.createFromText(aProduct.name);
+    }
+    this.props.description = aProduct.description ?? this.description
+
+    this.props.originalPrice = aProduct.originalPrice ?? this.originalPrice
+    this.props.finalPrice = aProduct.finalPrice ?? this.finalPrice
+    this.props.discountPercentage = aProduct.discountPercentage ?? this.discountPercentage
+
+    this.props.quantityInStock = aProduct.quantityInStock ?? this.quantityInStock
+    this.props.manufactureDate = aProduct.manufactureDate ?? this.manufactureDate
+    this.props.validityInDays = aProduct.validityInDays ?? this.validityInDays
+
+    this.props.unitOfMeasure = aProduct.unitOfMeasure ?? this.unitOfMeasure
+    this.props.weight = aProduct.weight ?? this.weight
+    this.props.dimensions = aProduct.dimensions ?? this.dimensions
+
+    this.props.manufacturer = aProduct.manufacturer ?? this.manufacturer
+    this.props.batch = aProduct.batch ?? this.batch
+
+    this.props.status = aProduct.status ?? this.status
+    this.props.productImage = aProduct.productImage ?? this.productImage
+
+    this.props.categoryId = aProduct.categoryId ?? this.categoryId
+
+    this.touch()
+  }
+  
+
+  get name() {
+    return this.props.name
+  }
+
+  set name(name: string) {
+    this.props.name = name
+    this.props.slug = Slug.createFromText(name)
+    this.touch()
+  }
+
+  get slug() {
+    return this.props.slug
+  }
+
+  get description() {
+    return this.props.description
+  }
+
+  get originalPrice() {
+    return this.props.originalPrice
+  }
+
+  get finalPrice() {
+    return this.props.finalPrice
+  }
+
+  get discountPercentage() {
+    return this.props.discountPercentage
+  }
+
+  get quantityInStock() {
+    return this.props.quantityInStock
+  }
+
+  get manufactureDate() {
+    return this.props.manufactureDate
+  }
+
+  get validityInDays() {
+    return this.props.validityInDays
+  }
+
+  get unitOfMeasure() {
+    return this.props.unitOfMeasure
+  }
+
+  get weight() {
+    return this.props.weight
+  }
+
+  get dimensions() {
+    return this.props.dimensions
+  }
+
+  get manufacturer() {
+    return this.props.manufacturer
+  }
+
+  get batch() {
+    return this.props.batch
+  }
+
+  get status() {
+    return this.props.status
+  }
+
+  get productImage() {
+    return this.props.productImage
+  }
+
+  get companyId() {
+    return this.props.companyId
+  }
+
+  get categoryId() {
+    return this.props.categoryId
+  }
+
+  get createdAt() {
+    return this.props.createdAt
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt
+  }
+
+  get deletedAt() {
+    return this.props.deletedAt
+  }
+
+  private touch() {
+    this.props.updatedAt = new Date()
+  }
+}

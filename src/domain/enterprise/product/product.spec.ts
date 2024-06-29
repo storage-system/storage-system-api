@@ -1,0 +1,104 @@
+import { describe, it, expect, beforeEach } from 'vitest'
+import { Product, ProductProps, StatusProduct } from './product'
+import { UniqueEntityID } from "@/core/entities/unique-entity-id"
+import { Slug } from "../slug/slug"
+import { faker } from '@faker-js/faker'
+
+describe('Product Entity', () => {
+  let initialProps: ProductProps
+
+  beforeEach(() => {
+    const productName = faker.commerce.product()
+
+    initialProps = {
+      name: productName,
+      slug: Slug.createFromText(productName),
+      description: faker.commerce.productDescription(),
+      originalPrice: 100,
+      finalPrice: 0,
+      discountPercentage: 10,
+      quantityInStock: faker.number.int({
+        max: 1000,
+      }),
+      manufactureDate: new Date('2023-01-01'),
+      validityInDays: faker.number.int({
+        min: 1,
+        max: 365,
+      }),
+      unitOfMeasure: 'kg',
+      weight: 1.5,
+      dimensions: { height: '10cm', width: '20cm', depth: '5cm' },
+      manufacturer: 'Test Manufacturer',
+      batch: '12345',
+      status: StatusProduct.ACTIVE,
+      productImage: 'test-image-url',
+      companyId: new UniqueEntityID(),
+      categoryId: [new UniqueEntityID()],
+      createdAt: new Date(),
+      updatedAt: null,
+      deletedAt: null,
+    }
+  })
+
+  it('should create a product', () => {
+    const product = Product.create(initialProps)
+
+    const slugMocked = Slug.createFromText(initialProps.name).value
+
+    expect(product).toBeInstanceOf(Product)
+    expect(product.name).toBe(initialProps.name)
+    expect(product.slug.value).toBe(slugMocked)
+    expect(product.description).toBe(initialProps.description)
+  })
+
+  it('should update a product', () => {
+    const product = Product.create(initialProps)
+
+    const updatedProps: Partial<ProductProps> = {
+      name: 'Updated Product',
+      description: 'This is an updated test product',
+      finalPrice: 70,
+      quantityInStock: 40,
+      manufacturer: 'Updated Manufacturer',
+      status: StatusProduct.INACTIVE,
+    }
+
+    product.update(updatedProps)
+
+    expect(product.name).toBe('Updated Product')
+    expect(product.slug.value).toBe('updated-product')
+    expect(product.description).toBe(updatedProps.description)
+    expect(product.finalPrice).toBe(updatedProps.finalPrice)
+    expect(product.quantityInStock).toBe(updatedProps.quantityInStock)
+    expect(product.manufacturer).toBe('Updated Manufacturer')
+    expect(product.status).toBe(StatusProduct.INACTIVE)
+  })
+
+  it('should have the correct getters', () => {
+    const product = Product.create(initialProps)
+    const slugMocked = Slug.createFromText(initialProps.name).value
+
+    expect(product.name).toBe(initialProps.name)
+    expect(product.slug.value).toBe(slugMocked)
+    expect(product.description).toBe(initialProps.description)
+    expect(product.originalPrice).toBe(initialProps.originalPrice)
+    expect(product.finalPrice).toBe(initialProps.finalPrice)
+    expect(product.discountPercentage).toBe(initialProps.discountPercentage)
+    expect(product.quantityInStock).toBe(initialProps.quantityInStock)
+    expect(product.manufactureDate).toEqual(new Date('2023-01-01'))
+    expect(product.validityInDays).toBe(initialProps.validityInDays)
+    expect(product.unitOfMeasure).toBe('kg')
+    expect(product.weight).toBe(1.5)
+    expect(product.dimensions).toEqual({ height: '10cm', width: '20cm', depth: '5cm' })
+    expect(product.manufacturer).toBe('Test Manufacturer')
+    expect(product.batch).toBe('12345')
+    expect(product.status).toBe(StatusProduct.ACTIVE)
+    expect(product.productImage).toBe('test-image-url')
+    expect(product.companyId).toBeInstanceOf(UniqueEntityID)
+    expect(product.categoryId.length).toBe(1)
+    expect(product.categoryId[0]).toBeInstanceOf(UniqueEntityID)
+    expect(product.createdAt).toBeInstanceOf(Date)
+    expect(product.updatedAt).toBeNull()
+    expect(product.deletedAt).toBeNull()
+  })
+})
