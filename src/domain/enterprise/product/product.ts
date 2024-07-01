@@ -39,7 +39,8 @@ export interface ProductProps {
   productImage?: string
 
   companyId: UniqueEntityID
-  categoryId: UniqueEntityID[]
+  categoryIds: UniqueEntityID[]
+  authorId: UniqueEntityID
 
   createdAt: Date
   updatedAt?: Date | null
@@ -88,11 +89,11 @@ export class Product extends Entity<ProductProps> {
     this.props.status = aProduct.status ?? this.status
     this.props.productImage = aProduct.productImage ?? this.productImage
 
-    this.props.categoryId = aProduct.categoryId ?? this.categoryId
+    this.props.categoryIds = aProduct.categoryIds ?? this.categoryIds
 
     this.touch()
   }
-  
+
 
   get name() {
     return this.props.name
@@ -168,8 +169,12 @@ export class Product extends Entity<ProductProps> {
     return this.props.companyId
   }
 
-  get categoryId() {
-    return this.props.categoryId
+  get categoryIds() {
+    return this.props.categoryIds
+  }
+
+  get authorId() {
+    return this.props.authorId
   }
 
   get createdAt() {

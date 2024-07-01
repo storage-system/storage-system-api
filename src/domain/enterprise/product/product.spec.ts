@@ -33,7 +33,8 @@ describe('Product Entity', () => {
       status: StatusProduct.ACTIVE,
       productImage: 'test-image-url',
       companyId: new UniqueEntityID(),
-      categoryId: [new UniqueEntityID()],
+      categoryIds: [new UniqueEntityID()],
+      authorId: new UniqueEntityID(),
       createdAt: new Date(),
       updatedAt: null,
       deletedAt: null,
@@ -95,8 +96,8 @@ describe('Product Entity', () => {
     expect(product.status).toBe(StatusProduct.ACTIVE)
     expect(product.productImage).toBe('test-image-url')
     expect(product.companyId).toBeInstanceOf(UniqueEntityID)
-    expect(product.categoryId.length).toBe(1)
-    expect(product.categoryId[0]).toBeInstanceOf(UniqueEntityID)
+    expect(product.categoryIds.length).toBe(1)
+    expect(product.categoryIds[0]).toBeInstanceOf(UniqueEntityID)
     expect(product.createdAt).toBeInstanceOf(Date)
     expect(product.updatedAt).toBeNull()
     expect(product.deletedAt).toBeNull()
