@@ -54,7 +54,7 @@ export class EditCategoryUseCase {
       isActive,
     })
 
-    await this.categoriesRepository.save(category)
+    await this.categoriesRepository.update(category)
 
     return right({})
   }

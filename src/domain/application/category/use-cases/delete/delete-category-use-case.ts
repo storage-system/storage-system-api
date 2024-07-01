@@ -20,6 +20,6 @@ export class DeleteCategoryUseCase {
       throw ResourceNotFoundException.with('Categoria', new UniqueEntityID(categoryId));
     }
 
-    await this.categoriesRepository.delete(category)
+    await this.categoriesRepository.delete(categoryId)
   }
 }

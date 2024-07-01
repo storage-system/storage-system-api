@@ -2,8 +2,9 @@ import { makeCategory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { FetchCategoriesUseCase } from './fetch-categories-use-case'
+import { CategoriesRepository } from '../../categories-repository'
 
-let repository: InMemoryCategoriesRepository
+let repository: CategoriesRepository
 let useCase: FetchCategoriesUseCase
 
 describe('Fetch Categories Use Case', () => {
@@ -11,14 +12,12 @@ describe('Fetch Categories Use Case', () => {
     repository = new InMemoryCategoriesRepository()
     useCase = new FetchCategoriesUseCase(repository)
 
-    const newCategory = makeCategory(
-      {
-        companyId: new UniqueEntityID('company-01'),
+    await makeCategory({
+      override: {
+        companyId: new UniqueEntityID('company-01')
       },
-      new UniqueEntityID('category-01'),
-    )
-
-    await repository.create(newCategory)
+      repository,
+    })
   })
 
   it('dependencies should be defined', (): void => {

@@ -76,7 +76,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     })
   }
 
-  async save(category: Category) {
+  async update(category: Category) {
     const data = PrismaCategoryMapper.toPersistence(category)
 
     await this.prisma.category.update({
@@ -87,12 +87,10 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     })
   }
 
-  async delete(category: Category) {
-    const data = PrismaCategoryMapper.toPersistence(category)
-
+  async delete(categoryId: string) {
     await this.prisma.category.update({
       where: {
-        id: data.id,
+        id: categoryId,
         deletedAt: null,
       },
       data: {

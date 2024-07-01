@@ -1,14 +1,11 @@
 import { makeCategory } from 'test/factories/make-category'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { EditCategoryUseCase } from './edit-category-use-case'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { makeCompany } from 'test/factories/make-company'
-import { fa } from '@faker-js/faker'
+import { CategoriesRepository } from '../../categories-repository'
 
-let categoriesRepository: InMemoryCategoriesRepository
+let categoriesRepository: CategoriesRepository
 let companiesRepository: InMemoryCompaniesRepository
 let useCase: EditCategoryUseCase
 
@@ -29,21 +26,22 @@ describe('Edit Category', () => {
     const company = makeCompany()
     await companiesRepository.create(company)
 
-    const newCategory = makeCategory(
-      {
+    const newCategory = await makeCategory({
+      override: {
         companyId: company.id
       },
-      new UniqueEntityID('category-01'))
-
-    await categoriesRepository.create(newCategory)
+      repository: categoriesRepository,
+    })
 
     await useCase.execute({
       companyId: company.id.toString(),
-      categoryId: 'category-01',
+      categoryId: newCategory.id.toString(),
       name: 'category-update-01',
     })
 
-    expect(categoriesRepository.items[0].name).toBe('category-update-01')
+    const categoryOnDatabase = await categoriesRepository.findById(newCategory.id.toString())
+
+    expect(categoryOnDatabase?.name).toBe('category-update-01')
   })
 
   it('should not be able to edit a category that does not exist', async () => {
@@ -77,16 +75,15 @@ describe('Edit Category', () => {
     await companiesRepository.create(company)
     await companiesRepository.create(otherCompany)
 
-    const newCategory = makeCategory(
-      {
+    const newCategory = await makeCategory({
+      override: {
         companyId: company.id
       },
-      new UniqueEntityID('category-01'))
-
-    await categoriesRepository.create(newCategory)
+      repository: categoriesRepository,
+    })
 
     const response = useCase.execute({
-      categoryId: 'category-01',
+      categoryId: newCategory.id.toString(),
       companyId: otherCompany.id.toString(),
       name: 'category-update-01',
       isActive: true,

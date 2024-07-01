@@ -1,9 +1,9 @@
 import { DeleteCategoryUseCase } from './delete-category-use-case'
 import { makeCategory } from 'test/factories/make-category'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
+import { CategoriesRepository } from '../../categories-repository'
 
-let repository: InMemoryCategoriesRepository
+let repository: CategoriesRepository
 let useCase: DeleteCategoryUseCase
 
 describe('Delete Category', () => {
@@ -18,15 +18,17 @@ describe('Delete Category', () => {
   })
 
   it('should be able to delete a category', async () => {
-    const newCategory = makeCategory({}, new UniqueEntityID('category-01'))
-
-    await repository.create(newCategory)
-
-    await useCase.execute({
-      categoryId: 'category-01',
+    const newCategory = await makeCategory({
+      repository,
     })
 
-    expect(repository.items).toHaveLength(0)
+    await useCase.execute({
+      categoryId: newCategory.id.toString()
+    })
+
+    const categoryOnDatabase = await repository.findById(newCategory.id.toString())
+
+    expect(categoryOnDatabase).toBeNull()
   })
 
   it('should not be able to delete a category that does not exist', async () => {

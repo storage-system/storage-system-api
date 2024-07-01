@@ -4,19 +4,32 @@ import { Category, CategoryProps } from '@/domain/enterprise/category/category'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { PrismaCategoryMapper } from '@/infrastructure/database/prisma/mappers/prisma-category-mapper'
+import { FactoryProp } from '.'
 
-export function makeCategory(
-  override: Partial<CategoryProps> = {},
-  id?: UniqueEntityID,
-) {
+export async function makeCategory({
+  repository,
+  override,
+}: FactoryProp<
+  Category,
+  Partial<
+    CategoryProps &
+    {
+      id: string
+    }
+  >
+> = {}): Promise<Category> {
   const category = Category.create({
     name: faker.commerce.department(),
     isActive: true,
     companyId: new UniqueEntityID(),
     ...override,
   },
-    id
+    new UniqueEntityID(override?.id),
   )
+
+  if (repository) {
+    await repository.create(category)
+  }
 
   return category
 }
@@ -28,7 +41,9 @@ export class CategoryFactory {
   async makePrismaCategory(
     data: Partial<CategoryProps> = {},
   ): Promise<Category> {
-    const category = makeCategory(data)
+    const category = await makeCategory({
+      override: data,
+    })
 
     await this.prisma.category.create({
       data: PrismaCategoryMapper.toPersistence(category)
