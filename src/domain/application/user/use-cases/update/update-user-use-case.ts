@@ -32,6 +32,6 @@ export class UpdateUserUseCase {
       roles,
     })
 
-    await this.usersRepository.save(user)
+    await this.usersRepository.update(user)
   }
 }

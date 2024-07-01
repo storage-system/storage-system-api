@@ -3,8 +3,9 @@ import { FakeHasher } from "test/cryptography/fake-hasher"
 import { AuthenticateUseCase } from "./authenticate-use-case"
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository"
 import { makeUser } from "test/factories/make-user"
+import { UsersRepository } from "../user/users-repository"
 
-let repository: InMemoryUsersRepository
+let repository: UsersRepository
 let fakeHasher: FakeHasher
 let encrypter: FakeEncrypter
 
@@ -33,12 +34,13 @@ describe('Authenticate User', () => {
   it('should be able to authenticate an user', async () => {
     const passwordMock = '123456'
 
-    const user = makeUser({
-      email: 'johndoeeletronics@example.com',
-      password: await fakeHasher.hash(passwordMock),
+    const user = await makeUser({
+      override: {
+        email: 'johndoeeletronics@example.com',
+        password: await fakeHasher.hash(passwordMock),
+      },
+      repository,
     })
-
-    repository.items.push(user)
 
     const result = await useCase.execute({
       email: user.email,

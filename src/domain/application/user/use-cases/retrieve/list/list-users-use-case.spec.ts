@@ -1,8 +1,9 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { ListUsersUseCase } from './list-users-use-case'
 import { makeUser } from 'test/factories/make-user'
+import { UsersRepository } from '../../../users-repository'
 
-let repository: InMemoryUsersRepository
+let repository: UsersRepository
 let useCase: ListUsersUseCase
 
 describe('List Users Use Case', () => {
@@ -10,9 +11,9 @@ describe('List Users Use Case', () => {
     repository = new InMemoryUsersRepository()
     useCase = new ListUsersUseCase(repository)
 
-    const newUser = makeUser()
-
-    await repository.create(newUser)
+    await makeUser({
+      repository,
+    })
   })
 
   it('dependencies should be defined', (): void => {

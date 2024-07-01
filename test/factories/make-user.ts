@@ -6,11 +6,20 @@ import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { PrismaUserMapper } from '@/infrastructure/database/prisma/mappers/prisma-user-mapper'
+import { FactoryProp } from '.'
 
-export function makeUser(
-  override: Partial<UserProps> = {},
-  id?: UniqueEntityID,
-) {
+export async function makeUser({
+  repository,
+  override,
+}: FactoryProp<
+  User,
+  Partial<
+    UserProps &
+    {
+      id: string
+    }
+  >
+> = {}): Promise<User> {
   const user = User.create(
     {
       name: faker.person.fullName(),
@@ -22,8 +31,12 @@ export function makeUser(
       roles: [UserRoles.MEMBER],
       ...override,
     },
-    id,
+    new UniqueEntityID(override?.id),
   )
+
+  if (repository) {
+    await repository.create(user)
+  }
 
   return user
 }
@@ -35,7 +48,7 @@ export class UserFactory {
   async makePrismaUser(
     data: Partial<UserProps> = {},
   ): Promise<User> {
-    const user = makeUser(data)
+    const user = await makeUser({ override: data })
 
     await this.prisma.user.create({
       data: PrismaUserMapper.toPersistence(user)

@@ -3,9 +3,10 @@ import { makeCompany } from "test/factories/make-company";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { makeUser } from "test/factories/make-user";
 import { RemoveUsersUseCase } from "./remove-users-use-case";
+import { UsersRepository } from "@/domain/application/user/users-repository";
 
 let companiesRepository: InMemoryCompaniesRepository
-let usersRepository: InMemoryUsersRepository
+let usersRepository: UsersRepository
 let useCase: RemoveUsersUseCase
 
 describe('Remove Users Use Case', () => {
@@ -25,13 +26,14 @@ describe('Remove Users Use Case', () => {
     const company = makeCompany()
     await companiesRepository.create(company)
 
-    const user = makeUser({
-      companyId: company.id
+    const user = await makeUser({
+      override: {
+        companyId: company.id
+      },
+      repository: usersRepository,
     })
 
     company.assignCompany(user.id.toString())
-
-    await usersRepository.create(user)
 
     await useCase.execute({
       companyId: company.id.toString(),

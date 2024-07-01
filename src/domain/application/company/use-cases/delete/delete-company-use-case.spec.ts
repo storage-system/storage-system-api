@@ -4,9 +4,10 @@ import { DeleteCompanyUseCase } from "./delete-company-use-case";
 import { makeCompany } from "test/factories/make-company";
 import { makeUser } from "test/factories/make-user";
 import { UserRoles } from "@/domain/enterprise/user/user-types";
+import { UsersRepository } from "@/domain/application/user/users-repository";
 
 let companiesRepository: InMemoryCompaniesRepository
-let usersRepository: InMemoryUsersRepository
+let usersRepository: UsersRepository
 let useCase: DeleteCompanyUseCase
 
 describe('Edit Company', () => {
@@ -23,10 +24,12 @@ describe('Edit Company', () => {
   })
 
   it('should be able to edit a company', async () => {
-    const newUser = makeUser({
-      roles: [UserRoles.ADMIN]
+    const newUser = await makeUser({
+      override: {
+        roles: [UserRoles.ADMIN]
+      },
+      repository: usersRepository,
     })
-    await usersRepository.create(newUser)
 
     const newCompany = makeCompany()
     await companiesRepository.create(newCompany)
@@ -40,10 +43,12 @@ describe('Edit Company', () => {
   })
 
   it('should not be able to edit a company that does companyId not exist', async () => {
-    const newUser = makeUser({
-      roles: [UserRoles.ADMIN]
+    const newUser = await makeUser({
+      override: {
+        roles: [UserRoles.ADMIN]
+      },
+      repository: usersRepository,
     })
-    await usersRepository.create(newUser)
 
     const companyId = 'non-exists-company-id-01'
 
@@ -68,10 +73,12 @@ describe('Edit Company', () => {
   })
 
   it('should not be able to edit a company if the user does not have the necessary permissions', async () => {
-    const newUser = makeUser({
-      roles: [UserRoles.MEMBER]
+    const newUser = await makeUser({
+      override: {
+        roles: [UserRoles.MEMBER]
+      },
+      repository: usersRepository,
     })
-    await usersRepository.create(newUser)
 
     const newCompany = makeCompany()
     await companiesRepository.create(newCompany)

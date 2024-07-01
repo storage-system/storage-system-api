@@ -1,10 +1,10 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { UpdateUserUseCase } from "./update-user-use-case";
 import { makeUser } from "test/factories/make-user";
 import { faker } from "@faker-js/faker";
+import { UsersRepository } from "../../users-repository";
 
-let repository: InMemoryUsersRepository
+let repository: UsersRepository
 let useCase: UpdateUserUseCase
 
 describe('Update User', () => {
@@ -23,7 +23,12 @@ describe('Update User', () => {
       length: 8
     })
 
-    const newUser = makeUser({}, new UniqueEntityID(userId))
+    const newUser = await makeUser({
+      override: {
+        id: userId,
+      },
+      repository,
+    })
 
     await repository.create(newUser)
 
@@ -32,11 +37,11 @@ describe('Update User', () => {
       name: 'user-02',
     }
 
+    const userOnDatabase = await repository.findById(userId)
+
     await useCase.execute(updateUser)
 
-    expect(repository.items[0]).toMatchObject({
-      name: updateUser.name,
-    })
+    expect(userOnDatabase?.name).toBe(updateUser.name)
   })
 
   it('should not be able to edit an user that does not exist', async () => {

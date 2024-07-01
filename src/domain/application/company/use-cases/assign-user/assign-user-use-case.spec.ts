@@ -3,9 +3,10 @@ import { makeCompany } from "test/factories/make-company";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { AssignUserUseCase } from "./assign-user-use-case";
 import { makeUser } from "test/factories/make-user";
+import { UsersRepository } from "@/domain/application/user/users-repository";
 
 let companiesRepository: InMemoryCompaniesRepository
-let usersRepository: InMemoryUsersRepository
+let usersRepository: UsersRepository
 let useCase: AssignUserUseCase
 
 describe('Assign User Use Case', () => {
@@ -25,10 +26,12 @@ describe('Assign User Use Case', () => {
     const company = makeCompany()
     await companiesRepository.create(company)
 
-    const user = makeUser({
-      companyId: company.id
+    const user = await makeUser({
+      override: {
+        companyId: company.id
+      },
+      repository: usersRepository,
     })
-    await usersRepository.create(user)
 
     await useCase.execute({
       companyId: company.id.toString(),
@@ -39,8 +42,9 @@ describe('Assign User Use Case', () => {
   })
 
   it('should not be able to assign an user that company does not exist', async () => {
-    const user = makeUser()
-    await usersRepository.create(user)
+    const user = await makeUser({
+      repository: usersRepository,
+    })
 
     const response = useCase.execute({
       companyId: 'company-01',

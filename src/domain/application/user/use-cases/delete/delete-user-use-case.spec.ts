@@ -1,10 +1,10 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { DeleteUserUseCase } from './delete-user-use-case'
 import { makeUser } from 'test/factories/make-user'
 import { faker } from '@faker-js/faker'
+import { UsersRepository } from '../../users-repository'
 
-let repository: InMemoryUsersRepository
+let repository: UsersRepository
 let useCase: DeleteUserUseCase
 
 describe('Delete User', () => {
@@ -23,7 +23,12 @@ describe('Delete User', () => {
       length: 8
     })
 
-    const newUser = makeUser({}, new UniqueEntityID(userId))
+    const newUser = await makeUser({
+      override: {
+        id: userId
+      },
+      repository,
+    })
 
     await repository.create(newUser)
 
@@ -31,7 +36,9 @@ describe('Delete User', () => {
       userId,
     })
 
-    expect(repository.items).toHaveLength(0)
+    const userOnDatabase = await repository.findById(newUser.id.toString())
+
+    expect(userOnDatabase).toBeNull()
   })
 
   it('should not be able to delete an user that does not exist', async () => {

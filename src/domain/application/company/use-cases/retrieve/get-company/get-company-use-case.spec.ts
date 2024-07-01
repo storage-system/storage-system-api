@@ -3,9 +3,10 @@ import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-compani
 import { GetCompanyUseCase } from './get-company-use-case'
 import { makeCompany } from 'test/factories/make-company'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { UsersRepository } from '@/domain/application/user/users-repository'
 
 let companiesRepository: InMemoryCompaniesRepository
-let usersRepository: InMemoryUsersRepository
+let usersRepository: UsersRepository
 let useCase: GetCompanyUseCase
 
 describe('List Users By Company Use Case', () => {
@@ -27,15 +28,16 @@ describe('List Users By Company Use Case', () => {
     const result = await useCase.execute({
       companyId: company.id.toString()
     })
-    
+
     expect(result.id).toBe(company.id.toString())
     expect(result.name).toBe(company.name)
     expect(result.users).toEqual([])
   })
 
   it('should be able to retrieve company details with users', async () => {
-    const user = makeUser()
-    await usersRepository.create(user)
+    const user = await makeUser({
+      repository: usersRepository,
+    })
 
     const company = makeCompany({ users: [user.id.toString()] })
     await companiesRepository.create(company)

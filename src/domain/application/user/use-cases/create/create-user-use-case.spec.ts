@@ -4,8 +4,9 @@ import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repos
 import { UserRoles } from "@/domain/enterprise/user/user-types"
 import { faker } from "@faker-js/faker"
 import { makeUser } from "test/factories/make-user"
+import { UsersRepository } from "../../users-repository"
 
-let repository: InMemoryUsersRepository
+let repository: UsersRepository
 let fakeHasher: FakeHasher
 
 let useCase: CreateUserUseCase
@@ -36,10 +37,10 @@ describe('Create User', () => {
       roles: [UserRoles.MEMBER],
     })
 
+    const userOnDatabase = await repository.findById(result.userId)
+
     expect(result.userId).toBeDefined()
-    expect(result).toEqual({
-      userId: repository.items[0].id.toString(),
-    })
+    expect(userOnDatabase).toBeDefined()
   })
 
   it('should hash user password upon registration', async () => {
@@ -57,12 +58,15 @@ describe('Create User', () => {
 
     const hashedPassword = await fakeHasher.hash(passwordMocked)
 
+    const userOnDatabase = await repository.findById(result.userId)
+
     expect(result.userId).toBeDefined()
-    expect(repository.items[0].password).toEqual(hashedPassword)
+    expect(userOnDatabase).toBeDefined()
+    expect(userOnDatabase?.password).toEqual(hashedPassword)
   })
 
   it('should not be able to create a user that email already exist', async () => {
-    const firstUser = makeUser()
+    const firstUser = await makeUser()
     await useCase.execute(firstUser)
 
     const response = useCase.execute({

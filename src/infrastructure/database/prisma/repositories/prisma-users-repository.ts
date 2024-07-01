@@ -93,7 +93,7 @@ export class PrismaUsersRepository implements UsersRepository {
     })
   }
 
-  async save(user: User): Promise<void> {
+  async update(user: User): Promise<void> {
     const data = PrismaUserMapper.toPersistence(user)
 
     await this.prisma.user.update({
