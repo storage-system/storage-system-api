@@ -1,9 +1,9 @@
 import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository";
 import { EditCompanyUseCase } from "./edit-company-use-case";
 import { makeCompany } from "test/factories/make-company";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { CompaniesRepository } from "../../companies-repository";
 
-let repository: InMemoryCompaniesRepository
+let repository: CompaniesRepository
 let useCase: EditCompanyUseCase
 
 describe('Edit Company', () => {
@@ -18,25 +18,23 @@ describe('Edit Company', () => {
   })
 
   it('should be able to edit a company', async () => {
-    const companyId = 'company-01'
-
-    const newCompany = makeCompany({}, new UniqueEntityID(companyId))
-
-    await repository.create(newCompany)
+    const newCompany = await makeCompany({
+      repository,
+    })
 
     const updateCompany = {
       name: 'company-02',
       email: newCompany.email,
       responsible: newCompany.responsible,
       contact: newCompany.contact,
-      companyId,
+      companyId: newCompany.id.toString()
     }
 
     await useCase.execute(updateCompany)
 
-    expect(repository.items[0]).toMatchObject({
-      name: updateCompany.name,
-    })
+    const companyOnDatabase = await repository.findById(updateCompany.companyId)
+
+    expect(companyOnDatabase?.name).toEqual(updateCompany.name)
   })
 
   it('should not be able to edit a company that does not exist', async () => {

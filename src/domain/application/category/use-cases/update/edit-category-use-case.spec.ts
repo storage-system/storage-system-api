@@ -4,9 +4,10 @@ import { EditCategoryUseCase } from './edit-category-use-case'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { makeCompany } from 'test/factories/make-company'
 import { CategoriesRepository } from '../../categories-repository'
+import { CompaniesRepository } from '@/domain/application/company/companies-repository'
 
 let categoriesRepository: CategoriesRepository
-let companiesRepository: InMemoryCompaniesRepository
+let companiesRepository: CompaniesRepository
 let useCase: EditCategoryUseCase
 
 describe('Edit Category', () => {
@@ -23,8 +24,9 @@ describe('Edit Category', () => {
   })
 
   it('should be able to edit a category', async () => {
-    const company = makeCompany()
-    await companiesRepository.create(company)
+    const company = await makeCompany({
+      repository: companiesRepository,
+    })
 
     const newCategory = await makeCategory({
       override: {
@@ -45,8 +47,9 @@ describe('Edit Category', () => {
   })
 
   it('should not be able to edit a category that does not exist', async () => {
-    const company = makeCompany()
-    await companiesRepository.create(company)
+    const company = await makeCompany({
+      repository: companiesRepository,
+    })
 
     const response = useCase.execute({
       categoryId: 'category-01',
@@ -70,8 +73,12 @@ describe('Edit Category', () => {
   })
 
   it('should not be able to edit a category from another company', async () => {
-    const company = makeCompany()
-    const otherCompany = makeCompany()
+    const company = await makeCompany({
+      repository: companiesRepository,
+    })
+    const otherCompany = await makeCompany({
+      repository: companiesRepository,
+    })
     await companiesRepository.create(company)
     await companiesRepository.create(otherCompany)
 

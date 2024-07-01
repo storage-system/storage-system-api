@@ -31,8 +31,9 @@ describe('Edit Company', () => {
       repository: usersRepository,
     })
 
-    const newCompany = makeCompany()
-    await companiesRepository.create(newCompany)
+    const newCompany = await makeCompany({
+      repository: companiesRepository,
+    })
 
     await useCase.execute({
       companyId: newCompany.id.toString(),
@@ -60,8 +61,9 @@ describe('Edit Company', () => {
   })
 
   it('should not be able to edit a company that userId does not exist', async () => {
-    const newCompany = makeCompany()
-    await companiesRepository.create(newCompany)
+    const newCompany = await makeCompany({
+      repository: companiesRepository,
+    })
 
     const authorId = 'non-exists-user-id-01'
 
@@ -80,8 +82,9 @@ describe('Edit Company', () => {
       repository: usersRepository,
     })
 
-    const newCompany = makeCompany()
-    await companiesRepository.create(newCompany)
+    const newCompany = await makeCompany({
+      repository: companiesRepository,
+    })
 
     await expect(useCase.execute({
       companyId: newCompany.id.toString(),

@@ -4,8 +4,9 @@ import { GetCompanyUseCase } from './get-company-use-case'
 import { makeCompany } from 'test/factories/make-company'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { UsersRepository } from '@/domain/application/user/users-repository'
+import { CompaniesRepository } from '../../../companies-repository'
 
-let companiesRepository: InMemoryCompaniesRepository
+let companiesRepository: CompaniesRepository
 let usersRepository: UsersRepository
 let useCase: GetCompanyUseCase
 
@@ -22,8 +23,9 @@ describe('List Users By Company Use Case', () => {
   })
 
   it('should be able to retrieve company details without users', async () => {
-    const company = makeCompany()
-    await companiesRepository.create(company)
+    const company = await makeCompany({
+      repository: companiesRepository,
+    })
 
     const result = await useCase.execute({
       companyId: company.id.toString()
@@ -39,8 +41,12 @@ describe('List Users By Company Use Case', () => {
       repository: usersRepository,
     })
 
-    const company = makeCompany({ users: [user.id.toString()] })
-    await companiesRepository.create(company)
+    const company = await makeCompany({
+      override: {
+        users: [user.id.toString()]
+      },
+      repository: companiesRepository,
+    })
 
     const result = await useCase.execute({
       companyId: company.id.toString()

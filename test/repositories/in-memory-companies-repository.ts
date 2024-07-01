@@ -28,7 +28,7 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
     this.items.push(company)
   }
 
-  async save(company: Company): Promise<void> {
+  async update(company: Company): Promise<void> {
     const itemIndex = this.items.findIndex((item) => item.id === company.id)
 
     this.items[itemIndex] = company

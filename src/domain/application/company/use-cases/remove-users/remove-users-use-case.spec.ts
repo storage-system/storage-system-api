@@ -4,8 +4,9 @@ import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repos
 import { makeUser } from "test/factories/make-user";
 import { RemoveUsersUseCase } from "./remove-users-use-case";
 import { UsersRepository } from "@/domain/application/user/users-repository";
+import { CompaniesRepository } from "../../companies-repository";
 
-let companiesRepository: InMemoryCompaniesRepository
+let companiesRepository: CompaniesRepository
 let usersRepository: UsersRepository
 let useCase: RemoveUsersUseCase
 
@@ -23,8 +24,9 @@ describe('Remove Users Use Case', () => {
   })
 
   it('should be able to remove users to the company', async () => {
-    const company = makeCompany()
-    await companiesRepository.create(company)
+    const company = await makeCompany({
+      repository: companiesRepository,
+    })
 
     const user = await makeUser({
       override: {
@@ -35,11 +37,15 @@ describe('Remove Users Use Case', () => {
 
     company.assignCompany(user.id.toString())
 
+    const companyId = company.id.toString()
+
     await useCase.execute({
-      companyId: company.id.toString(),
+      companyId,
       userIds: [user.id.toString()]
     })
 
-    expect(companiesRepository.items[0].users).toEqual([])
+    const companyOnDatabase = await companiesRepository.findById(companyId)
+
+    expect(companyOnDatabase?.users).toEqual([])
   })
 })

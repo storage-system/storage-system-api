@@ -34,6 +34,6 @@ export class AssignUserUseCase {
 
     company.assignCompany(userId)
 
-    await this.companiesRepository.save(company)
+    await this.companiesRepository.update(company)
   }
 }

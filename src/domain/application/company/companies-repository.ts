@@ -1,10 +1,7 @@
+import { Repository } from "@/core/repository";
 import { Company } from "@/domain/enterprise/company/company";
 
-export abstract class CompaniesRepository {
+export abstract class CompaniesRepository extends Repository<Company> {
   abstract findByEmail(email: string): Promise<Company | null>
-  abstract findById(id: string): Promise<Company | null>
-  abstract create(company: Company): Promise<void>
-  abstract save(company: Company): Promise<void>
-  abstract delete(companyId: string): Promise<void>
   abstract removeUsers(companyId: string, userIds: string[]): Promise<void>
 }

@@ -35,6 +35,6 @@ export class EditCompanyUseCase {
       contact,
     })
 
-    await this.companiesRepository.save(company)
+    await this.companiesRepository.update(company)
   }
 }

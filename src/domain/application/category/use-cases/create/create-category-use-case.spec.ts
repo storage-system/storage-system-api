@@ -1,12 +1,13 @@
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { CreateCategoryUseCase } from './create-category-use-case'
-import { Category } from '@/domain/enterprise/category/category'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { makeCompany } from 'test/factories/make-company'
 import { Company } from '@/domain/enterprise/company/company'
+import { CategoriesRepository } from '../../categories-repository'
+import { CompaniesRepository } from '@/domain/application/company/companies-repository'
 
-let categoriesRepository: InMemoryCategoriesRepository
-let companiesRepository: InMemoryCompaniesRepository
+let categoriesRepository: CategoriesRepository
+let companiesRepository: CompaniesRepository
 let useCase: CreateCategoryUseCase
 
 describe('Create Category', () => {
@@ -17,8 +18,9 @@ describe('Create Category', () => {
     companiesRepository = new InMemoryCompaniesRepository()
     useCase = new CreateCategoryUseCase(categoriesRepository, companiesRepository)
 
-    company = makeCompany()
-    await companiesRepository.create(company)
+    company = await makeCompany({
+      repository: companiesRepository,
+    })
   })
 
   it('dependencies should be defined', (): void => {
@@ -27,13 +29,16 @@ describe('Create Category', () => {
   })
 
   it('should be able to create a category', async () => {
-    await useCase.execute({
+    const result = await useCase.execute({
       name: 'category-01',
       companyId: company.id.toString(),
       isActive: true,
     })
 
-    expect(categoriesRepository.items[0]).toBeInstanceOf(Category)
+    const categoryOnDatabase = await categoriesRepository.findById(result.categoryId)
+
+    expect(result).toBeDefined()
+    expect(categoryOnDatabase?.id.toString()).toBe(result.categoryId)
   })
 
   it('should not be able to create a category if it exist', async () => {

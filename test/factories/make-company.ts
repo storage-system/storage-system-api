@@ -4,11 +4,20 @@ import { Company, CompanyProps } from '@/domain/enterprise/company/company'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { PrismaCompanyMapper } from '@/infrastructure/database/prisma/mappers/prisma-company-mapper'
+import { FactoryProp } from '.'
 
-export function makeCompany(
-  override: Partial<CompanyProps> = {},
-  id?: UniqueEntityID,
-) {
+export async function makeCompany({
+  repository,
+  override,
+}: FactoryProp<
+  Company,
+  Partial<
+    CompanyProps &
+    {
+      id: string
+    }
+  >
+> = {}): Promise<Company> {
   const company = Company.create(
     {
       name: faker.company.name(),
@@ -19,8 +28,12 @@ export function makeCompany(
       users: [],
       ...override,
     },
-    id,
+    new UniqueEntityID(override?.id),
   )
+
+  if (repository) {
+    await repository.create(company)
+  }
 
   return company
 }
@@ -32,7 +45,9 @@ export class CompanyFactory {
   async makePrismaCompany(
     data: Partial<CompanyProps> = {},
   ): Promise<Company> {
-    const company = makeCompany(data)
+    const company = await makeCompany({
+      override: data,
+    })
 
     await this.prisma.company.create({
       data: PrismaCompanyMapper.toPersistence(company)
