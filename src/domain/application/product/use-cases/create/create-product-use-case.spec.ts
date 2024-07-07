@@ -100,4 +100,94 @@ describe('Create Product Use Case', () => {
     expect(productOnDatabase.items).toBeDefined()
     expect(productOnDatabase.items[0].name).toBe(productMock?.name)
   })
+
+  it('should not be able to create a product that company does not exist', async () => {
+    const user = await makeUser({
+      repository: usersRepository,
+    })
+    const category = await makeCategory({
+      repository: categoriesRepository,
+    })
+
+    const companyNonExists = 'company-id'
+
+    const productMock: CreateProductUseCaseRequest = {
+      name: faker.company.name(),
+      description: faker.commerce.productDescription(),
+      companyId: companyNonExists,
+      categoryIds: [category.id.toString()],
+      authorId: user.id.toString(),
+      originalPrice: faker.number.int({
+        max: 200,
+        min: 100,
+      }),
+      discountPercentage: faker.number.int({
+        max: 90,
+        min: 1,
+      }),
+      finalPrice: faker.number.int({
+        max: 150,
+        min: 50,
+      }),
+      quantityInStock: faker.number.int({
+        max: 100,
+        min: 0
+      }),
+      validityInDays: faker.number.int({
+        min: 1,
+        max: 100,
+      }),
+      weight: faker.number.int(),
+      status: StatusProduct.ACTIVE,
+      unitOfMeasure: 'kg',
+      manufactureDate: faker.date.past(),
+    }
+
+    expect(useCase.execute(productMock)).rejects.toThrowError()
+  })
+
+  it('should not be able to create a product that user does not exist', async () => {
+    const company = await makeCompany({
+      repository: companiesRepository,
+    })
+    const category = await makeCategory({
+      repository: categoriesRepository,
+    })
+
+    const userNonExists = 'user-id'
+
+    const productMock: CreateProductUseCaseRequest = {
+      name: faker.company.name(),
+      description: faker.commerce.productDescription(),
+      companyId: company.id.toString(),
+      categoryIds: [category.id.toString()],
+      authorId: userNonExists,
+      originalPrice: faker.number.int({
+        max: 200,
+        min: 100,
+      }),
+      discountPercentage: faker.number.int({
+        max: 90,
+        min: 1,
+      }),
+      finalPrice: faker.number.int({
+        max: 150,
+        min: 50,
+      }),
+      quantityInStock: faker.number.int({
+        max: 100,
+        min: 0
+      }),
+      validityInDays: faker.number.int({
+        min: 1,
+        max: 100,
+      }),
+      weight: faker.number.int(),
+      status: StatusProduct.ACTIVE,
+      unitOfMeasure: 'kg',
+      manufactureDate: faker.date.past(),
+    }
+
+    expect(useCase.execute(productMock)).rejects.toThrowError()
+  })
 })
