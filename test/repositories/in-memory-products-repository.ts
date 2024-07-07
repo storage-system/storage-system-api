@@ -40,7 +40,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
     this.items.push(product)
   }
 
-  async save(product: Product): Promise<void> {
+  async update(product: Product): Promise<void> {
     const itemIndex = this.items.findIndex((item) => item.id === product.id)
     this.items[itemIndex] = product
   }

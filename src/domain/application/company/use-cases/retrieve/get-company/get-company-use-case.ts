@@ -11,7 +11,6 @@ interface GetCompanyUseCaseRequest {
 
 type GetCompanyUseCaseResponse = CompanyPresenter
 
-
 @Injectable()
 export class GetCompanyUseCase {
   constructor(

@@ -10,5 +10,4 @@ const createUserBodySchema = z.object({
   roles: z.array(z.nativeEnum(UserRoles)),
 })
 
-
 export class CreateUserDTO extends createZodDto(createUserBodySchema) { }
