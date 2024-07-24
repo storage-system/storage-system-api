@@ -38,7 +38,7 @@ describe('Get Product Use Case', () => {
     expect(useCase).toBeDefined()
   })
 
-  it('should be able to retrieve company details without users', async () => {
+  it('should be able to retrieve product details', async () => {
     const user = await makeUser({
       repository: usersRepository
     })

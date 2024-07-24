@@ -3,7 +3,7 @@ import { Company, CompanyProps } from '@/domain/enterprise/company/company';
 import { DimensionsProduct, Product, ProductProps, StatusProduct } from '@/domain/enterprise/product/product';
 import { Category, CategoryProps } from '@/domain/enterprise/category/category';
 
-export class GetProductPresenter {
+export class GetProductOutput {
   id: string
   name: string
   description: string
@@ -127,7 +127,7 @@ export class GetProductPresenter {
       ? categoriesProps.map((category) => category.toJSON())
       : []
 
-    return new GetProductPresenter(
+    return new GetProductOutput(
       product.toJSON(),
       companyProps.toJSON(),
       categories,

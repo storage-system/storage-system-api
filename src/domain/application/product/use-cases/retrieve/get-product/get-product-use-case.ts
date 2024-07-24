@@ -5,14 +5,14 @@ import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { CompaniesRepository } from '@/domain/application/company/companies-repository'
 import { UsersRepository } from '@/domain/application/user/users-repository'
 import { CategoriesRepository } from '@/domain/application/category/categories-repository'
-import { GetProductPresenter } from '../get-product-presenter'
+import { GetProductOutput } from './get-product-output'
 import { Category } from '@/domain/enterprise/category/category'
 
 interface GetProductUseCaseRequest {
   productId: string
 }
 
-type GetProductUseCaseResponse = GetProductPresenter
+type GetProductUseCaseResponse = GetProductOutput
 
 @Injectable()
 export class GetProductUseCase {
@@ -38,7 +38,7 @@ export class GetProductUseCase {
       this.getCategories(product.categoryIds.map((categoryId) => categoryId.toString()))
     ]);
 
-    return GetProductPresenter.fromAggregate(
+    return GetProductOutput.fromAggregate(
       product,
       company,
       categories,
