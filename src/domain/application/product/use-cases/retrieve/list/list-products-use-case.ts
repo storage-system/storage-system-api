@@ -10,11 +10,7 @@ import { ListProductsOutput } from './list-products-output'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { User } from '@/domain/enterprise/user/user'
 import { Company } from '@/domain/enterprise/company/company'
-
-interface ListProductsUseCaseRequest {
-  page: number
-  perPage: number
-}
+import { ListProductsCommand } from './list-products-command'
 
 type ListProductsUseCaseResponse = PaginationProps<ListProductsOutput>
 
@@ -27,7 +23,7 @@ export class ListProductsUseCase {
     private categoriesRepository: CategoriesRepository,
   ) { }
 
-  async execute(anInput: ListProductsUseCaseRequest): Promise<ListProductsUseCaseResponse> {
+  async execute(anInput: ListProductsCommand): Promise<ListProductsUseCaseResponse> {
     const products = await this.productsRepository.findAll(anInput)
 
     const [authors, companies, categories] = await Promise.all([
