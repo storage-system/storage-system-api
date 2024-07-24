@@ -26,6 +26,8 @@ model User {
   companyId String?  @map("company_id")
   company   Company? @relation(fields: [companyId], references: [id])
 
+  Product Product[]
+
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
@@ -46,6 +48,7 @@ model Company {
 
   categories Category[]
   users      User[]
+  Product    Product[]
 
   @@map("companies")
 }
@@ -67,5 +70,55 @@ model Category {
 
   children Category[] @relation("child_categories")
 
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+
   @@map("categories")
+}
+
+enum StatusProduct {
+  ACTIVE
+  INACTIVE
+  OUT_OF_STOCK
+}
+
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  slug        String
+  description String
+
+  originalPrice      Int
+  finalPrice         Int
+  discountPercentage Int
+
+  quantityInStock Int
+  manufactureDate DateTime
+  validityInDays  Int
+
+  unitOfMeasure String
+  weight        Int
+
+  dimensions_height String
+  dimensions_width  String
+  dimensions_depth  String
+
+  manufacturer String?
+  batch        String?
+
+  status StatusProduct
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  authorId String @map("author_id")
+  user     User   @relation(fields: [authorId], references: [id])
+
+  categories Category[]
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("products")
 }
