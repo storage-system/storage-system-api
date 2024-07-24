@@ -3,6 +3,7 @@ import { CategoryModule } from "./modules/category/category.module";
 import { CompanyModule } from "./modules/company/company.module";
 import { AuthenticateModule } from "./modules/authenticate/authenticate.module";
 import { UserModule } from "./modules/user/user.module";
+import { ProductModule } from "./modules/product/product.module";
 import { APP_GUARD } from "@nestjs/core";
 import { RolesGuard } from "../guards/roles.guard";
 
@@ -12,6 +13,7 @@ import { RolesGuard } from "../guards/roles.guard";
     CompanyModule,
     CategoryModule,
     UserModule,
+    ProductModule,
   ],
   providers: [
     {
