@@ -4,5 +4,4 @@ import { Product } from '@/domain/enterprise/product/product'
 
 export abstract class ProductsRepository extends Repository<Product> {
   abstract findAll(params: PaginationProps<Product>): Promise<Pagination<Product>>
-  abstract findBySlug(slug: string): Promise<Product | null>
 }

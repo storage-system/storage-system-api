@@ -26,16 +26,6 @@ export class InMemoryProductsRepository implements ProductsRepository {
     })
   }
 
-  async findBySlug(slug: string): Promise<Product | null> {
-    const item = this.items.find((item) => item.slug.value === slug)
-
-    if (!item) {
-      return null
-    }
-
-    return item
-  }
-
   async create(product: Product): Promise<void> {
     this.items.push(product)
   }
