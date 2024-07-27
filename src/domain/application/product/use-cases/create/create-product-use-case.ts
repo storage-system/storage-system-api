@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Notification } from '@/core/validation/notification'
 import NotificationException from '@/core/exception/notification-exception'
-import { DimensionsProduct, Product, StatusProduct } from '@/domain/enterprise/product/product'
+import { Product, StatusProduct } from '@/domain/enterprise/product/product'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { CompaniesRepository } from '@/domain/application/company/companies-repository'
 import { CategoriesRepository } from '@/domain/application/category/categories-repository'
@@ -17,18 +17,23 @@ export interface CreateProductUseCaseRequest {
   finalPrice: number
   discountPercentage: number
   quantityInStock: number
-  manufactureDate: Date
+  manufactureDate?: Date
   validityInDays: number
   unitOfMeasure: string
   weight: number
-  dimensions?: DimensionsProduct
+  dimensions_height: string
+  dimensions_width: string
+  dimensions_depth: string
   manufacturer?: string
   batch?: string
   status: StatusProduct
   productImage?: string
   companyId: string
   categoryIds: string[]
-  authorId: string
+}
+
+export interface CreateProductUseCaseResponse {
+  productId: string
 }
 
 @Injectable()
@@ -40,19 +45,13 @@ export class CreateProductUseCase {
     private categoriesRepository: CategoriesRepository,
   ) { }
 
-  async execute(anInput: CreateProductUseCaseRequest): Promise<void> {
+  async execute(anInput: CreateProductUseCaseRequest): Promise<CreateProductUseCaseResponse> {
     const notification = Notification.create()
 
     const company = await this.companiesRepository.findById(anInput.companyId)
 
     if (!company) {
       throw notification.appendAnError(new Error("Empresa não encontrada"))
-    }
-
-    const user = await this.usersRepository.findById(anInput.authorId)
-
-    if (!user) {
-      throw notification.appendAnError(new Error("Usuário não encontrado"))
     }
 
     const categoriesValidation = await Promise.all(
@@ -67,8 +66,12 @@ export class CreateProductUseCase {
     const product = Product.create({
       ...anInput,
       categoryIds: categories,
+      dimensions: {
+        depth: anInput.dimensions_depth,
+        height: anInput.dimensions_height,
+        width: anInput.dimensions_width,
+      },
       companyId: new UniqueEntityID(anInput.companyId),
-      authorId: new UniqueEntityID(anInput.authorId)
     })
 
     if (notification.hasErrors()) {
@@ -76,6 +79,10 @@ export class CreateProductUseCase {
     }
 
     await this.productsRepository.create(product)
+
+    return {
+      productId: product.id.toString()
+    }
   }
 
   async validateCategory(id: string, aHandler: ValidationHandler) {

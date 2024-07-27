@@ -22,13 +22,9 @@ export class ProductController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(
-    @CurrentUser() user: UserPayload,
     @Body() body: CreateProductDTO,
   ) {
-    return await this.createProductUseCase.execute({
-      ...body,
-      authorId: user.sub,
-    })
+    return await this.createProductUseCase.execute(body)
   }
 
   @Get()

@@ -23,10 +23,8 @@ export class CategoryController {
   @Post()
   async create(
     @Body() body: CreateCategoryDTO,
-    @CurrentUser() user: UserPayload
   ) {
-    const { name, isActive } = body
-    const companyId = user.companyId
+    const { name, isActive, companyId } = body
 
     return await this.createCategoryUseCase.execute({
       name,

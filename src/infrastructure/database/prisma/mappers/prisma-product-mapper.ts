@@ -13,7 +13,7 @@ export class PrismaProductMapper {
       finalPrice: raw.finalPrice,
       discountPercentage: raw.discountPercentage,
       quantityInStock: raw.quantityInStock,
-      manufactureDate: raw.manufactureDate,
+      manufactureDate: raw.manufactureDate ?? undefined,
       validityInDays: raw.validityInDays,
       unitOfMeasure: raw.unitOfMeasure,
       weight: raw.weight,
@@ -26,7 +26,6 @@ export class PrismaProductMapper {
       batch: raw.batch ?? undefined,
       status: raw.status as StatusProduct,
       companyId: new UniqueEntityID(raw.companyId),
-      authorId: new UniqueEntityID(raw.authorId),
       categoryIds: [],
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
@@ -55,7 +54,6 @@ export class PrismaProductMapper {
       batch: product.batch,
       status: product.status,
       companyId: product.companyId.toString(),
-      authorId: product.authorId.toString(),
       categories: {
         connect: product.categoryIds.map((categoryId) => ({
           id: categoryId.toString(),

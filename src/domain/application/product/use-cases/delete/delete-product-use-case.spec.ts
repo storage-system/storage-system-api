@@ -43,7 +43,6 @@ describe('Delete Product Use Case', () => {
     const product = await makeProduct({
       repository: productsRepository,
       override: {
-        authorId: user.id,
         companyId: company.id,
         categoryIds: [category.id]
       }

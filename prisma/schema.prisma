@@ -26,8 +26,6 @@ model User {
   companyId String?  @map("company_id")
   company   Company? @relation(fields: [companyId], references: [id])
 
-  products Product[]
-
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
@@ -92,7 +90,7 @@ model Product {
   discountPercentage Int
 
   quantityInStock Int
-  manufactureDate DateTime
+  manufactureDate DateTime?
   validityInDays  Int
 
   unitOfMeasure String
@@ -109,9 +107,6 @@ model Product {
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
-
-  authorId String @map("author_id")
-  user     User   @relation(fields: [authorId], references: [id])
 
   categories Category[]
 

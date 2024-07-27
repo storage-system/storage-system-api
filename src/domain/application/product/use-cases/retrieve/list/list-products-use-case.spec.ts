@@ -57,7 +57,6 @@ describe('List Products Use Case', () => {
     await makeProduct({
       repository: productsRepository,
       override: {
-        authorId: user.id,
         companyId: company.id,
         categoryIds: [category.id]
       }
@@ -67,8 +66,6 @@ describe('List Products Use Case', () => {
       page: 1,
       perPage: 10,
     })
-
-    console.log('result', result)
 
     expect(result).toBeDefined()
     expect(result.items).toHaveLength(1)

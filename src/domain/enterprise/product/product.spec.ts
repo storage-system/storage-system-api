@@ -34,7 +34,6 @@ describe('Product Entity', () => {
       productImage: 'test-image-url',
       companyId: new UniqueEntityID(),
       categoryIds: [new UniqueEntityID()],
-      authorId: new UniqueEntityID(),
       createdAt: new Date(),
       updatedAt: null,
       deletedAt: null,

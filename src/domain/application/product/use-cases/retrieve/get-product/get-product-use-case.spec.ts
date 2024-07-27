@@ -4,17 +4,13 @@ import { InMemoryProductsRepository } from 'test/repositories/in-memory-products
 import { makeProduct } from 'test/factories/make-product'
 import { CategoriesRepository } from '@/domain/application/category/categories-repository'
 import { CompaniesRepository } from '@/domain/application/company/companies-repository'
-import { UsersRepository } from '@/domain/application/user/users-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
-import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { makeUser } from 'test/factories/make-user'
 import { makeCompany } from 'test/factories/make-company'
 import { makeCategory } from 'test/factories/make-category'
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository
-let usersRepository: UsersRepository
 let categoriesRepository: CategoriesRepository
 let useCase: GetProductUseCase
 
@@ -22,13 +18,11 @@ describe('Get Product Use Case', () => {
   beforeEach(async () => {
     productsRepository = new InMemoryProductsRepository()
     companiesRepository = new InMemoryCompaniesRepository()
-    usersRepository = new InMemoryUsersRepository()
     categoriesRepository = new InMemoryCategoriesRepository()
 
     useCase = new GetProductUseCase(
       productsRepository,
       companiesRepository,
-      usersRepository,
       categoriesRepository,
     )
   })
@@ -39,10 +33,6 @@ describe('Get Product Use Case', () => {
   })
 
   it('should be able to retrieve product details', async () => {
-    const user = await makeUser({
-      repository: usersRepository
-    })
-
     const company = await makeCompany({
       repository: companiesRepository,
     })
@@ -54,7 +44,6 @@ describe('Get Product Use Case', () => {
     const product = await makeProduct({
       repository: productsRepository,
       override: {
-        authorId: user.id,
         companyId: company.id,
         categoryIds: [category.id]
       }

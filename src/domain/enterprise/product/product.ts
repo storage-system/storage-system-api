@@ -25,7 +25,7 @@ export interface ProductProps {
   discountPercentage: number
 
   quantityInStock: number
-  manufactureDate: Date
+  manufactureDate?: Date
   validityInDays: number
 
   unitOfMeasure: string
@@ -40,7 +40,6 @@ export interface ProductProps {
 
   companyId: UniqueEntityID
   categoryIds: UniqueEntityID[]
-  authorId: UniqueEntityID
 
   createdAt: Date
   updatedAt?: Date | null
@@ -49,12 +48,13 @@ export interface ProductProps {
 
 export class Product extends Entity<ProductProps> {
   static create(
-    props: Optional<ProductProps, 'createdAt' | 'slug'>,
+    props: Optional<ProductProps, 'createdAt' | 'slug' | 'manufactureDate'>,
     id?: UniqueEntityID,
   ) {
     const product = new Product(
       {
         slug: props.slug ?? Slug.createFromText(props.name),
+        manufactureDate: props.manufactureDate ?? new Date(),
         createdAt: new Date(),
         ...props,
       },
@@ -171,10 +171,6 @@ export class Product extends Entity<ProductProps> {
 
   get categoryIds() {
     return this.props.categoryIds
-  }
-
-  get authorId() {
-    return this.props.authorId
   }
 
   get createdAt() {

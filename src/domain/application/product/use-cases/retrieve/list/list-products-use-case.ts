@@ -8,7 +8,6 @@ import { CategoriesRepository } from '@/domain/application/category/categories-r
 import { Category } from '@/domain/enterprise/category/category'
 import { ListProductsOutput } from './list-products-output'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
-import { User } from '@/domain/enterprise/user/user'
 import { Company } from '@/domain/enterprise/company/company'
 import { ListProductsCommand } from './list-products-command'
 
@@ -26,8 +25,7 @@ export class ListProductsUseCase {
   async execute(anInput: ListProductsCommand): Promise<ListProductsUseCaseResponse> {
     const products = await this.productsRepository.findAll(anInput)
 
-    const [authors, companies, categories] = await Promise.all([
-      this.getUsers(products.items.map((product) => product.authorId.toString())),
+    const [companies, categories] = await Promise.all([
       this.getCompanies(products.items.map((product) => product.companyId.toString())),
       Promise.all(products.items.map((product) => this.getCategories(product.categoryIds)))
     ])
@@ -37,7 +35,6 @@ export class ListProductsUseCase {
         product,
         companies[index],
         categories[index],
-        authors[index],
       )
     );
 
@@ -46,22 +43,6 @@ export class ListProductsUseCase {
       items,
       total: products.total,
     })
-  }
-
-  private async getUsers(userIds: string[]): Promise<User[]> {
-    const users = await Promise.all(userIds.map((userId) => this.getUser(userId)));
-
-    return users
-  }
-
-  private async getUser(id: string) {
-    const user = await this.usersRepository.findById(id)
-
-    if (!user) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(id));
-    }
-
-    return user
   }
 
   private async getCompanies(companyIds: string[]): Promise<Company[]> {

@@ -3,7 +3,6 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ProductsRepository } from '../../../products-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { CompaniesRepository } from '@/domain/application/company/companies-repository'
-import { UsersRepository } from '@/domain/application/user/users-repository'
 import { CategoriesRepository } from '@/domain/application/category/categories-repository'
 import { GetProductOutput } from './get-product-output'
 import { Category } from '@/domain/enterprise/category/category'
@@ -19,7 +18,6 @@ export class GetProductUseCase {
   constructor(
     private productsRepository: ProductsRepository,
     private companiesRepository: CompaniesRepository,
-    private usersRepository: UsersRepository,
     private categoriesRepository: CategoriesRepository,
   ) { }
 
@@ -32,8 +30,7 @@ export class GetProductUseCase {
       throw ResourceNotFoundException.with('Produto', new UniqueEntityID(productId));
     }
 
-    const [author, company, categories] = await Promise.all([
-      this.getUser(product.authorId.toString()),
+    const [company, categories] = await Promise.all([
       this.getCompany(product.companyId.toString()),
       this.getCategories(product.categoryIds.map((categoryId) => categoryId.toString()))
     ]);
@@ -42,18 +39,7 @@ export class GetProductUseCase {
       product,
       company,
       categories,
-      author
     )
-  }
-
-  private async getUser(id: string) {
-    const user = await this.usersRepository.findById(id)
-
-    if (!user) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(id));
-    }
-
-    return user
   }
 
   private async getCompany(id: string) {

@@ -13,7 +13,7 @@ export class GetProductOutput {
   discountPercentage: number
 
   quantityInStock: number
-  manufactureDate: Date
+  manufactureDate?: Date
   validityInDays: number
 
   unitOfMeasure: string
@@ -40,12 +40,6 @@ export class GetProductOutput {
     isActive: boolean
   }[]
 
-  author: {
-    id: string
-    name: string
-    email: string
-  }
-
   createdAt: Date
   updatedAt?: Date | null
   deletedAt?: Date | null
@@ -62,11 +56,6 @@ export class GetProductOutput {
         id: string
       } & CategoryProps
     >[],
-    anAuthorProps: Required<
-      {
-        id: string
-      } & UserProps
-    >
   ) {
     this.id = aProductProps.id.toString();
     this.name = aProductProps.name;
@@ -105,12 +94,6 @@ export class GetProductOutput {
         isActive: category.isActive,
       })) : []
 
-    this.author = {
-      id: anAuthorProps.id.toString(),
-      name: anAuthorProps.name,
-      email: anAuthorProps.email
-    };
-
     this.createdAt = aProductProps.createdAt;
     this.updatedAt = aProductProps.updatedAt;
     this.deletedAt = aProductProps.deletedAt
@@ -120,7 +103,6 @@ export class GetProductOutput {
     product: Product,
     companyProps: Company,
     categoriesProps: Category[],
-    authorProps: User
   ) {
 
     const categories = categoriesProps.length > 0
@@ -131,7 +113,6 @@ export class GetProductOutput {
       product.toJSON(),
       companyProps.toJSON(),
       categories,
-      authorProps.toJSON(),
     );
   }
 }

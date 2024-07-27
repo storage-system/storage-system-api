@@ -9,7 +9,7 @@ export const createProductBodySchema = z.object({
   finalPrice: z.number(),
   discountPercentage: z.number(),
   quantityInStock: z.number(),
-  manufactureDate: z.date(),
+  manufactureDate: z.date().optional(),
   validityInDays: z.number(),
   unitOfMeasure: z.string(),
   weight: z.number(),
@@ -23,4 +23,4 @@ export const createProductBodySchema = z.object({
   categoryIds: z.array(z.string())
 })
 
-export class CreateProductDTO extends createZodDto(createProductBodySchema) {}
+export class CreateProductDTO extends createZodDto(createProductBodySchema) { }
