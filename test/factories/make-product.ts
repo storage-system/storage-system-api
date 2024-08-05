@@ -45,7 +45,6 @@ export async function makeProduct({
       status: StatusProduct.ACTIVE,
       unitOfMeasure: 'kg',
       manufactureDate: faker.date.past(),
-      authorId: override?.authorId!,
       ...override,
     },
     new UniqueEntityID(override?.id),
