@@ -6,19 +6,10 @@ import { Category, CategoryProps } from '@/domain/enterprise/category/category';
 export class ListProductsOutput {
   id: string
   name: string
-  description: string
-
-  originalPrice: number
-  finalPrice: number
-  discountPercentage: number
 
   quantityInStock: number
   manufactureDate?: Date
   validityInDays: number
-
-  unitOfMeasure: string
-  weight: number
-  dimensions?: DimensionsProduct
 
   manufacturer?: string
   batch?: string
@@ -55,19 +46,10 @@ export class ListProductsOutput {
   ) {
     this.id = aProductProps.id.toString();
     this.name = aProductProps.name;
-    this.description = aProductProps.description;
-
-    this.originalPrice = aProductProps.originalPrice;
-    this.finalPrice = aProductProps.finalPrice;
-    this.discountPercentage = aProductProps.discountPercentage;
 
     this.quantityInStock = aProductProps.quantityInStock;
     this.manufactureDate = aProductProps.manufactureDate;
     this.validityInDays = aProductProps.validityInDays;
-
-    this.unitOfMeasure = aProductProps.unitOfMeasure;
-    this.weight = aProductProps.weight;
-    this.dimensions = aProductProps.dimensions;
 
     this.manufacturer = aProductProps.manufacturer;
     this.batch = aProductProps.batch;
@@ -88,7 +70,7 @@ export class ListProductsOutput {
 
     this.createdAt = aProductProps.createdAt;
     this.updatedAt = aProductProps.updatedAt;
-    this.deletedAt = aProductProps.deletedAt;
+    this.deletedAt = aProductProps.deletedAt ?? undefined;
   }
 
   static from(

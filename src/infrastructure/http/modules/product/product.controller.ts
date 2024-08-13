@@ -5,8 +5,6 @@ import { CreateProductUseCase } from "@/domain/application/product/use-cases/cre
 import { DeleteProductUseCase } from "@/domain/application/product/use-cases/delete/delete-product-use-case";
 import { ListProductsUseCase } from "@/domain/application/product/use-cases/retrieve/list/list-products-use-case";
 import { GetProductUseCase } from "@/domain/application/product/use-cases/retrieve/get-product/get-product-use-case";
-import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
-import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
 import { QueryParamsDTO } from "../query-params/query-params.dto";
 
 @ApiTags('Product')
@@ -27,14 +25,14 @@ export class ProductController {
     return await this.createProductUseCase.execute(body)
   }
 
-  @Get()
+  @Get('/company/:companyId')
   async list(
-    @CurrentUser() user: UserPayload,
-    @Query() query: QueryParamsDTO
+    @Query() query: QueryParamsDTO,
+    @Param('companyId') companyId: string,
   ) {
     return await this.listProductsUseCase.execute({
       ...query,
-      companyId: user.companyId,
+      companyId,
     })
   }
 

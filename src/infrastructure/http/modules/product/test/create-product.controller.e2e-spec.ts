@@ -90,8 +90,6 @@ describe('Create Product (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send(productMock)
 
-    console.log('response.body.productId', response.body.productId)
-
     expect(response.statusCode).toBe(HttpStatus.CREATED)
 
     const productOnDatabase = await prisma.product.findFirst({

@@ -54,11 +54,11 @@ export class PrismaProductMapper {
       batch: product.batch,
       status: product.status,
       companyId: product.companyId.toString(),
-      categories: {
+      categories: product.categoryIds ? {
         connect: product.categoryIds.map((categoryId) => ({
           id: categoryId.toString(),
         })),
-      },
+      } : undefined,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
       deletedAt: product.deletedAt,

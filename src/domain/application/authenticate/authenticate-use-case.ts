@@ -49,11 +49,7 @@ export class AuthenticateUseCase {
       roles: user.roles,
     };
 
-    console.log("accessTokenPayload", accessTokenPayload)
-
     const accessToken = await this.encrypter.encrypt(accessTokenPayload)
-
-    console.log('accessToken', accessToken)
 
     return {
       accessToken,

@@ -3,7 +3,6 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ProductsRepository } from '../../../products-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { CompaniesRepository } from '@/domain/application/company/companies-repository'
-import { UsersRepository } from '@/domain/application/user/users-repository'
 import { CategoriesRepository } from '@/domain/application/category/categories-repository'
 import { Category } from '@/domain/enterprise/category/category'
 import { ListProductsOutput } from './list-products-output'
@@ -18,7 +17,6 @@ export class ListProductsUseCase {
   constructor(
     private productsRepository: ProductsRepository,
     private companiesRepository: CompaniesRepository,
-    private usersRepository: UsersRepository,
     private categoriesRepository: CategoriesRepository,
   ) { }
 
