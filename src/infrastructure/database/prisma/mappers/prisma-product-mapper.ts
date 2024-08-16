@@ -30,7 +30,7 @@ export class PrismaProductMapper {
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
       deletedAt: raw.deletedAt,
-    })
+    }, new UniqueEntityID(raw.id))
   }
 
   static toPersistence(product: Product): Prisma.ProductUncheckedCreateInput {
