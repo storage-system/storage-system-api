@@ -73,7 +73,9 @@ export class PrismaProductsRepository implements ProductsRepository {
   }
 
   async delete(anId: string): Promise<void> {
-    await this.prisma.user.update({
+    
+    
+    await this.prisma.product.update({
       where: {
         id: anId,
       },
