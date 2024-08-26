@@ -21,6 +21,7 @@ export interface UpdateProductUseCaseRequest {
   batch?: string
   status?: StatusProduct
   productImage?: string
+  categoryIds?: string[]
 }
 
 @Injectable()
@@ -34,7 +35,10 @@ export class UpdateProductUseCase {
       throw ResourceNotFoundException.with('Produto', new UniqueEntityID(props.productId));
     }
 
-    product.update(props)
+    product.update({
+      ...props,
+      categoryIds: props.categoryIds?.map((categoryId) => new UniqueEntityID(categoryId))
+    })
 
     await this.productsRepository.update(product)
   }

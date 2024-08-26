@@ -1,11 +1,13 @@
 import { ApiTags } from "@nestjs/swagger";
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from "@nestjs/common";
 import { CreateProductDTO } from "./dto/create-product-dto";
 import { CreateProductUseCase } from "@/domain/application/product/use-cases/create/create-product-use-case";
 import { DeleteProductUseCase } from "@/domain/application/product/use-cases/delete/delete-product-use-case";
 import { ListProductsUseCase } from "@/domain/application/product/use-cases/retrieve/list/list-products-use-case";
 import { GetProductUseCase } from "@/domain/application/product/use-cases/retrieve/get-product/get-product-use-case";
 import { QueryParamsDTO } from "../query-params/query-params.dto";
+import { UpdateProductUseCase } from "@/domain/application/product/use-cases/update/update-product-use-case";
+import { UpdateProductDTO } from "./dto/update-product-dto";
 
 @ApiTags('Product')
 @Controller('/products')
@@ -14,6 +16,7 @@ export class ProductController {
     private createProductUseCase: CreateProductUseCase,
     private listProductsUseCase: ListProductsUseCase,
     private getProductUseCase: GetProductUseCase,
+    private updateProductUseCase: UpdateProductUseCase,
     private deleteProductUseCase: DeleteProductUseCase,
   ) { }
 
@@ -42,6 +45,18 @@ export class ProductController {
   ) {
     return await this.getProductUseCase.execute({
       productId,
+    })
+  }
+
+  @Patch('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async update(
+    @Body() body: UpdateProductDTO,
+    @Param('id') productId: string,
+  ) {
+    return await this.updateProductUseCase.execute({
+      productId,
+      ...body
     })
   }
 
