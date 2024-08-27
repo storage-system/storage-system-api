@@ -1,6 +1,6 @@
 import { Pagination } from "@/core/entities/pagination";
 import { User } from "@/domain/enterprise/user/user";
-import { ListUsersCommand } from "./use-cases/retrieve/list/list-users-command";
+import { ListUsersCommand } from "../../application/user/use-cases/retrieve/list/list-users-command";
 import { Repository } from "@/core/repository";
 
 export abstract class UsersRepository extends Repository<User> {

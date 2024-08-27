@@ -1,4 +1,4 @@
-import { CategoriesRepository } from '../../categories-repository'
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { Injectable } from '@nestjs/common'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'

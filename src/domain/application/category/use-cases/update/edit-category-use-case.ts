@@ -1,5 +1,5 @@
 import { Either, right } from '@/core/either'
-import { CategoriesRepository } from '../../categories-repository'
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { Injectable } from '@nestjs/common'
@@ -7,7 +7,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import NotAuthorizedException from '@/core/exception/not-authorized-exception'
 import { Notification } from '@/core/validation/notification'
-import { CompaniesRepository } from '@/domain/application/company/companies-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 
 interface EditCategoryUseCaseRequest {
   name?: string

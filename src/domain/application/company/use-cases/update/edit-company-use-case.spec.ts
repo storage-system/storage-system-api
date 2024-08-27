@@ -1,7 +1,7 @@
 import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository";
 import { EditCompanyUseCase } from "./edit-company-use-case";
 import { makeCompany } from "test/factories/make-company";
-import { CompaniesRepository } from "../../companies-repository";
+import { CompaniesRepository } from "../../../../enterprise/company/companies-repository";
 
 let repository: CompaniesRepository
 let useCase: EditCompanyUseCase

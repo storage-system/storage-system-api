@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { CompaniesRepository } from '../../../companies-repository'
+import { CompaniesRepository } from '../../../../../enterprise/company/companies-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { UsersRepository } from '@/domain/application/user/users-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { CompanyPresenter } from './company-presenter'
 
 interface GetCompanyUseCaseRequest {
@@ -30,7 +30,7 @@ export class GetCompanyUseCase {
     const users = company?.users && company?.users?.length > 0
       ? await this.usersRepository.findByIds(
         company.users.map((user) => user)
-        )
+      )
       : [];
 
     return CompanyPresenter.fromAggregate(

@@ -4,7 +4,7 @@ import { DeleteCompanyUseCase } from "./delete-company-use-case";
 import { makeCompany } from "test/factories/make-company";
 import { makeUser } from "test/factories/make-user";
 import { UserRoles } from "@/domain/enterprise/user/user-types";
-import { UsersRepository } from "@/domain/application/user/users-repository";
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 
 let companiesRepository: InMemoryCompaniesRepository
 let usersRepository: UsersRepository

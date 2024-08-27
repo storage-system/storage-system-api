@@ -1,5 +1,5 @@
 import { PaginationProps, Pagination } from "@/core/entities/pagination";
-import { CategoriesRepository } from "@/domain/application/category/categories-repository";
+import { CategoriesRepository } from "@/domain/enterprise/category/categories-repository";
 import { Category } from "@/domain/enterprise/category/category";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";

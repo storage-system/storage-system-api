@@ -1,5 +1,5 @@
 import { PaginationProps, Pagination } from "@/core/entities/pagination";
-import { ProductsRepository } from "@/domain/application/product/products-repository";
+import { ProductsRepository } from "@/domain/enterprise/product/products-repository";
 import { Product } from "@/domain/enterprise/product/product";
 
 export class InMemoryProductsRepository implements ProductsRepository {

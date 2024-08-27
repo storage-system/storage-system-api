@@ -1,5 +1,5 @@
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
-import { CategoriesRepository } from '@/domain/application/category/categories-repository'
+import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { Category } from '@/domain/enterprise/category/category'
 
 export class InMemoryCategoriesRepository implements CategoriesRepository {

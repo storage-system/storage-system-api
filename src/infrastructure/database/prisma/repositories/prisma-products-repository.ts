@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
-import { ProductsRepository } from "@/domain/application/product/products-repository";
+import { ProductsRepository } from "@/domain/enterprise/product/products-repository";
 import { Pagination } from "@/core/entities/pagination";
 import { ListProductsCommand } from "@/domain/application/product/use-cases/retrieve/list/list-products-command";
 import { Product } from "@/domain/enterprise/product/product";

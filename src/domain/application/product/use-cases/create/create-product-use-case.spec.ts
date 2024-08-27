@@ -8,10 +8,10 @@ import { makeCompany } from "test/factories/make-company"
 import { makeCategory } from "test/factories/make-category"
 import { StatusProduct } from "@/domain/enterprise/product/product"
 import { faker } from "@faker-js/faker"
-import { UsersRepository } from "@/domain/application/user/users-repository"
-import { ProductsRepository } from "../../products-repository"
-import { CompaniesRepository } from "@/domain/application/company/companies-repository"
-import { CategoriesRepository } from "@/domain/application/category/categories-repository"
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { ProductsRepository } from "../../../../enterprise/product/products-repository"
+import { CompaniesRepository } from "@/domain/enterprise/company/companies-repository"
+import { CategoriesRepository } from "@/domain/enterprise/category/categories-repository"
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository

@@ -1,7 +1,7 @@
 import { Either, right } from "@/core/either"
 import { User } from "@/domain/enterprise/user/user"
 import { UserRoles } from "@/domain/enterprise/user/user-types"
-import { UsersRepository } from "../../users-repository"
+import { UsersRepository } from "../../../../enterprise/user/users-repository"
 import { Injectable } from "@nestjs/common"
 import { Notification } from "@/core/validation/notification"
 import { AlreadyExistsError } from "@/core/errors/already-exists-error"

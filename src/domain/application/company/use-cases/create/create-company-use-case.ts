@@ -1,7 +1,7 @@
 import { Either, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 import { HashGenerator } from '../../../cryptography/hash-generator'
-import { CompaniesRepository } from '../../companies-repository'
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
 import { Company } from '@/domain/enterprise/company/company'
 import { Notification } from '@/core/validation/notification'
 import NotificationException from '@/core/exception/notification-exception'

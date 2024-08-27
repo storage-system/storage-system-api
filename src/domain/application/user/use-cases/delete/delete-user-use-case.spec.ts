@@ -2,7 +2,7 @@ import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repos
 import { DeleteUserUseCase } from './delete-user-use-case'
 import { makeUser } from 'test/factories/make-user'
 import { faker } from '@faker-js/faker'
-import { UsersRepository } from '../../users-repository'
+import { UsersRepository } from '../../../../enterprise/user/users-repository'
 
 let repository: UsersRepository
 let useCase: DeleteUserUseCase

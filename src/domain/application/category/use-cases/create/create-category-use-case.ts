@@ -1,11 +1,11 @@
 import { Category } from '@/domain/enterprise/category/category'
-import { CategoriesRepository } from '../../categories-repository'
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Injectable } from '@nestjs/common'
 import { Slug } from '@/domain/enterprise/slug/slug'
 import NotificationException from '@/core/exception/notification-exception'
 import { Notification } from '@/core/validation/notification'
-import { CompaniesRepository } from '@/domain/application/company/companies-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 
 interface CreateCategoryUseCaseRequest {

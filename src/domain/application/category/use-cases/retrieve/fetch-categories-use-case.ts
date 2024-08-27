@@ -1,5 +1,5 @@
 
-import { CategoriesRepository } from '../../categories-repository'
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Injectable } from '@nestjs/common'
 import { CategoryPresenter } from '@/infrastructure/http/presenters/category-presenter'

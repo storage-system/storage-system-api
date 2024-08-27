@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { Encrypter } from '../cryptography/encrypter'
 import WrongCredentialsException from '@/core/exception/wrong-credentials-exception'
-import { UsersRepository } from '../user/users-repository'
+import { UsersRepository } from '../../enterprise/user/users-repository'
 
 interface AuthenticateUseCaseRequest {
   email: string

@@ -4,7 +4,7 @@ import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repos
 import { UserRoles } from "@/domain/enterprise/user/user-types"
 import { faker } from "@faker-js/faker"
 import { makeUser } from "test/factories/make-user"
-import { UsersRepository } from "../../users-repository"
+import { UsersRepository } from "../../../../enterprise/user/users-repository"
 
 let repository: UsersRepository
 let fakeHasher: FakeHasher

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { ProductsRepository } from '../../products-repository'
+import { ProductsRepository } from '../../../../enterprise/product/products-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 
 interface DeleteProductUseCaseRequest {

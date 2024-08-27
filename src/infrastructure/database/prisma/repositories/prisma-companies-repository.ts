@@ -1,4 +1,4 @@
-import { CompaniesRepository } from "@/domain/application/company/companies-repository";
+import { CompaniesRepository } from "@/domain/enterprise/company/companies-repository";
 import { Company } from "@/domain/enterprise/company/company";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
-import { UsersRepository } from '../../users-repository'
+import { UsersRepository } from '../../../../enterprise/user/users-repository'
 
 interface DeleteUserUseCaseRequest {
   userId: string

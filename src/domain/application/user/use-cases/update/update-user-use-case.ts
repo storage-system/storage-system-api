@@ -1,6 +1,6 @@
 import { UserRoles } from "@/domain/enterprise/user/user-types"
 import { Injectable } from "@nestjs/common"
-import { UsersRepository } from "../../users-repository"
+import { UsersRepository } from "../../../../enterprise/user/users-repository"
 import ResourceNotFoundException from "@/core/exception/not-found-exception"
 import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 

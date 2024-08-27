@@ -1,7 +1,7 @@
 import { DeleteCategoryUseCase } from './delete-category-use-case'
 import { makeCategory } from 'test/factories/make-category'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { CategoriesRepository } from '../../categories-repository'
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 
 let repository: CategoriesRepository
 let useCase: DeleteCategoryUseCase

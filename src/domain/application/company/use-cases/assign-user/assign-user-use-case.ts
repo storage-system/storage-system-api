@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { CompaniesRepository } from '../../companies-repository'
-import { UsersRepository } from '@/domain/application/user/users-repository'
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 

@@ -3,8 +3,8 @@ import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-catego
 import { EditCategoryUseCase } from './edit-category-use-case'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { makeCompany } from 'test/factories/make-company'
-import { CategoriesRepository } from '../../categories-repository'
-import { CompaniesRepository } from '@/domain/application/company/companies-repository'
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 
 let categoriesRepository: CategoriesRepository
 let companiesRepository: CompaniesRepository

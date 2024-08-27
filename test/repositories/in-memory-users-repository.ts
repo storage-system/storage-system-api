@@ -1,5 +1,5 @@
 import { PaginationProps, Pagination } from "@/core/entities/pagination";
-import { UsersRepository } from "@/domain/application/user/users-repository";
+import { UsersRepository } from "@/domain/enterprise/user/users-repository";
 import { User } from "@/domain/enterprise/user/user";
 
 export class InMemoryUsersRepository implements UsersRepository {

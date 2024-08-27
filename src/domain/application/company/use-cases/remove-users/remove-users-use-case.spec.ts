@@ -3,8 +3,8 @@ import { makeCompany } from "test/factories/make-company";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { makeUser } from "test/factories/make-user";
 import { RemoveUsersUseCase } from "./remove-users-use-case";
-import { UsersRepository } from "@/domain/application/user/users-repository";
-import { CompaniesRepository } from "../../companies-repository";
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { CompaniesRepository } from "../../../../enterprise/company/companies-repository";
 
 let companiesRepository: CompaniesRepository
 let usersRepository: UsersRepository
