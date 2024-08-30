@@ -20,7 +20,7 @@ export class StyleID extends UniqueEntityID { }
 export class Style extends Entity<StyleProps> {
   static create(
     props: Optional<StyleProps, 'createdAt'>,
-    id?: UniqueEntityID,
+    id?: StyleID,
   ) {
     const style = new Style(
       {
