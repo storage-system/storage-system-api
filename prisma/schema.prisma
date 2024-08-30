@@ -26,6 +26,8 @@ model User {
   companyId String?  @map("company_id")
   company   Company? @relation(fields: [companyId], references: [id])
 
+  configuration Configuration[]
+
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
@@ -44,9 +46,10 @@ model Company {
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  categories Category[]
-  users      User[]
-  products   Product[]
+  categories    Category[]
+  users         User[]
+  products      Product[]
+  configuration Configuration[]
 
   @@map("companies")
 }
@@ -71,6 +74,29 @@ model Category {
   products Product[]
 
   @@map("categories")
+}
+
+model Configuration {
+  id                         String  @id @default(uuid())
+  daysBeforeOldStock         Int     @map("days_before_old_stock")
+  warningDays                Int     @map("warning_days")
+  emailNotification          Boolean @map("email_notification")
+  systemNotification         Boolean @map("system_notification")
+  autoDiscardAfterExpiration Boolean @map("auto_discard_after_expiration")
+  freeShippingOnOldStock     Boolean @map("free_shipping_on_old_stock")
+  reportFrequency            String  @map("report_frequency")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("configurations")
 }
 
 enum StatusProduct {
