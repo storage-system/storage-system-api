@@ -43,6 +43,10 @@ export class Style extends Entity<StyleProps> {
     this.touch()
   }
 
+  delete() {
+    this.props.deletedAt = new Date();
+  }
+
   get name() {
     return this.props.name
   }
