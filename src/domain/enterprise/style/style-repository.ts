@@ -5,4 +5,5 @@ import { ListStylesCommand } from '@/domain/application/style/use-cases/retrieve
 
 export abstract class StyleRepository extends Repository<Style> {
   abstract findAll(params: ListStylesCommand): Promise<Pagination<Style>>
+  abstract findActiveStyleByCompanyId(companyId: string): Promise<Style | null>
 }

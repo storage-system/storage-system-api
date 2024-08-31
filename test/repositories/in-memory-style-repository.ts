@@ -40,4 +40,12 @@ export class InMemoryStyleRepository implements StyleRepository {
     const filteredStyles = this.items.filter((style) => style.id.toString() !== styleId)
     this.items = filteredStyles
   }
+
+  async findActiveStyleByCompanyId(companyId: string): Promise<Style | null> {
+    const activeStyle = this.items.find(
+      (style) => style.companyId.toString() === companyId && style.isActive
+    );
+
+    return activeStyle || null;
+  }
 }

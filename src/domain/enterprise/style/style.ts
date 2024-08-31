@@ -5,6 +5,7 @@ import { Optional } from "@/core/types/optional"
 export interface StyleProps {
   companyId: UniqueEntityID
   name: string
+  isActive: boolean
   backgroundColor: string
   textColor: string
   primaryColor: string
@@ -43,12 +44,24 @@ export class Style extends Entity<StyleProps> {
     this.touch()
   }
 
+  chooseActiveStyle() {
+    this.props.isActive = true
+  }
+
+  deactivateStyle() {
+    this.props.isActive = false
+  }
+
   delete() {
     this.props.deletedAt = new Date();
   }
 
   get name() {
     return this.props.name
+  }
+
+  get isActive() {
+    return this.props.isActive
   }
 
   get companyId() {
