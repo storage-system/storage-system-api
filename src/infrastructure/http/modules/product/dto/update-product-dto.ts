@@ -9,7 +9,10 @@ export const updateProductBodySchema = z.object({
   finalPrice: z.number().optional(),
   discountPercentage: z.number().optional(),
   quantityInStock: z.number().optional(),
-  manufactureDate: z.date().optional(),
+  manufactureDate: z
+    .string()
+    .transform((v) => new Date(v))
+    .optional(),
   validityInDays: z.number().optional(),
   unitOfMeasure: z.string().optional(),
   weight: z.number().optional(),

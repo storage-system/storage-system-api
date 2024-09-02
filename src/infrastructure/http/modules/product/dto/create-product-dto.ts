@@ -9,7 +9,10 @@ export const createProductBodySchema = z.object({
   finalPrice: z.number(),
   discountPercentage: z.number(),
   quantityInStock: z.number(),
-  manufactureDate: z.date().optional(),
+  manufactureDate: z
+    .date()
+    .transform((v) => new Date(v))
+    .optional(),
   validityInDays: z.number(),
   unitOfMeasure: z.string(),
   weight: z.number(),
