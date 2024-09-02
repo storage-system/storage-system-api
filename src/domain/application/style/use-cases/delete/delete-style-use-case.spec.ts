@@ -44,8 +44,6 @@ describe('Delete Style Use Case', () => {
 
     const styleOnDatabase = await styleRepository.findById(styleId)
 
-    console.log('styleOnDatabase', styleOnDatabase)
-
     expect(styleOnDatabase?.deletedAt).toBeDefined()
   })
 

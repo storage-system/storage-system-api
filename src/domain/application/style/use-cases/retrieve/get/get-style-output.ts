@@ -4,6 +4,7 @@ export class GetStyleOutput {
   id: string
   companyId: string
   name: string
+  isActive: boolean
   backgroundColor: string
   textColor: string
   primaryColor: string
@@ -20,6 +21,7 @@ export class GetStyleOutput {
     this.id = aStyleProps.id.toString();
     this.companyId = aStyleProps.companyId.toString();
     this.name = aStyleProps.name;
+    this.isActive = aStyleProps.isActive;
     this.backgroundColor = aStyleProps.backgroundColor;
     this.textColor = aStyleProps.textColor;
     this.primaryColor = aStyleProps.primaryColor;
@@ -28,7 +30,7 @@ export class GetStyleOutput {
 
     this.createdAt = aStyleProps.createdAt;
     this.updatedAt = aStyleProps.updatedAt;
-    this.deletedAt = aStyleProps.deletedAt;
+    this.deletedAt = aStyleProps.deletedAt ?? undefined;
   }
 
   static fromAggregate(

@@ -26,7 +26,7 @@ export class StyleController {
   ) { }
 
   @Post()
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() body: CreateStyleDTO) {
     return await this.createStyleUseCase.execute(body)
   }
@@ -66,7 +66,7 @@ export class StyleController {
   }
 
   @Patch('/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async update(
     @Body() body: UpdateStyleDTO,
     @Param('id') styleId: string,
@@ -78,6 +78,7 @@ export class StyleController {
   }
 
   @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
     @Param('id') styleId: string,
   ) {
