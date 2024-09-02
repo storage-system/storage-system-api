@@ -14,6 +14,9 @@ export class PrismaConfigurationMapper {
       reportFrequency: raw.reportFrequency as ReportFrequency,
       userId: new UniqueEntityID(raw.userId),
       companyId: new UniqueEntityID(raw.companyId),
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+      deletedAt: raw.deletedAt,
     }, new UniqueEntityID(raw.id))
   }
 

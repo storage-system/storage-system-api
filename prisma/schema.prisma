@@ -50,6 +50,7 @@ model Company {
   users         User[]
   products      Product[]
   configuration Configuration[]
+  styles        Style[]
 
   @@map("companies")
 }
@@ -97,6 +98,27 @@ model Configuration {
   user   User   @relation(fields: [userId], references: [id])
 
   @@map("configurations")
+}
+
+model Style {
+  id String @id @default(uuid())
+
+  name            String
+  isActive        Boolean @default(false) @map("is_active")
+  backgroundColor String  @map("background_color")
+  textColor       String  @map("text_color")
+  primaryColor    String  @map("primary_color")
+  secondaryColor  String  @map("secondary_color")
+  tertiaryColor   String  @map("tertiary_color")
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("styles")
 }
 
 enum StatusProduct {

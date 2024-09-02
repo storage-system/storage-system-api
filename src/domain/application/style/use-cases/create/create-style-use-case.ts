@@ -11,6 +11,7 @@ import { Style } from '@/domain/enterprise/style/style'
 export interface CreateStyleUseCaseRequest {
   companyId: string
   name: string
+  isActive: boolean,
   backgroundColor: string
   textColor: string
   primaryColor: string
