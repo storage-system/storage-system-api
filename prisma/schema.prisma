@@ -133,15 +133,16 @@ model Product {
   slug        String
   description String
 
-  originalPrice      Int
-  finalPrice         Int
-  discountPercentage Int
+  originalPrice      Int @map("original_price")
+  finalPrice         Int @map("final_price")
+  discountPercentage Int @map("discount_percentage")
 
-  quantityInStock Int
-  manufactureDate DateTime?
-  validityInDays  Int
+  quantityInStock Int      @map("quantity_in_stock")
+  manufactureDate DateTime @map("manufacture_date")
+  dueDate         DateTime @map("due_date")
+  validityInDays  Int      @map("validity_in_days")
 
-  unitOfMeasure String
+  unitOfMeasure String @map("unit_of_measure")
   weight        Int
 
   dimensions_height String
