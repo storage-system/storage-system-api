@@ -6,9 +6,9 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { ProductsRepository } from '../../../../enterprise/product/products-repository'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import Error from '@/core/validation/error'
 import { ValidationHandler } from '@/core/validation/validation-handler'
+import ResourceNotFoundException from '@/core/exception/not-found-exception'
 
 export interface CreateProductUseCaseRequest {
   name: string
@@ -17,7 +17,7 @@ export interface CreateProductUseCaseRequest {
   finalPrice: number
   discountPercentage: number
   quantityInStock: number
-  manufactureDate?: Date
+  manufactureDate: Date
   validityInDays: number
   unitOfMeasure: string
   weight: number
@@ -41,7 +41,6 @@ export class CreateProductUseCase {
   constructor(
     private productsRepository: ProductsRepository,
     private companiesRepository: CompaniesRepository,
-    private usersRepository: UsersRepository,
     private categoriesRepository: CategoriesRepository,
   ) { }
 
@@ -51,7 +50,7 @@ export class CreateProductUseCase {
     const company = await this.companiesRepository.findById(anInput.companyId)
 
     if (!company) {
-      throw notification.appendAnError(new Error("Empresa não encontrada"))
+      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(anInput.companyId))
     }
 
     const categoriesValidation = await Promise.all(
@@ -66,6 +65,7 @@ export class CreateProductUseCase {
     const product = Product.create({
       ...anInput,
       categoryIds: categories,
+      manufactureDate: anInput.manufactureDate,
       dimensions: {
         depth: anInput.dimensions_depth,
         height: anInput.dimensions_height,
@@ -90,7 +90,7 @@ export class CreateProductUseCase {
 
     if (!category) {
       aHandler.appendAnError(
-        new Error("Categoria não encontrada.")
+        new Error(`Categoria ${id} não encontrada.`)
       )
     }
 

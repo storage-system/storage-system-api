@@ -1,6 +1,5 @@
 import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository"
 import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository"
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository"
 import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository"
 import { CreateProductUseCase, CreateProductUseCaseRequest } from "./create-product-use-case"
 import { makeUser } from "test/factories/make-user"
@@ -8,14 +7,12 @@ import { makeCompany } from "test/factories/make-company"
 import { makeCategory } from "test/factories/make-category"
 import { StatusProduct } from "@/domain/enterprise/product/product"
 import { faker } from "@faker-js/faker"
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { ProductsRepository } from "../../../../enterprise/product/products-repository"
 import { CompaniesRepository } from "@/domain/enterprise/company/companies-repository"
 import { CategoriesRepository } from "@/domain/enterprise/category/categories-repository"
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository
-let usersRepository: UsersRepository
 let categoriesRepository: CategoriesRepository
 
 let useCase: CreateProductUseCase
@@ -24,13 +21,11 @@ describe('Create Product Use Case', () => {
   beforeEach(() => {
     productsRepository = new InMemoryProductsRepository()
     companiesRepository = new InMemoryCompaniesRepository()
-    usersRepository = new InMemoryUsersRepository()
     categoriesRepository = new InMemoryCategoriesRepository()
 
     useCase = new CreateProductUseCase(
       productsRepository,
       companiesRepository,
-      usersRepository,
       categoriesRepository,
     )
   })
@@ -40,18 +35,11 @@ describe('Create Product Use Case', () => {
 
     expect(productsRepository).toBeDefined()
     expect(companiesRepository).toBeDefined()
-    expect(usersRepository).toBeDefined()
     expect(categoriesRepository).toBeDefined()
   })
 
   it('should be able to create a new product', async () => {
-    const user = await makeUser({
-      repository: usersRepository,
-    })
     const company = await makeCompany({
-      override: {
-        users: [user.id.toString()]
-      },
       repository: companiesRepository,
     })
     const category = await makeCategory({
@@ -145,6 +133,7 @@ describe('Create Product Use Case', () => {
       manufactureDate: faker.date.past(),
     }
 
-    expect(useCase.execute(productMock)).rejects.toThrowError()
+    expect(useCase.execute(productMock))
+      .rejects.toThrowError(`Empresa com ID ${productMock.companyId} não foi encontrado`)
   })
 })

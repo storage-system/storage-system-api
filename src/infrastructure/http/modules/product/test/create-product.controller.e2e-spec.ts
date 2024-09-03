@@ -57,6 +57,7 @@ describe('Create Product (E2E)', () => {
         max: 200,
         min: 100,
       }),
+      manufactureDate: faker.date.past(),
       discountPercentage: faker.number.int({
         max: 90,
         min: 1,
