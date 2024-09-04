@@ -8,7 +8,8 @@ export class ListProductsOutput {
   name: string
 
   quantityInStock: number
-  manufactureDate?: Date
+  manufactureDate: Date
+  dueDate: Date
   validityInDays: number
 
   manufacturer?: string
@@ -49,6 +50,7 @@ export class ListProductsOutput {
 
     this.quantityInStock = aProductProps.quantityInStock;
     this.manufactureDate = aProductProps.manufactureDate;
+    this.dueDate = aProductProps.dueDate;
     this.validityInDays = aProductProps.validityInDays;
 
     this.manufacturer = aProductProps.manufacturer;

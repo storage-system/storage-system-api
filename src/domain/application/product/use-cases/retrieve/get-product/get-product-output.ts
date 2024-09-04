@@ -1,4 +1,3 @@
-import { User, UserProps } from '@/domain/enterprise/user/user';
 import { Company, CompanyProps } from '@/domain/enterprise/company/company';
 import { DimensionsProduct, Product, ProductProps, StatusProduct } from '@/domain/enterprise/product/product';
 import { Category, CategoryProps } from '@/domain/enterprise/category/category';
@@ -13,7 +12,8 @@ export class GetProductOutput {
   discountPercentage: number
 
   quantityInStock: number
-  manufactureDate?: Date
+  manufactureDate: Date
+  dueDate: Date
   validityInDays: number
 
   unitOfMeasure: string
@@ -67,6 +67,7 @@ export class GetProductOutput {
 
     this.quantityInStock = aProductProps.quantityInStock;
     this.manufactureDate = aProductProps.manufactureDate;
+    this.dueDate = aProductProps.dueDate;
     this.validityInDays = aProductProps.validityInDays;
 
     this.unitOfMeasure = aProductProps.unitOfMeasure;

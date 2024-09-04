@@ -29,6 +29,7 @@
     "@nestjs/swagger": "^7.3.1",
     "@prisma/client": "^5.12.1",
     "bcryptjs": "^2.4.3",
+    "date-fns": "^3.6.0",
     "lodash": "^4.17.21",
     "nestjs-zod": "^3.0.0",
     "passport-jwt": "^4.0.1",

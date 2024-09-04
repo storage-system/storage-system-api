@@ -1,7 +1,8 @@
 import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { Slug } from "../slug/slug"
 import { Entity } from "@/core/entities/entity"
-import { Optional } from "@/core/types/optional"
+import { addDays } from "date-fns"
+import { Replace } from "@/core/replace"
 
 export enum StatusProduct {
   ACTIVE = 'ACTIVE',
@@ -25,7 +26,8 @@ export interface ProductProps {
   discountPercentage: number
 
   quantityInStock: number
-  manufactureDate?: Date
+  manufactureDate: Date
+  dueDate: Date
   validityInDays: number
 
   unitOfMeasure: string
@@ -46,15 +48,29 @@ export interface ProductProps {
   deletedAt?: Date | null
 }
 
+export type ProductConstructorProps = Replace<
+  ProductProps,
+  {
+    slug?: Slug,
+    manufactureDate?: Date
+    dueDate?: Date
+    createdAt?: Date
+  }
+>
+
 export class Product extends Entity<ProductProps> {
   static create(
-    props: Optional<ProductProps, 'createdAt' | 'slug' | 'manufactureDate'>,
+    props: ProductConstructorProps,
     id?: UniqueEntityID,
   ) {
+    const manufactureDate = props.manufactureDate ?? new Date()
+    const dueDate = addDays(manufactureDate, props.validityInDays)
+
     const product = new Product(
       {
         slug: props.slug ?? Slug.createFromText(props.name),
-        manufactureDate: props.manufactureDate ?? new Date(),
+        manufactureDate,
+        dueDate,
         createdAt: new Date(),
         ...props,
       },
@@ -131,6 +147,10 @@ export class Product extends Entity<ProductProps> {
 
   get manufactureDate() {
     return this.props.manufactureDate
+  }
+
+  get dueDate() {
+    return this.props.dueDate
   }
 
   get validityInDays() {

@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Product, ProductProps, StatusProduct } from './product'
+import { Product, ProductConstructorProps, ProductProps, StatusProduct } from './product'
 import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { Slug } from "../slug/slug"
 import { faker } from '@faker-js/faker'
+import { addDays } from 'date-fns'
 
 describe('Product Entity', () => {
-  let initialProps: ProductProps
+  let initialProps: ProductConstructorProps
 
   beforeEach(() => {
     const productName = faker.commerce.product()
@@ -21,10 +22,7 @@ describe('Product Entity', () => {
         max: 1000,
       }),
       manufactureDate: new Date('2023-01-01'),
-      validityInDays: faker.number.int({
-        min: 1,
-        max: 365,
-      }),
+      validityInDays: 2,
       unitOfMeasure: 'kg',
       weight: 1.5,
       dimensions: { height: '10cm', width: '20cm', depth: '5cm' },
@@ -43,12 +41,18 @@ describe('Product Entity', () => {
   it('should create a product', () => {
     const product = Product.create(initialProps)
 
+    const manufactureDate = product.manufactureDate
+    const validityInDays = product.validityInDays
+
+    const dueDateResult = addDays(new Date(manufactureDate), validityInDays)
+
     const slugMocked = Slug.createFromText(initialProps.name).value
 
     expect(product).toBeInstanceOf(Product)
     expect(product.name).toBe(initialProps.name)
     expect(product.slug.value).toBe(slugMocked)
     expect(product.description).toBe(initialProps.description)
+    expect(product.dueDate).toEqual(dueDateResult)
   })
 
   it('should update a product', () => {
