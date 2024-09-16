@@ -8,6 +8,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { RolesGuard } from "../guards/roles.guard";
 import { ConfigurationModule } from "./modules/configuration/configuration.module";
 import { StyleModule } from "./modules/style/style.module";
+import { MetricsModule } from "./modules/metrics/metrics.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { StyleModule } from "./modules/style/style.module";
     ProductModule,
     ConfigurationModule,
     StyleModule,
+    MetricsModule,
   ],
   providers: [
     {

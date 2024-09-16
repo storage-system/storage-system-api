@@ -37,6 +37,7 @@ describe('Create Style Use Case', () => {
     const styleMock: CreateStyleUseCaseRequest = {
       name: 'Style 1',
       companyId,
+      isActive: false,
       backgroundColor: faker.color.rgb(),
       primaryColor: faker.color.rgb(),
       secondaryColor: faker.color.rgb(),
@@ -63,6 +64,7 @@ describe('Create Style Use Case', () => {
     const styleMock: CreateStyleUseCaseRequest = {
       name: 'Style 1',
       companyId: companyNonExists,
+      isActive: false,
       backgroundColor: faker.color.rgb(),
       primaryColor: faker.color.rgb(),
       secondaryColor: faker.color.rgb(),

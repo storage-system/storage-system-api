@@ -22,6 +22,6 @@ import { RemoveUsersUseCase } from "@/domain/application/company/use-cases/remov
     DeleteCompanyUseCase,
     AssignUserUseCase,
     RemoveUsersUseCase,
-  ]
+  ],
 })
 export class CompanyModule { }
