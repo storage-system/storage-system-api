@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { Express } from 'express'
 
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import { File } from '@/domain/enterprise/file/file'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import { CompanyID } from '@/domain/enterprise/company/company'
 
 @Injectable()
 export class UploadFileUseCase {
@@ -22,7 +21,7 @@ export class UploadFileUseCase {
     if (!findCompany) {
       throw ResourceNotFoundException.with(
         'Empresa',
-        new UniqueEntityID(companyId)
+        new CompanyID(companyId)
       );
     }
     
@@ -32,7 +31,7 @@ export class UploadFileUseCase {
       filename: file.originalname,
       path: uploadedFileName, 
       size: file.size,
-      companyId: new UniqueEntityID(companyId),
+      companyId: new CompanyID(companyId),
     });
 
     await this.fileRepository.create(newFile);

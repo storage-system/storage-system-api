@@ -22,7 +22,8 @@ export class InMemoryFileRepository implements FileRepository {
     throw new Error('Method not implemented.')
   }
 
-  delete(anId: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(anId: string): Promise<void> {
+    const filteredFiles = this.items.filter((file) => file.id.toString() !== anId)
+    this.items = filteredFiles
   }
 }
