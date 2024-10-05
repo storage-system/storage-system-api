@@ -2,6 +2,8 @@ import { Entity } from '@/core/entities/entity'
 import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
+export class CompanyID extends UniqueEntityID {}
+
 export interface CompanyProps {
   name: string
   email: string
@@ -57,7 +59,7 @@ export class Company extends Entity<CompanyProps> {
 
   static create(
     props: Optional<CompanyProps, 'createdAt'>,
-    id?: UniqueEntityID,
+    id?: CompanyID,
   ) {
     const company = new Company(
       {

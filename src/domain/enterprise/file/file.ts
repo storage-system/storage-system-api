@@ -1,15 +1,17 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ValueObject } from '@/core/value-object'
 import { Replace } from '@/core/replace'
+import { CompanyID } from '../company/company'
 
 export class FileID extends UniqueEntityID {}
 
 export interface FileProps {
   id: FileID
+  companyId?: CompanyID
   size: number
   filename: string
-  createdAt: Date
   path: string
+  createdAt: Date
 }
 
 export type FileConstructorProps = Replace<
@@ -52,5 +54,9 @@ export class File extends ValueObject<FileProps> {
 
   get filetype(): string {
     return this.value.filename.split('.').at(-1)!
+  }
+
+  get companyId() {
+    return this.value.companyId
   }
 }

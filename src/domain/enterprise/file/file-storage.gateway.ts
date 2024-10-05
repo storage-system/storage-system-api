@@ -1,7 +1,8 @@
 import { Readable } from 'stream'
-import { ReadStream } from 'fs'
 
 export abstract class FileStorageGateway {
-  abstract put(path: string, stream: Readable): Promise<void>
-  abstract get(path: string): Promise<ReadStream>
+  abstract getFileUrl(path: string): Promise<string>
+  abstract uploadFile(file: Express.Multer.File): Promise<string>
+  abstract deleteFile(path: string): Promise<void>
+  abstract downloadFile(path: string): Promise<Readable>
 }
