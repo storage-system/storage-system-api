@@ -15,7 +15,8 @@
     "incremental": true,
     "skipLibCheck": true,
     "types": [
-      "vitest/globals"
+      "vitest/globals",
+      "multer"
     ],
     "paths": {
       "@/*": [
