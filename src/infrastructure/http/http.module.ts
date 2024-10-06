@@ -9,6 +9,7 @@ import { RolesGuard } from "../guards/roles.guard";
 import { ConfigurationModule } from "./modules/configuration/configuration.module";
 import { StyleModule } from "./modules/style/style.module";
 import { MetricsModule } from "./modules/metrics/metrics.module";
+import { FileModule } from "./modules/file/file.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MetricsModule } from "./modules/metrics/metrics.module";
     ProductModule,
     ConfigurationModule,
     StyleModule,
+    FileModule,
     MetricsModule,
   ],
   providers: [
