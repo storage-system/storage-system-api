@@ -1,4 +1,4 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ValueObject } from '@/core/value-object'
 import { Replace } from '@/core/replace'
 import { CompanyID } from '../company/company'
@@ -12,6 +12,8 @@ export interface FileProps {
   filename: string
   path: string
   createdAt: Date
+  updatedAt?: Date
+  deletedAt?: Date
 }
 
 export type FileConstructorProps = Replace<
@@ -32,6 +34,10 @@ export class File extends ValueObject<FileProps> {
     return new File({ ...defaultProps, ...props })
   }
 
+  public delete() {
+    this.value.deletedAt = new Date()
+  }
+
   get id() {
     return this.value.id
   }
@@ -44,10 +50,6 @@ export class File extends ValueObject<FileProps> {
     return this.value.path
   }
 
-  get createdAt() {
-    return this.value.createdAt
-  }
-
   get filename(): string {
     return this.value.filename
   }
@@ -58,5 +60,17 @@ export class File extends ValueObject<FileProps> {
 
   get companyId() {
     return this.value.companyId
+  }
+
+  get createdAt() {
+    return this.value.createdAt
+  }
+
+  get updatedAt() {
+    return this.value.updatedAt
+  }
+
+  get deletedAt() {
+    return this.value.deletedAt
   }
 }

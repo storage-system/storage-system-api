@@ -51,6 +51,7 @@ model Company {
   products      Product[]
   configuration Configuration[]
   styles        Style[]
+  files         File[]
 
   @@map("companies")
 }
@@ -164,4 +165,20 @@ model Product {
   deletedAt DateTime? @map("deleted_at")
 
   @@map("products")
+}
+
+model File {
+  id       String @id @default(uuid())
+  path     String @db.VarChar(255)
+  size     Int
+  filename String @db.VarChar(255)
+
+  createdAt DateTime  @map(name: "created_at") @db.Timestamp(6)
+  updatedAt DateTime? @map(name: "updated_at") @db.Timestamp(6)
+  deletedAt DateTime? @map(name: "deleted_at") @db.Timestamp(6)
+
+  companyId String?  @map("company_id")
+  company   Company? @relation(fields: [companyId], references: [id])
+
+  @@map("files")
 }

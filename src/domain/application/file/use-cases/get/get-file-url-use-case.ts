@@ -3,7 +3,7 @@ import { FileRepository } from '@/domain/enterprise/file/file-repository';
 import ResourceNotFoundException from '@/core/exception/not-found-exception';
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway';
 
-export class DownloadFileUseCase {
+export class GetFileUrlUseCase {
   constructor(
     private fileRepository: FileRepository,
     private fileStorageRepository: FileStorageGateway

@@ -12,6 +12,8 @@ import { ConfigurationRepository } from "@/domain/enterprise/configuration/confi
 import { PrismaConfigurationRepository } from "./prisma/repositories/prisma-configuration-repository";
 import { StyleRepository } from "@/domain/enterprise/style/style-repository";
 import { PrismaStyleRepository } from "./prisma/repositories/prisma-style-repository";
+import { FileRepository } from "@/domain/enterprise/file/file-repository";
+import { PrismaFileRepository } from "./prisma/repositories/prisma-file-repository";
 
 @Module({
   providers: [
@@ -40,6 +42,10 @@ import { PrismaStyleRepository } from "./prisma/repositories/prisma-style-reposi
       provide: StyleRepository,
       useClass: PrismaStyleRepository,
     },
+    {
+      provide: FileRepository,
+      useClass: PrismaFileRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -49,6 +55,7 @@ import { PrismaStyleRepository } from "./prisma/repositories/prisma-style-reposi
     ProductsRepository,
     ConfigurationRepository,
     StyleRepository,
+    FileRepository
   ],
 })
 export class DatabaseModule { }
