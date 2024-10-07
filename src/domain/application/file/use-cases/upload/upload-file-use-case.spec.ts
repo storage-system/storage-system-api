@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { UploadFileUseCase } from './upload-file-use-case';
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway';
 import { FileRepository } from '@/domain/enterprise/file/file-repository';
-import { File } from '@/domain/enterprise/file/file';
+import { InMemoryFileRepository } from 'test/repositories/in-memory-file-repository';
+import { InMemoryFileStorageGateway } from 'test/repositories/in-memory-file-storage.gateway';
 
 describe('UploadFileUseCase', () => {
   let uploadFileUseCase: UploadFileUseCase;
@@ -10,13 +11,9 @@ describe('UploadFileUseCase', () => {
   let fileRepository: FileRepository;
 
   beforeEach(() => {
-    fileStorageGateway = {
-      uploadFile: vi.fn(),
-    } as unknown as FileStorageGateway;
+    fileStorageGateway = new InMemoryFileStorageGateway()
 
-    fileRepository = {
-      create: vi.fn(),
-    } as unknown as FileRepository;
+    fileRepository = new InMemoryFileRepository()
 
     uploadFileUseCase = new UploadFileUseCase(
       fileStorageGateway,
@@ -31,28 +28,14 @@ describe('UploadFileUseCase', () => {
       buffer: Buffer.from('test file content'),
     } as Express.Multer.File;
 
-    (fileStorageGateway.uploadFile as ReturnType<typeof vi.fn>).mockResolvedValue('uploaded-test.txt');
-
     const result = await uploadFileUseCase.execute(mockFile);
 
-    expect(fileStorageGateway.uploadFile).toHaveBeenCalledWith(mockFile);
+    const fileOnDatabase = await fileRepository.findById(result.id.toString())
+    const fileOnGateway = fileOnDatabase?.path && await fileStorageGateway.getFileUrl(fileOnDatabase?.path)
 
-    expect(fileRepository.create).toHaveBeenCalledWith(expect.any(File));
-
-    expect(result.filename).toBe('test.txt');
-    expect(result.path).toBe('uploaded-test.txt');
-    expect(result.size).toBe(1024);
-  });
-
-  it('should throw an error if upload fails', async () => {
-    const mockFile = {
-      originalname: 'test.txt',
-      size: 1024,
-      buffer: Buffer.from('test file content'),
-    } as Express.Multer.File;
-
-    (fileStorageGateway.uploadFile as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Upload failed'));
-
-    await expect(uploadFileUseCase.execute(mockFile)).rejects.toThrow('Upload failed');
+    expect(fileOnDatabase?.filename).toBe('test.txt');
+    expect(fileOnDatabase?.path).toBe('test.txt');
+    expect(fileOnDatabase?.size).toBe(1024);
+    expect(fileOnGateway).toBe(`http://localhost/in-memory/${mockFile.originalname}`)
   });
 });

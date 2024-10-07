@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common'
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import { File } from '@/domain/enterprise/file/file'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
+import NotificationException from '@/core/exception/notification-exception';
+import { Notification } from '@/core/validation/notification';
 
 @Injectable()
 export class UploadFileUseCase {
@@ -12,7 +14,16 @@ export class UploadFileUseCase {
   ) {}
 
   async execute(file: Express.Multer.File): Promise<File> {
-    const uploadedFileName = await this.fileStorageGateway.uploadFile(file);
+    const notification = Notification.create()
+    
+    const uploadedFileName = await this.fileStorageGateway
+      .uploadFile(file)
+      .catch(() => {
+        throw new NotificationException(
+          'Impossível realizar upload do arquivo',
+          notification
+        );
+      });;
     
     const newFile = File.create({
       filename: file.originalname,
