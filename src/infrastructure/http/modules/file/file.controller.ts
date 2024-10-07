@@ -26,13 +26,12 @@ export class FileController {
     private deleteFileUseCase: DeleteFileUseCase,
   ) {}
 
-  @Post('upload/company/:companyId')
+  @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @Param('companyId') companyId: string,
   ) {
-    return await this.uploadFileUseCase.execute(file, companyId)
+    return await this.uploadFileUseCase.execute(file)
   }
 
   @Get('url/:fileId')

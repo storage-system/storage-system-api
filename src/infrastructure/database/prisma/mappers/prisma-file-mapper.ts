@@ -1,4 +1,3 @@
-import { CompanyID } from '@/domain/enterprise/company/company';
 import { File, FileID } from '@/domain/enterprise/file/file';
 import { Prisma, File as PrismaFile } from '@prisma/client'
 
@@ -9,7 +8,6 @@ export class PrismaFileMapper {
       filename: raw.filename,
       path: raw.path,
       size: raw.size,
-      companyId: raw.companyId ? new CompanyID(raw.companyId) : undefined,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt ?? undefined,
       deletedAt: raw.deletedAt ?? undefined,
@@ -22,7 +20,6 @@ export class PrismaFileMapper {
       filename: file.filename,
       path: file.path,
       size: file.size,
-      companyId: file.companyId?.toString(),
       createdAt: file.createdAt,
       updatedAt: file.updatedAt ?? undefined,
       deletedAt: file.deletedAt ?? undefined,

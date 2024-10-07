@@ -51,7 +51,6 @@ model Company {
   products      Product[]
   configuration Configuration[]
   styles        Style[]
-  files         File[]
 
   @@map("companies")
 }
@@ -67,6 +66,9 @@ model Category {
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
+
+  iconId String? @map("icon_id")
+  icon   File?   @relation(fields: [iconId], references: [id])
 
   parentId String?   @map("parent_id")
   parent   Category? @relation(fields: [parentId], references: [id], name: "child_categories")
@@ -146,9 +148,9 @@ model Product {
   unitOfMeasure String @map("unit_of_measure")
   weight        Int
 
-  dimensions_height String
-  dimensions_width  String
-  dimensions_depth  String
+  dimensionsHeight String @map("dimensions_height")
+  dimensionsWidth  String @map("dimensions_width")
+  dimensionsDepth  String @map("dimensions_depth")
 
   manufacturer String?
   batch        String?
@@ -173,12 +175,11 @@ model File {
   size     Int
   filename String @db.VarChar(255)
 
+  categories Category[]
+
   createdAt DateTime  @map(name: "created_at") @db.Timestamp(6)
   updatedAt DateTime? @map(name: "updated_at") @db.Timestamp(6)
   deletedAt DateTime? @map(name: "deleted_at") @db.Timestamp(6)
-
-  companyId String?  @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id])
 
   @@map("files")
 }

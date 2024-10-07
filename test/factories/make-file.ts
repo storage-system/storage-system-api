@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { FactoryProp } from "."
 import { File, FileProps } from "@/domain/enterprise/file/file"
 
@@ -20,7 +19,6 @@ File,
       filename: faker.system.fileName(),
       path: faker.system.filePath(),
       size: faker.number.int(),
-      companyId: new UniqueEntityID(override?.companyId?.toString()),
       ...override,
     }
   )

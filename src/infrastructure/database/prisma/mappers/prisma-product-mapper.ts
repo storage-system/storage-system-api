@@ -19,9 +19,9 @@ export class PrismaProductMapper {
       unitOfMeasure: raw.unitOfMeasure,
       weight: raw.weight,
       dimensions: {
-        height: raw.dimensions_height,
-        width: raw.dimensions_width,
-        depth: raw.dimensions_depth
+        height: raw.dimensionsHeight,
+        width: raw.dimensionsWidth,
+        depth: raw.dimensionsDepth
       },
       manufacturer: raw.manufacturer ?? undefined,
       batch: raw.batch ?? undefined,
@@ -49,9 +49,9 @@ export class PrismaProductMapper {
       validityInDays: product.validityInDays,
       unitOfMeasure: product.unitOfMeasure,
       weight: product.weight,
-      dimensions_depth: product.dimensions?.depth!,
-      dimensions_height: product.dimensions?.height!,
-      dimensions_width: product.dimensions?.width!,
+      dimensionsDepth: product.dimensions?.depth!,
+      dimensionsHeight: product.dimensions?.height!,
+      dimensionsWidth: product.dimensions?.width!,
       manufacturer: product.manufacturer,
       batch: product.batch,
       status: product.status,

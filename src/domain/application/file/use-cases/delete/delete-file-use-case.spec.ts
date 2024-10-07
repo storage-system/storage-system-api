@@ -4,7 +4,6 @@ import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gatewa
 import { FileRepository } from '@/domain/enterprise/file/file-repository';
 import { makeFile } from 'test/factories/make-file';
 import { InMemoryFileRepository } from 'test/repositories/in-memory-file-repository';
-import { makeCompany } from 'test/factories/make-company';
 
 describe('DeleteFileUseCase', () => {
   let deleteFileUseCase: DeleteFileUseCase;
@@ -22,13 +21,8 @@ describe('DeleteFileUseCase', () => {
   });
 
   it('should delete the file and its metadata', async () => {
-    const company = await makeCompany()
-
     const mockFile = await makeFile({
       repository: fileRepository,
-      override: {
-        companyId: company.id
-      }
     })
 
     await deleteFileUseCase.execute(mockFile.id.toString());
