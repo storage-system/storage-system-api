@@ -1,5 +1,6 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Category } from '@/domain/enterprise/category/category';
+import { FileID } from '@/domain/enterprise/file/file';
 import { Slug } from '@/domain/enterprise/slug/slug';
 import { Prisma, Category as PrismaCateogory } from '@prisma/client'
 
@@ -9,6 +10,7 @@ export class PrismaCategoryMapper {
       name: raw.name,
       isActive: raw.isActive,
       companyId: new UniqueEntityID(raw.companyId),
+      icon: raw.iconId ? new FileID(raw.iconId) : undefined,
       slug: Slug.create(raw.slug),
       createdAt: raw.createdAt,
       deletedAt: raw.deletedAt,
@@ -22,6 +24,7 @@ export class PrismaCategoryMapper {
       name: category.name,
       isActive: category.isActive,
       companyId: category.companyId.toString(),
+      iconId: category.icon?.toString() ?? undefined,
       slug: category.slug.value,
       createdAt: category.createdAt,
       deletedAt: category.deletedAt,
