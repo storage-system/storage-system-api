@@ -12,7 +12,7 @@ import { FileID } from '@/domain/enterprise/file/file'
 interface CreateCategoryUseCaseRequest {
   name: string
   fileId?: string
-  companyId: string | undefined
+  companyId: string
   isActive: boolean
 }
 
@@ -25,7 +25,6 @@ export class CreateCategoryUseCase {
 
   async execute(anInput: CreateCategoryUseCaseRequest) {
     const notification = Notification.create()
-    console.log("anInput", anInput)
     const { companyId, isActive, name, fileId } = anInput
 
     const company = companyId && await this.companiesRepository.findById(companyId)

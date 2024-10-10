@@ -1,16 +1,16 @@
 import { makeCategory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { FetchCategoriesUseCase } from './fetch-categories-use-case'
+import { ListCategoriesUseCase } from './list-categories-use-case'
 import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 
 let repository: CategoriesRepository
-let useCase: FetchCategoriesUseCase
+let useCase: ListCategoriesUseCase
 
-describe('Fetch Categories Use Case', () => {
+describe('List Categories Use Case', () => {
   beforeEach(async () => {
     repository = new InMemoryCategoriesRepository()
-    useCase = new FetchCategoriesUseCase(repository)
+    useCase = new ListCategoriesUseCase(repository)
 
     await makeCategory({
       override: {

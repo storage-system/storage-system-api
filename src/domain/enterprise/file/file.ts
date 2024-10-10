@@ -52,7 +52,7 @@ export class File extends ValueObject<FileProps> {
     return this.value.filename
   }
 
-  get filetype(): string {
+  get type(): string {
     return this.value.filename.split('.').at(-1)!
   }
 

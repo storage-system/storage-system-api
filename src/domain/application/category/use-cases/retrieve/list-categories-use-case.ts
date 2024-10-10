@@ -4,21 +4,21 @@ import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Injectable } from '@nestjs/common'
 import { CategoryPresenter } from '@/infrastructure/http/presenters/category-presenter'
 
-interface FetchCategoriesUseCaseRequest {
+interface ListCategoriesUseCaseRequest {
   page: number
   perPage: number
 }
 
-type FetchCategoriesUseCaseResponse = PaginationProps<CategoryPresenter>
+type ListCategoriesUseCaseResponse = PaginationProps<CategoryPresenter>
 
 @Injectable()
-export class FetchCategoriesUseCase {
+export class ListCategoriesUseCase {
   constructor(private categoriesRepository: CategoriesRepository) { }
 
   async execute({
     page,
     perPage,
-  }: FetchCategoriesUseCaseRequest): Promise<FetchCategoriesUseCaseResponse> {
+  }: ListCategoriesUseCaseRequest): Promise<ListCategoriesUseCaseResponse> {
     const categories = await this.categoriesRepository.findAll({
       page,
       perPage,

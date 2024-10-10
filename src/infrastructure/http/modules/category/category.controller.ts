@@ -3,7 +3,7 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } fr
 import { CreateCategoryDTO } from "./dto/create-category.dto";
 import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
 import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
-import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/fetch-categories-use-case";
+import { ListCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/list-categories-use-case";
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
 import { EditCategoryDTO } from "./dto/edit-category.dto";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
@@ -16,7 +16,7 @@ import { HttpCategoryListResponse } from "../../docs/category/http-category-list
 export class CategoryController {
   constructor(
     private createCategoryUseCase: CreateCategoryUseCase,
-    private fetchCategoriesUseCase: FetchCategoriesUseCase,
+    private listCategoriesUseCase: ListCategoriesUseCase,
     private editCategoryUseCase: EditCategoryUseCase,
     private deleteCategoryUseCase: DeleteCategoryUseCase,
   ) { }
@@ -34,7 +34,7 @@ export class CategoryController {
     @Query('page', new ParsePositiveIntPipe(1)) page: number = 1,
     @Query('perPage', new ParsePositiveIntPipe(10)) perPage: number = 10,
   ) {
-    return await this.fetchCategoriesUseCase.execute({
+    return await this.listCategoriesUseCase.execute({
       page,
       perPage,
     })
