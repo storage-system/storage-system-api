@@ -46,7 +46,8 @@ export class MinioFileStorageGateway implements FileStorageGateway {
   }
 
   async getFileUrl(fileName: string) {
-    return await this.minioClient.presignedUrl('GET', this.bucketName, fileName)
+    const expiresTime = 5
+    return await this.minioClient.presignedUrl('GET', this.bucketName, fileName, expiresTime)
   }
 
   async downloadFile(fileName: string): Promise<Readable> {
