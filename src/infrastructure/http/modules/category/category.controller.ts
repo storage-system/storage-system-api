@@ -7,8 +7,9 @@ import { FetchCategoriesUseCase } from "@/domain/application/category/use-cases/
 import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
 import { EditCategoryDTO } from "./dto/edit-category.dto";
 import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { ParsePositiveIntPipe } from "../../pipes/parse-positive-int.pipe";
+import { HttpCategoryListResponse } from "../../docs/category/http-category-list-response";
 
 @ApiTags('Category')
 @Controller('/categories')
@@ -28,6 +29,7 @@ export class CategoryController {
   }
 
   @Get()
+  @ApiOkResponse({ type: HttpCategoryListResponse })
   async list(
     @Query('page', new ParsePositiveIntPipe(1)) page: number = 1,
     @Query('perPage', new ParsePositiveIntPipe(10)) perPage: number = 10,

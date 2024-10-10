@@ -3,7 +3,6 @@ import { InMemoryProductsRepository } from 'test/repositories/in-memory-products
 import { makeProduct } from 'test/factories/make-product'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { makeCompany } from 'test/factories/make-company'
@@ -12,7 +11,6 @@ import { ListProductsUseCase } from './list-products-use-case'
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository
-let usersRepository: UsersRepository
 let categoriesRepository: CategoriesRepository
 let useCase: ListProductsUseCase
 
@@ -24,7 +22,6 @@ describe('List Products Use Case', () => {
 
     useCase = new ListProductsUseCase(
       productsRepository,
-      companiesRepository,
       categoriesRepository,
     )
   })
@@ -37,7 +34,6 @@ describe('List Products Use Case', () => {
   })
 
   it('should be able to retrieve products list.', async () => {
-
     const company = await makeCompany({
       repository: companiesRepository,
     })

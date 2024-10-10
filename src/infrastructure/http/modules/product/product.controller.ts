@@ -1,4 +1,4 @@
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from "@nestjs/common";
 import { CreateProductDTO } from "./dto/create-product-dto";
 import { CreateProductUseCase } from "@/domain/application/product/use-cases/create/create-product-use-case";
@@ -8,6 +8,8 @@ import { GetProductUseCase } from "@/domain/application/product/use-cases/retrie
 import { QueryParamsDTO } from "../query-params/query-params.dto";
 import { UpdateProductUseCase } from "@/domain/application/product/use-cases/update/update-product-use-case";
 import { UpdateProductDTO } from "./dto/update-product-dto";
+import { HttpProductListResponse } from "../../docs/product/http-product-list-response";
+import { HttpProductGetResponse } from "../../docs/product/htt-product-get-response";
 
 @ApiTags('Product')
 @Controller('/products')
@@ -29,6 +31,7 @@ export class ProductController {
   }
 
   @Get('/company/:companyId')
+  @ApiOkResponse({ type: HttpProductListResponse })
   async list(
     @Query() query: QueryParamsDTO,
     @Param('companyId') companyId: string,
@@ -40,6 +43,7 @@ export class ProductController {
   }
 
   @Get('/:id')
+  @ApiOkResponse({ type: HttpProductGetResponse })
   async getById(
     @Param('id') productId: string,
   ) {

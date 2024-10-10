@@ -17,12 +17,10 @@ let useCase: GetProductUseCase
 describe('Get Product Use Case', () => {
   beforeEach(async () => {
     productsRepository = new InMemoryProductsRepository()
-    companiesRepository = new InMemoryCompaniesRepository()
     categoriesRepository = new InMemoryCategoriesRepository()
 
     useCase = new GetProductUseCase(
       productsRepository,
-      companiesRepository,
       categoriesRepository,
     )
   })

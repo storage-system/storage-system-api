@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ProductsRepository } from '../../../../../enterprise/product/products-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
-import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { Category } from '@/domain/enterprise/category/category'
 import { ListProductsOutput } from './list-products-output'
@@ -16,22 +15,17 @@ type ListProductsUseCaseResponse = PaginationProps<ListProductsOutput>
 export class ListProductsUseCase {
   constructor(
     private productsRepository: ProductsRepository,
-    private companiesRepository: CompaniesRepository,
     private categoriesRepository: CategoriesRepository,
   ) { }
 
   async execute(anInput: ListProductsCommand): Promise<ListProductsUseCaseResponse> {
     const products = await this.productsRepository.findAll(anInput)
 
-    const [companies, categories] = await Promise.all([
-      this.getCompanies(products.items.map((product) => product.companyId.toString())),
-      Promise.all(products.items.map((product) => this.getCategories(product.categoryIds)))
-    ])
+    const categories = await Promise.all(products.items.map((product) => this.getCategories(product.categoryIds)))
 
     const items = products.items.map((product, index) =>
       ListProductsOutput.from(
         product,
-        companies[index],
         categories[index],
       )
     );
@@ -41,22 +35,6 @@ export class ListProductsUseCase {
       items,
       total: products.total,
     })
-  }
-
-  private async getCompanies(companyIds: string[]): Promise<Company[]> {
-    const companies = await Promise.all(companyIds.map((companyId) => this.getCompany(companyId)));
-
-    return companies
-  }
-
-  private async getCompany(id: string) {
-    const company = await this.companiesRepository.findById(id)
-
-    if (!company) {
-      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(id));
-    }
-
-    return company
   }
 
   private async getCategories(categoryIds: UniqueEntityID[]): Promise<Category[]> {

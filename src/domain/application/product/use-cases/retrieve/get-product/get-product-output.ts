@@ -1,4 +1,3 @@
-import { Company, CompanyProps } from '@/domain/enterprise/company/company';
 import { DimensionsProduct, Product, ProductProps, StatusProduct } from '@/domain/enterprise/product/product';
 import { Category, CategoryProps } from '@/domain/enterprise/category/category';
 
@@ -26,14 +25,6 @@ export class GetProductOutput {
   status: StatusProduct
   productImage?: string
 
-  company: {
-    id: string
-    name: string
-    email: string
-    responsible: string
-    createdAt: Date
-  }
-
   categories: {
     id: string
     name: string
@@ -46,11 +37,6 @@ export class GetProductOutput {
 
   constructor(
     aProductProps: ProductProps & { id: string },
-    aCompanyProps: Required<
-      {
-        id: string;
-      } & CompanyProps
-    >,
     aCategoryProps: Required<
       {
         id: string
@@ -80,14 +66,6 @@ export class GetProductOutput {
     this.status = aProductProps.status;
     this.productImage = aProductProps.productImage;
 
-    this.company = {
-      id: aCompanyProps.id.toString(),
-      name: aCompanyProps.name,
-      email: aCompanyProps.email,
-      responsible: aCompanyProps.responsible,
-      createdAt: aCompanyProps.createdAt,
-    }
-
     this.categories = aCategoryProps.length > 0
       ? aCategoryProps.map((category) => ({
         id: category.id.toString(),
@@ -102,7 +80,6 @@ export class GetProductOutput {
 
   static fromAggregate(
     product: Product,
-    companyProps: Company,
     categoriesProps: Category[],
   ) {
 
@@ -112,7 +89,6 @@ export class GetProductOutput {
 
     return new GetProductOutput(
       product.toJSON(),
-      companyProps.toJSON(),
       categories,
     );
   }

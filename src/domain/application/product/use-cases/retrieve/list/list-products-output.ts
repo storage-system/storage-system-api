@@ -18,11 +18,6 @@ export class ListProductsOutput {
   status: StatusProduct
   productImage?: string
 
-  company: {
-    id: string
-    name: string
-  }
-
   categories: {
     id: string
     name: string
@@ -34,11 +29,6 @@ export class ListProductsOutput {
 
   constructor(
     aProductProps: ProductProps & { id: string },
-    aCompanyProps: Required<
-      {
-        id: string;
-      } & CompanyProps
-    >,
     aCategoryProps: Required<
       {
         id: string
@@ -59,11 +49,6 @@ export class ListProductsOutput {
     this.status = aProductProps.status;
     this.productImage = aProductProps.productImage;
 
-    this.company = {
-      id: aCompanyProps.id.toString(),
-      name: aCompanyProps.name,
-    }
-
     this.categories = aCategoryProps.length > 0
       ? aCategoryProps.map((category) => ({
         id: category.id.toString(),
@@ -77,7 +62,6 @@ export class ListProductsOutput {
 
   static from(
     product: Product,
-    companyProps: Company,
     categoriesProps: Category[],
   ) {
 
@@ -87,7 +71,6 @@ export class ListProductsOutput {
 
     return new ListProductsOutput(
       product.toJSON(),
-      companyProps.toJSON(),
       categories,
     );
   }
