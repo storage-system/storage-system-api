@@ -1,4 +1,4 @@
-import { ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from "@nestjs/common";
 
 import { CreateStyleUseCase } from "@/domain/application/style/use-cases/create/create-style-use-case";
@@ -12,6 +12,8 @@ import { UpdateStyleDTO } from "./dto/update-style.dto";
 import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
 import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
 import { QueryParamsDTO } from "../query-params/query-params.dto";
+import { HttpStyleListResponse } from "../../docs/style/http-style-list-response";
+import { HttpStyleGetResponse } from "../../docs/style/http-style-get-response";
 
 @ApiTags('Styles')
 @Controller('/styles')
@@ -34,6 +36,7 @@ export class StyleController {
   @Get()
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'perPage', required: false, type: Number })
+  @ApiOkResponse({ type: HttpStyleListResponse })
   async list(
     @Query() query: QueryParamsDTO,
     @CurrentUser() user: UserPayload,
@@ -45,6 +48,7 @@ export class StyleController {
   }
 
   @Get('/:id')
+  @ApiOkResponse({ type: HttpStyleGetResponse })
   async getById(
     @Param('id') styleId: string,
   ) {

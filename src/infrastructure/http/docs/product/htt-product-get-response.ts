@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-import { HttpPaginationResponse } from '../shared/http-pagination-response'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { StatusProduct } from '@/domain/enterprise/product/product'
 import { HttpItemResponse } from '../shared/http-item-response'
 
-class HttpEachProductGetResponse {
+export class HttpProductGetResponse {
   @ApiProperty({ type: String, example: new UniqueEntityID().toString() })
   id: string
 
@@ -65,9 +64,4 @@ class HttpEachProductGetResponse {
 
   @ApiProperty({ type: Date, required: false })
   deletedAt?: Date
-}
-
-export class HttpProductGetResponse extends HttpPaginationResponse {
-  @ApiProperty({ type: HttpEachProductGetResponse, isArray: true })
-  items: HttpEachProductGetResponse[]
 }
