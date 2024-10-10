@@ -1,14 +1,71 @@
 {
   "extends": [
-    "@rocketseat/eslint-config/node",
+    "@kingspanisoeste/eslint-config/node",
     "plugin:vitest-globals/recommended"
   ],
+  "plugins": [
+    "prettier",
+    "perfectionist"
+  ],
   "rules": {
+    "no-new": "off",
+    "no-console": "error",
+    "no-unused-vars": "off",
     "no-useless-constructor": "off",
     "prettier/prettier": [
-      "error",
+      "warn",
+      {},
       {
-        "endOfLine": "off"
+        "usePrettierrc": true
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_|^_$"
+      }
+    ],
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "perfectionist/sort-imports": [
+      "warn",
+      {
+        "type": "line-length",
+        "order": "desc",
+        "groups": [
+          "type",
+          [
+            "builtin",
+            "external"
+          ],
+          "internal-type",
+          "internal",
+          [
+            "parent-type",
+            "sibling-type",
+            "index-type"
+          ],
+          [
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "object",
+          "unknown"
+        ],
+        "custom-groups": {
+          "value": {},
+          "type": {}
+        },
+        "newlines-between": "always",
+        "internal-pattern": [
+          "@/**",
+          "@test/**"
+        ]
       }
     ]
   },
