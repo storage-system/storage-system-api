@@ -30,7 +30,7 @@ describe('UploadFileUseCase', () => {
 
     const result = await uploadFileUseCase.execute(mockFile);
 
-    const fileOnDatabase = await fileRepository.findById(result.id.toString())
+    const fileOnDatabase = await fileRepository.findById(result.fileId)
     const fileOnGateway = fileOnDatabase?.path && await fileStorageGateway.getFileUrl(fileOnDatabase?.path)
 
     expect(fileOnDatabase?.filename).toBe('test.txt');

@@ -24,13 +24,7 @@ export class CategoryController {
   async create(
     @Body() body: CreateCategoryDTO,
   ) {
-    const { name, isActive, companyId } = body
-
-    return await this.createCategoryUseCase.execute({
-      name,
-      isActive,
-      companyId,
-    })
+    return await this.createCategoryUseCase.execute(body)
   }
 
   @Get()

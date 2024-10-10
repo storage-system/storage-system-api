@@ -8,9 +8,11 @@ import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import NotAuthorizedException from '@/core/exception/not-authorized-exception'
 import { Notification } from '@/core/validation/notification'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { FileID } from '@/domain/enterprise/file/file'
 
 interface EditCategoryUseCaseRequest {
   name?: string
+  iconId?: string
   isActive?: boolean
   categoryId: string
   companyId: string | undefined
@@ -27,6 +29,7 @@ export class EditCategoryUseCase {
 
   async execute({
     name,
+    iconId,
     isActive,
     categoryId,
     companyId,
@@ -52,6 +55,7 @@ export class EditCategoryUseCase {
     category.update({
       name,
       isActive,
+      icon: iconId ? new FileID(iconId) : undefined,
     })
 
     await this.categoriesRepository.update(category)

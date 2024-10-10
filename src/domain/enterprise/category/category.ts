@@ -2,12 +2,17 @@ import { Slug } from '../slug/slug'
 import { Entity } from '@/core/entities/entity'
 import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { CompanyID } from '../company/company'
+import { FileID } from '../file/file'
+
+export class CategoryID extends UniqueEntityID {}
 
 export interface CategoryProps {
   name: string
   slug: Slug
-  companyId: UniqueEntityID
-  parentId?: UniqueEntityID
+  companyId: CompanyID
+  icon?: FileID
+  parentId?: CategoryID
   children?: Category[]
   isActive: boolean
   createdAt: Date
@@ -16,6 +21,35 @@ export interface CategoryProps {
 }
 
 export class Category extends Entity<CategoryProps> {
+  static create(
+    props: Optional<CategoryProps, 'createdAt' | 'slug'>,
+    id?: CategoryID,
+  ) {
+    const category = new Category(
+      {
+        slug: props.slug ?? Slug.createFromText(props.name),
+        createdAt: new Date(),
+        ...props,
+      },
+      id,
+    )
+
+    return category
+  }
+
+  public update(aCategory: Partial<CategoryProps>) {
+    this.props.name = aCategory.name ?? this.name
+    this.props.icon = aCategory.icon ?? this.icon
+    this.props.isActive = aCategory.isActive ?? this.isActive
+
+    this.touch()
+  }
+
+  public addIcon(fileId: string) {
+    this.props.icon = new FileID(fileId)
+    this.touch()
+  }
+
   get name() {
     return this.props.name
   }
@@ -28,6 +62,10 @@ export class Category extends Entity<CategoryProps> {
 
   get slug() {
     return this.props.slug
+  }
+
+  get icon() {
+    return this.props.icon
   }
 
   get companyId() {
@@ -52,28 +90,5 @@ export class Category extends Entity<CategoryProps> {
 
   private touch() {
     this.props.updatedAt = new Date()
-  }
-
-  static create(
-    props: Optional<CategoryProps, 'createdAt' | 'slug'>,
-    id?: UniqueEntityID,
-  ) {
-    const category = new Category(
-      {
-        slug: props.slug ?? Slug.createFromText(props.name),
-        createdAt: new Date(),
-        ...props,
-      },
-      id,
-    )
-
-    return category
-  }
-
-  update(aCategory: Partial<CategoryProps>) {
-    this.props.name = aCategory.name ?? this.name
-    this.props.isActive = aCategory.isActive ?? this.isActive
-
-    this.touch()
   }
 }

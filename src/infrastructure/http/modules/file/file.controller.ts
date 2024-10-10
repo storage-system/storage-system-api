@@ -31,7 +31,8 @@ export class FileController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.uploadFileUseCase.execute(file)
+    const { fileId } = await this.uploadFileUseCase.execute(file)
+    return fileId
   }
 
   @Get('url/:fileId')

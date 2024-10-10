@@ -2,7 +2,9 @@ import { FileID } from '@/domain/enterprise/file/file';
 import { FileRepository } from '@/domain/enterprise/file/file-repository';
 import ResourceNotFoundException from '@/core/exception/not-found-exception';
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class GetFileUrlUseCase {
   constructor(
     private fileRepository: FileRepository,

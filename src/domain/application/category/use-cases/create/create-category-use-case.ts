@@ -7,9 +7,11 @@ import NotificationException from '@/core/exception/notification-exception'
 import { Notification } from '@/core/validation/notification'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import { FileID } from '@/domain/enterprise/file/file'
 
 interface CreateCategoryUseCaseRequest {
   name: string
+  fileId?: string
   companyId: string | undefined
   isActive: boolean
 }
@@ -21,12 +23,10 @@ export class CreateCategoryUseCase {
     private companiesRepository: CompaniesRepository,
   ) { }
 
-  async execute({
-    name,
-    companyId,
-    isActive,
-  }: CreateCategoryUseCaseRequest) {
+  async execute(anInput: CreateCategoryUseCaseRequest) {
     const notification = Notification.create()
+    console.log("anInput", anInput)
+    const { companyId, isActive, name, fileId } = anInput
 
     const company = companyId && await this.companiesRepository.findById(companyId)
 
@@ -43,6 +43,7 @@ export class CreateCategoryUseCase {
     const category = Category.create({
       name,
       isActive,
+      icon: fileId ? new FileID(fileId) : undefined,
       companyId: new UniqueEntityID(companyId),
     })
 

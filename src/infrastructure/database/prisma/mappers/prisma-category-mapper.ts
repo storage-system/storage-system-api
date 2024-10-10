@@ -2,10 +2,10 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Category } from '@/domain/enterprise/category/category';
 import { FileID } from '@/domain/enterprise/file/file';
 import { Slug } from '@/domain/enterprise/slug/slug';
-import { Prisma, Category as PrismaCateogory } from '@prisma/client'
+import { Prisma, Category as PrismaCategory } from '@prisma/client'
 
 export class PrismaCategoryMapper {
-  static toDomain(raw: PrismaCateogory): Category {
+  static toDomain(raw: PrismaCategory): Category {
     return Category.create({
       name: raw.name,
       isActive: raw.isActive,

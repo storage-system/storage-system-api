@@ -7,6 +7,7 @@ export class CategoryPresenter {
       id: category.id.toString(),
       name: category.name,
       isActive: category.isActive,
+      iconId: category.icon?.toString() ?? undefined,
       createdAt: category.createdAt,
       updatedAt: category.updatedAt,
     }

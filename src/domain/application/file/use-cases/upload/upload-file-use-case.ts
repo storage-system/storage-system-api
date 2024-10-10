@@ -6,6 +6,10 @@ import { FileRepository } from '@/domain/enterprise/file/file-repository'
 import NotificationException from '@/core/exception/notification-exception';
 import { Notification } from '@/core/validation/notification';
 
+interface UploadFileUseCaseResponse {
+  fileId: string
+}
+
 @Injectable()
 export class UploadFileUseCase {
   constructor(
@@ -13,9 +17,9 @@ export class UploadFileUseCase {
     private readonly fileRepository: FileRepository,
   ) {}
 
-  async execute(file: Express.Multer.File): Promise<File> {
+  async execute(file: Express.Multer.File): Promise<UploadFileUseCaseResponse> {
     const notification = Notification.create()
-    
+
     const uploadedFileName = await this.fileStorageGateway
       .uploadFile(file)
       .catch(() => {
@@ -33,6 +37,6 @@ export class UploadFileUseCase {
 
     await this.fileRepository.create(newFile);
 
-    return newFile;
+    return { fileId: newFile.id.toString() };
   }
 }
