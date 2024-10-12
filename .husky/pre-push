@@ -1,0 +1,13 @@
+RED='\033[0;31m'
+NC='\033[0m'
+
+echo "${RED}# Running lint${NC}"
+npx --no -- npm run lint
+
+# echo "${RED}# Running integration/unit tests${NC}"
+# npx --no -- npm run test
+
+# echo "\n\n${RED}# Running E2E tests${NC}"
+# npx --no -- npm run test:e2e
+
+echo "\n\n${RED}# Pushing commits${NC}"
