@@ -21,7 +21,7 @@ export class UploadFileUseCase {
 
     const uploadedFileName = await this.fileStorageGateway
       .uploadFile(file)
-      .catch(() => {
+      .catch((e) => {
         throw new NotificationException(
           'Impossível realizar upload do arquivo',
           notification,

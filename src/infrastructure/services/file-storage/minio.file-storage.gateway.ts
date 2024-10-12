@@ -2,7 +2,6 @@ import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gatewa
 import { EnvService } from '@/infrastructure/env/env.service'
 import { Inject, Injectable } from '@nestjs/common'
 import { Readable } from 'stream'
-import { ReadStream } from 'fs'
 import * as Minio from 'minio'
 
 @Injectable()
