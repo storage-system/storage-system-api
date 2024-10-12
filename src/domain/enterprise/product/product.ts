@@ -1,8 +1,9 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Slug } from "../slug/slug"
-import { Entity } from "@/core/entities/entity"
-import { addDays } from "date-fns"
-import { Replace } from "@/core/replace"
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Entity } from '@/core/entities/entity'
+import { Replace } from '@/core/replace'
+import { addDays } from 'date-fns'
+
+import { Slug } from '../slug/slug'
 
 export enum StatusProduct {
   ACTIVE = 'ACTIVE',
@@ -51,7 +52,7 @@ export interface ProductProps {
 export type ProductConstructorProps = Replace<
   ProductProps,
   {
-    slug?: Slug,
+    slug?: Slug
     manufactureDate?: Date
     dueDate?: Date
     createdAt?: Date
@@ -59,10 +60,7 @@ export type ProductConstructorProps = Replace<
 >
 
 export class Product extends Entity<ProductProps> {
-  static create(
-    props: ProductConstructorProps,
-    id?: UniqueEntityID,
-  ) {
+  static create(props: ProductConstructorProps, id?: UniqueEntityID) {
     const manufactureDate = props.manufactureDate ?? new Date()
     const dueDate = addDays(manufactureDate, props.validityInDays)
 
@@ -83,16 +81,19 @@ export class Product extends Entity<ProductProps> {
   update(aProduct: Partial<ProductProps>) {
     if (aProduct.name && aProduct.name !== this.props.name) {
       this.props.name = aProduct.name ?? this.name
-      this.props.slug = Slug.createFromText(aProduct.name);
+      this.props.slug = Slug.createFromText(aProduct.name)
     }
     this.props.description = aProduct.description ?? this.description
 
     this.props.originalPrice = aProduct.originalPrice ?? this.originalPrice
     this.props.finalPrice = aProduct.finalPrice ?? this.finalPrice
-    this.props.discountPercentage = aProduct.discountPercentage ?? this.discountPercentage
+    this.props.discountPercentage =
+      aProduct.discountPercentage ?? this.discountPercentage
 
-    this.props.quantityInStock = aProduct.quantityInStock ?? this.quantityInStock
-    this.props.manufactureDate = aProduct.manufactureDate ?? this.manufactureDate
+    this.props.quantityInStock =
+      aProduct.quantityInStock ?? this.quantityInStock
+    this.props.manufactureDate =
+      aProduct.manufactureDate ?? this.manufactureDate
     this.props.validityInDays = aProduct.validityInDays ?? this.validityInDays
 
     this.props.unitOfMeasure = aProduct.unitOfMeasure ?? this.unitOfMeasure
@@ -109,7 +110,6 @@ export class Product extends Entity<ProductProps> {
 
     this.touch()
   }
-
 
   get name() {
     return this.props.name

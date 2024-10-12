@@ -1,4 +1,7 @@
-import { Configuration, ConfigurationProps } from '@/domain/enterprise/configuration/configuration';
+import {
+  Configuration,
+  ConfigurationProps,
+} from '@/domain/enterprise/configuration/configuration'
 
 export class GetConfigurationOutput {
   id: string
@@ -16,30 +19,25 @@ export class GetConfigurationOutput {
   updatedAt?: Date | null
   deletedAt?: Date | null
 
-  constructor(
-    aConfigurationProps: ConfigurationProps & { id: string },
-  ) {
-    this.id = aConfigurationProps.id.toString();
-    this.userId = aConfigurationProps.userId.toString();
-    this.companyId = aConfigurationProps.companyId.toString();
-    this.daysBeforeOldStock = aConfigurationProps.daysBeforeOldStock;
-    this.warningDays = aConfigurationProps.warningDays;
-    this.emailNotification = aConfigurationProps.emailNotification;
-    this.systemNotification = aConfigurationProps.systemNotification;
-    this.autoDiscardAfterExpiration = aConfigurationProps.autoDiscardAfterExpiration;
-    this.freeShippingOnOldStock = aConfigurationProps.freeShippingOnOldStock;
-    this.reportFrequency = aConfigurationProps.reportFrequency;
+  constructor(aConfigurationProps: ConfigurationProps & { id: string }) {
+    this.id = aConfigurationProps.id.toString()
+    this.userId = aConfigurationProps.userId.toString()
+    this.companyId = aConfigurationProps.companyId.toString()
+    this.daysBeforeOldStock = aConfigurationProps.daysBeforeOldStock
+    this.warningDays = aConfigurationProps.warningDays
+    this.emailNotification = aConfigurationProps.emailNotification
+    this.systemNotification = aConfigurationProps.systemNotification
+    this.autoDiscardAfterExpiration =
+      aConfigurationProps.autoDiscardAfterExpiration
+    this.freeShippingOnOldStock = aConfigurationProps.freeShippingOnOldStock
+    this.reportFrequency = aConfigurationProps.reportFrequency
 
-    this.createdAt = aConfigurationProps.createdAt;
-    this.updatedAt = aConfigurationProps.updatedAt;
+    this.createdAt = aConfigurationProps.createdAt
+    this.updatedAt = aConfigurationProps.updatedAt
     this.deletedAt = aConfigurationProps.deletedAt
   }
 
-  static fromAggregate(
-    configuration: Configuration,
-  ) {
-    return new GetConfigurationOutput(
-      configuration.toJSON(),
-    );
+  static fromAggregate(configuration: Configuration) {
+    return new GetConfigurationOutput(configuration.toJSON())
   }
 }

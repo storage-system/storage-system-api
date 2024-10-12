@@ -1,6 +1,6 @@
-import { StatusProduct } from "@/domain/enterprise/product/product"
-import { createZodDto } from "nestjs-zod"
-import { z } from "nestjs-zod/z"
+import { StatusProduct } from '@/domain/enterprise/product/product'
+import { createZodDto } from 'nestjs-zod'
+import { z } from 'nestjs-zod/z'
 
 export const updateProductBodySchema = z.object({
   name: z.string().optional(),
@@ -22,7 +22,7 @@ export const updateProductBodySchema = z.object({
   manufacturer: z.string().optional(),
   batch: z.string().optional(),
   status: z.nativeEnum(StatusProduct).optional(),
-  categoryIds: z.array(z.string()).optional()
+  categoryIds: z.array(z.string()).optional(),
 })
 
-export class UpdateProductDTO extends createZodDto(updateProductBodySchema) { }
+export class UpdateProductDTO extends createZodDto(updateProductBodySchema) {}

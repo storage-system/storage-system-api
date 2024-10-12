@@ -1,9 +1,10 @@
-import { FakeEncrypter } from "test/cryptography/fake-encrypter"
-import { FakeHasher } from "test/cryptography/fake-hasher"
-import { AuthenticateUseCase } from "./authenticate-use-case"
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository"
-import { makeUser } from "test/factories/make-user"
-import { UsersRepository } from "../../enterprise/user/users-repository"
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { makeUser } from 'test/factories/make-user'
+
+import { UsersRepository } from '../../enterprise/user/users-repository'
+import { AuthenticateUseCase } from './authenticate-use-case'
 
 let repository: UsersRepository
 let fakeHasher: FakeHasher
@@ -17,11 +18,7 @@ describe('Authenticate User', () => {
     fakeHasher = new FakeHasher()
     encrypter = new FakeEncrypter()
 
-    useCase = new AuthenticateUseCase(
-      repository,
-      fakeHasher,
-      encrypter,
-    )
+    useCase = new AuthenticateUseCase(repository, fakeHasher, encrypter)
   })
 
   it('dependencies should be defined', (): void => {

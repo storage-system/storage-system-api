@@ -1,9 +1,15 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Product, ProductConstructorProps, ProductProps, StatusProduct } from './product'
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Slug } from "../slug/slug"
 import { faker } from '@faker-js/faker'
 import { addDays } from 'date-fns'
+
+import {
+  Product,
+  ProductConstructorProps,
+  ProductProps,
+  StatusProduct,
+} from './product'
+import { Slug } from '../slug/slug'
 
 describe('Product Entity', () => {
   let initialProps: ProductConstructorProps
@@ -93,7 +99,11 @@ describe('Product Entity', () => {
     expect(product.validityInDays).toBe(initialProps.validityInDays)
     expect(product.unitOfMeasure).toBe('kg')
     expect(product.weight).toBe(1.5)
-    expect(product.dimensions).toEqual({ height: '10cm', width: '20cm', depth: '5cm' })
+    expect(product.dimensions).toEqual({
+      height: '10cm',
+      width: '20cm',
+      depth: '5cm',
+    })
     expect(product.manufacturer).toBe('Test Manufacturer')
     expect(product.batch).toBe('12345')
     expect(product.status).toBe(StatusProduct.ACTIVE)

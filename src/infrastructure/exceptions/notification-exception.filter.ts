@@ -1,8 +1,12 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from '@nestjs/common'
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpStatus,
+} from '@nestjs/common'
+import NotificationException from '@/core/exception/notification-exception'
 import { Response } from 'express'
 import { union } from 'lodash'
-
-import NotificationException from '@/core/exception/notification-exception'
 
 @Catch(NotificationException)
 export class NotificationExceptionFilter implements ExceptionFilter {
@@ -14,11 +18,7 @@ export class NotificationExceptionFilter implements ExceptionFilter {
       statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
       message: exception.aMessage,
       errors: union(
-        exception
-          .getErrors()
-          .map((error) =>
-            String(error.message),
-          ),
+        exception.getErrors().map((error) => String(error.message)),
       ),
     })
   }

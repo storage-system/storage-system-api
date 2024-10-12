@@ -1,15 +1,19 @@
-import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository"
-import { InMemoryProductsRepository } from "test/repositories/in-memory-products-repository"
-import { InMemoryCategoriesRepository } from "test/repositories/in-memory-categories-repository"
-import { CreateProductUseCase, CreateProductUseCaseRequest } from "./create-product-use-case"
-import { makeUser } from "test/factories/make-user"
-import { makeCompany } from "test/factories/make-company"
-import { makeCategory } from "test/factories/make-category"
-import { StatusProduct } from "@/domain/enterprise/product/product"
-import { faker } from "@faker-js/faker"
-import { ProductsRepository } from "../../../../enterprise/product/products-repository"
-import { CompaniesRepository } from "@/domain/enterprise/company/companies-repository"
-import { CategoriesRepository } from "@/domain/enterprise/category/categories-repository"
+import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { StatusProduct } from '@/domain/enterprise/product/product'
+import { makeCategory } from 'test/factories/make-category'
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+import { faker } from '@faker-js/faker'
+
+import {
+  CreateProductUseCase,
+  CreateProductUseCaseRequest,
+} from './create-product-use-case'
+import { ProductsRepository } from '../../../../enterprise/product/products-repository'
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository
@@ -68,7 +72,7 @@ describe('Create Product Use Case', () => {
       }),
       quantityInStock: faker.number.int({
         max: 100,
-        min: 0
+        min: 0,
       }),
       validityInDays: faker.number.int({
         min: 1,
@@ -121,7 +125,7 @@ describe('Create Product Use Case', () => {
       }),
       quantityInStock: faker.number.int({
         max: 100,
-        min: 0
+        min: 0,
       }),
       validityInDays: faker.number.int({
         min: 1,
@@ -133,7 +137,8 @@ describe('Create Product Use Case', () => {
       manufactureDate: faker.date.past(),
     }
 
-    expect(useCase.execute(productMock))
-      .rejects.toThrowError(`Empresa com ID ${productMock.companyId} não foi encontrado`)
+    expect(useCase.execute(productMock)).rejects.toThrowError(
+      `Empresa com ID ${productMock.companyId} não foi encontrado`,
+    )
   })
 })

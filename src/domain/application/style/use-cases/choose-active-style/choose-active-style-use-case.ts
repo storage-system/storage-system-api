@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { StyleRepository } from '@/domain/enterprise/style/style-repository'
-import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
 
 export interface ChooseActiveStyleUseCaseRequest {
   styleId: string
@@ -14,7 +14,7 @@ export class ChooseActiveStyleUseCase {
   constructor(
     private companyRepository: CompaniesRepository,
     private styleRepository: StyleRepository,
-  ) { }
+  ) {}
 
   async execute(props: ChooseActiveStyleUseCaseRequest) {
     await this.ensureCompanyExists(props.companyId)
@@ -31,8 +31,8 @@ export class ChooseActiveStyleUseCase {
     if (!company) {
       throw ResourceNotFoundException.with(
         'Empresa',
-        new UniqueEntityID(companyId)
-      );
+        new UniqueEntityID(companyId),
+      )
     }
   }
 
@@ -41,14 +41,15 @@ export class ChooseActiveStyleUseCase {
     if (!style) {
       throw ResourceNotFoundException.with(
         'Estilo',
-        new UniqueEntityID(styleId)
-      );
+        new UniqueEntityID(styleId),
+      )
     }
     return style
   }
 
   private async deactivateCurrentActiveStyle(companyId: string) {
-    const activeStyle = await this.styleRepository.findActiveStyleByCompanyId(companyId)
+    const activeStyle =
+      await this.styleRepository.findActiveStyleByCompanyId(companyId)
     if (activeStyle) {
       activeStyle.deactivateStyle()
       await this.styleRepository.update(activeStyle)

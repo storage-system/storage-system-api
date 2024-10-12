@@ -1,13 +1,17 @@
-import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository"
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository"
-import { makeUser } from "test/factories/make-user"
-import { makeCompany } from "test/factories/make-company"
+import { InMemoryConfigurationRepository } from 'test/repositories/in-memory-configuration-repository'
+import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { ReportFrequency } from '@/domain/enterprise/configuration/configuration'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { CompaniesRepository } from "@/domain/enterprise/company/companies-repository"
-import { ConfigurationRepository } from "@/domain/enterprise/configuration/configuration-repository"
-import { CreateConfigurationUseCase, CreateConfigurationUseCaseRequest } from "./create-configuration-use-case"
-import { InMemoryConfigurationRepository } from "test/repositories/in-memory-configuration-repository"
-import { ReportFrequency } from "@/domain/enterprise/configuration/configuration"
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+
+import {
+  CreateConfigurationUseCase,
+  CreateConfigurationUseCaseRequest,
+} from './create-configuration-use-case'
 
 let companiesRepository: CompaniesRepository
 let usersRepository: UsersRepository
@@ -42,7 +46,7 @@ describe('Create Configuration Use Case', () => {
     })
     const company = await makeCompany({
       override: {
-        users: [user.id.toString()]
+        users: [user.id.toString()],
       },
       repository: companiesRepository,
     })
@@ -61,13 +65,18 @@ describe('Create Configuration Use Case', () => {
 
     const { configurationId } = await useCase.execute(configurationMock)
 
-    const configurationOnDatabase = await configurationRepository.findById(configurationId)
+    const configurationOnDatabase =
+      await configurationRepository.findById(configurationId)
 
     expect(configurationOnDatabase?.id.toString()).toBe(configurationId)
     expect(configurationOnDatabase?.companyId).toBe(company.id.toString())
     expect(configurationOnDatabase?.userId).toBe(user.id.toString())
-    expect(configurationOnDatabase?.daysBeforeOldStock).toBe(configurationMock.daysBeforeOldStock)
-    expect(configurationOnDatabase?.reportFrequency).toBe(configurationMock.reportFrequency)
+    expect(configurationOnDatabase?.daysBeforeOldStock).toBe(
+      configurationMock.daysBeforeOldStock,
+    )
+    expect(configurationOnDatabase?.reportFrequency).toBe(
+      configurationMock.reportFrequency,
+    )
   })
 
   it('should not be able to create a configuration that user does not exist', async () => {
@@ -89,7 +98,9 @@ describe('Create Configuration Use Case', () => {
       warningDays: 15,
     }
 
-    expect(useCase.execute(configurationMock)).rejects.toThrowError('Erro ao criar configuração.')
+    expect(useCase.execute(configurationMock)).rejects.toThrowError(
+      'Erro ao criar configuração.',
+    )
   })
 
   it('should not be able to create a configuration that company does not exist', async () => {
@@ -111,6 +122,8 @@ describe('Create Configuration Use Case', () => {
       warningDays: 15,
     }
 
-    expect(useCase.execute(configurationMock)).rejects.toThrowError('Erro ao criar configuração.')
+    expect(useCase.execute(configurationMock)).rejects.toThrowError(
+      'Erro ao criar configuração.',
+    )
   })
 })

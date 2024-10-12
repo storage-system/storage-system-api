@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common'
-import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { ValidationHandler } from '@/core/validation/validation-handler'
-import Error from '@/core/validation/error'
-import { Notification } from '@/core/validation/notification'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import NotificationException from '@/core/exception/notification-exception'
+import { ValidationHandler } from '@/core/validation/validation-handler'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Notification } from '@/core/validation/notification'
+import { Injectable } from '@nestjs/common'
+import Error from '@/core/validation/error'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
 
 interface RemoveUsersUseCaseRequest {
   companyId: string
@@ -18,7 +19,7 @@ export class RemoveUsersUseCase {
   constructor(
     private companiesRepository: CompaniesRepository,
     private usersRepository: UsersRepository,
-  ) { }
+  ) {}
 
   async execute({
     companyId,
@@ -29,21 +30,23 @@ export class RemoveUsersUseCase {
     const company = await this.companiesRepository.findById(companyId)
 
     if (!company) {
-      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(companyId));
+      throw ResourceNotFoundException.with(
+        'Empresa',
+        new UniqueEntityID(companyId),
+      )
     }
 
     const usersValidation = await Promise.all(
-      userIds.map((userId) => this.validateUser(userId, notification))
+      userIds.map((userId) => this.validateUser(userId, notification)),
     )
 
     if (notification.hasErrors()) {
-      throw new NotificationException(
-        "Erro ",
-        notification
-      );
+      throw new NotificationException('Erro ', notification)
     }
 
-    const users = usersValidation.filter(user => user).map(user => user!.id.toString());
+    const users = usersValidation
+      .filter((user) => user)
+      .map((user) => user!.id.toString())
 
     await this.companiesRepository.removeUsers(companyId, users)
   }
@@ -52,9 +55,7 @@ export class RemoveUsersUseCase {
     const user = await this.usersRepository.findById(id)
 
     if (!user) {
-      aHandler.appendAnError(
-        new Error("Usuário não se encontra no sistema.")
-      )
+      aHandler.appendAnError(new Error('Usuário não se encontra no sistema.'))
     }
 
     return user

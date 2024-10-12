@@ -1,13 +1,17 @@
-import { makeUser } from 'test/factories/make-user'
-import { makeCompany } from 'test/factories/make-company'
-import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
-import { UpdateConfigurationUseCase, UpdateConfigurationUseCaseRequest } from './update-configuration-use-case'
 import { InMemoryConfigurationRepository } from 'test/repositories/in-memory-configuration-repository'
-import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { makeConfiguration } from 'test/factories/make-configuration'
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+
+import {
+  UpdateConfigurationUseCase,
+  UpdateConfigurationUseCaseRequest,
+} from './update-configuration-use-case'
 
 let companyRepository: CompaniesRepository
 let userRepository: UsersRepository
@@ -30,7 +34,7 @@ describe('Update Configuration Use Case', () => {
 
   it('should be able to update configuration', async () => {
     const user = await makeUser({
-      repository: userRepository
+      repository: userRepository,
     })
 
     const company = await makeCompany({
@@ -41,8 +45,8 @@ describe('Update Configuration Use Case', () => {
       repository: configurationRepository,
       override: {
         companyId: company.id,
-        userId: user.id
-      }
+        userId: user.id,
+      },
     })
 
     const configurationId = configuration.id.toString()
@@ -55,11 +59,16 @@ describe('Update Configuration Use Case', () => {
 
     await useCase.execute(updateConfigurationProps)
 
-    const configurationOnDatabase = await configurationRepository.findById(configurationId)
+    const configurationOnDatabase =
+      await configurationRepository.findById(configurationId)
 
     expect(configurationOnDatabase?.id.toString()).toBe(configurationId)
-    expect(configurationOnDatabase?.daysBeforeOldStock).toBe(updateConfigurationProps.daysBeforeOldStock)
-    expect(configurationOnDatabase?.warningDays).toBe(updateConfigurationProps.warningDays)
+    expect(configurationOnDatabase?.daysBeforeOldStock).toBe(
+      updateConfigurationProps.daysBeforeOldStock,
+    )
+    expect(configurationOnDatabase?.warningDays).toBe(
+      updateConfigurationProps.warningDays,
+    )
   })
 
   it('should not be able to update a configuration that does not exist', async () => {
@@ -69,6 +78,8 @@ describe('Update Configuration Use Case', () => {
       configurationId: fakeConfigurationId,
     })
 
-    expect(response).rejects.toThrow(`Configuração com ID ${fakeConfigurationId} não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Configuração com ID ${fakeConfigurationId} não foi encontrado`,
+    )
   })
 })

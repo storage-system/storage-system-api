@@ -1,8 +1,7 @@
-import 'dotenv/config'
-
 import { PrismaClient } from '@prisma/client'
-import { randomUUID } from 'node:crypto'
 import { execSync } from 'node:child_process'
+import { randomUUID } from 'node:crypto'
+import 'dotenv/config'
 
 const prisma = new PrismaClient()
 

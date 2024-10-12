@@ -1,14 +1,14 @@
-import request from 'supertest'
-import { Test } from "@nestjs/testing"
-import { JwtService } from "@nestjs/jwt"
-import { AppModule } from "@/infrastructure/app.module"
-import { CompanyFactory } from "test/factories/make-company"
-import { HttpStatus, INestApplication } from "@nestjs/common"
-import { DatabaseModule } from "@/infrastructure/database/database.module"
-import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { UserFactory } from 'test/factories/make-user'
+import { HttpStatus, INestApplication } from '@nestjs/common'
+import { CompanyFactory } from 'test/factories/make-company'
 import { MainConfig } from '@/infrastructure/main.config'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { JwtService } from '@nestjs/jwt'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
 
 describe('Remove Users (E2E)', () => {
   let app: INestApplication
@@ -31,10 +31,11 @@ describe('Remove Users (E2E)', () => {
   })
 
   test('[DELETE] /companies/:id/remove-users', async () => {
-    const { accessToken, companyId, userId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, companyId, userId } =
+      await authenticateFactory.makePrismaAuthenticate()
 
     const removeUsersBody = {
-      userIds: [userId]
+      userIds: [userId],
     }
 
     const response = await request(app.getHttpServer())
@@ -52,9 +53,9 @@ describe('Remove Users (E2E)', () => {
         users: {
           select: {
             id: true,
-          }
+          },
         },
-      }
+      },
     })
 
     expect(companyOnDatabase?.users).toEqual([])

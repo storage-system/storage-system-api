@@ -1,22 +1,25 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { Style } from '@/domain/enterprise/style/style';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Prisma, Style as PrismaStyle } from '@prisma/client'
+import { Style } from '@/domain/enterprise/style/style'
 
 export class PrismaStyleMapper {
   static toDomain(raw: PrismaStyle): Style {
-    return Style.create({
-      name: raw.name,
-      isActive: raw.isActive,
-      backgroundColor: raw.backgroundColor,
-      textColor: raw.textColor,
-      primaryColor: raw.primaryColor,
-      secondaryColor: raw.secondaryColor,
-      tertiaryColor: raw.tertiaryColor,
-      createdAt: raw.createdAt,
-      updatedAt: raw.updatedAt,
-      deletedAt: raw.deletedAt,
-      companyId: new UniqueEntityID(raw.companyId),
-    }, new UniqueEntityID(raw.id))
+    return Style.create(
+      {
+        name: raw.name,
+        isActive: raw.isActive,
+        backgroundColor: raw.backgroundColor,
+        textColor: raw.textColor,
+        primaryColor: raw.primaryColor,
+        secondaryColor: raw.secondaryColor,
+        tertiaryColor: raw.tertiaryColor,
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt,
+        deletedAt: raw.deletedAt,
+        companyId: new UniqueEntityID(raw.companyId),
+      },
+      new UniqueEntityID(raw.id),
+    )
   }
 
   static toPersistence(style: Style): Prisma.StyleUncheckedCreateInput {

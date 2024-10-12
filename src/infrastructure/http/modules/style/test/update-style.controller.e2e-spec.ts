@@ -1,14 +1,15 @@
-import { AppModule } from '@/infrastructure/app.module'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { DatabaseModule } from '@/infrastructure/database/database.module'
+import { AuthenticateFactory } from 'test/factories/make-authenticate'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { HttpStatus, INestApplication } from '@nestjs/common'
+import { CompanyFactory } from 'test/factories/make-company'
+import { StyleFactory } from 'test/factories/make-style'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { UserFactory } from 'test/factories/make-user'
-import { CompanyFactory } from 'test/factories/make-company'
-import { DatabaseModule } from '@/infrastructure/database/database.module'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { StyleFactory } from 'test/factories/make-style'
+
 import { UpdateStyleDTO } from '../dto/update-style.dto'
 
 describe('Update Style (E2E)', () => {
@@ -25,7 +26,7 @@ describe('Update Style (E2E)', () => {
         CompanyFactory,
         AuthenticateFactory,
         StyleFactory,
-      ]
+      ],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -37,15 +38,16 @@ describe('Update Style (E2E)', () => {
   })
 
   test('[PATCH] /styles/:id', async () => {
-    const { accessToken, companyId, userId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, companyId, userId } =
+      await authenticateFactory.makePrismaAuthenticate()
     const style = await styleFactory.makePrismaStyle({
-      companyId: new UniqueEntityID(companyId)
+      companyId: new UniqueEntityID(companyId),
     })
     const styleId = style.id.toString()
 
     const updateStyle: UpdateStyleDTO = {
       name: 'updated-style',
-      backgroundColor: '#222'
+      backgroundColor: '#222',
     }
 
     const response = await request(app.getHttpServer())
@@ -56,7 +58,7 @@ describe('Update Style (E2E)', () => {
     const styleOnDatabase = await prisma.style.findUnique({
       where: {
         id: styleId,
-      }
+      },
     })
 
     expect(response.statusCode).toBe(HttpStatus.NO_CONTENT)

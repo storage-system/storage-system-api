@@ -1,7 +1,7 @@
-import { Pagination } from "@/core/entities/pagination";
-import { SearchQuery } from "@/core/entities/search-query";
-import { Style } from "@/domain/enterprise/style/style";
-import { StyleRepository } from "@/domain/enterprise/style/style-repository";
+import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { SearchQuery } from '@/core/entities/search-query'
+import { Pagination } from '@/core/entities/pagination'
+import { Style } from '@/domain/enterprise/style/style'
 
 export class InMemoryStyleRepository implements StyleRepository {
   public items: Style[] = []
@@ -37,15 +37,17 @@ export class InMemoryStyleRepository implements StyleRepository {
   }
 
   async delete(styleId: string): Promise<void> {
-    const filteredStyles = this.items.filter((style) => style.id.toString() !== styleId)
+    const filteredStyles = this.items.filter(
+      (style) => style.id.toString() !== styleId,
+    )
     this.items = filteredStyles
   }
 
   async findActiveStyleByCompanyId(companyId: string): Promise<Style | null> {
     const activeStyle = this.items.find(
-      (style) => style.companyId.toString() === companyId && style.isActive
-    );
+      (style) => style.companyId.toString() === companyId && style.isActive,
+    )
 
-    return activeStyle || null;
+    return activeStyle || null
   }
 }

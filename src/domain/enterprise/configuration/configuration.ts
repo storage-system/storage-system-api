@@ -1,12 +1,12 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Entity } from "@/core/entities/entity"
-import { Optional } from "@/core/types/optional"
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+import { Entity } from '@/core/entities/entity'
 
 export enum ReportFrequency {
   DIARY = 'diary',
   WEEKLY = 'weekly',
   MONTH = 'month',
-  YEAR = 'year'
+  YEAR = 'year',
 }
 
 export interface ConfigurationProps {
@@ -26,7 +26,10 @@ export interface ConfigurationProps {
 
 export class Configuration extends Entity<ConfigurationProps> {
   static create(
-    props: Optional<ConfigurationProps, 'createdAt' | 'daysBeforeOldStock' | 'warningDays'>,
+    props: Optional<
+      ConfigurationProps,
+      'createdAt' | 'daysBeforeOldStock' | 'warningDays'
+    >,
     id?: UniqueEntityID,
   ) {
     const configuration = new Configuration(
@@ -43,33 +46,40 @@ export class Configuration extends Entity<ConfigurationProps> {
   }
 
   update(aConfiguration: Partial<ConfigurationProps>) {
-    this.props.daysBeforeOldStock = aConfiguration.daysBeforeOldStock !== undefined
-      ? aConfiguration.daysBeforeOldStock
-      : this.daysBeforeOldStock;
+    this.props.daysBeforeOldStock =
+      aConfiguration.daysBeforeOldStock !== undefined
+        ? aConfiguration.daysBeforeOldStock
+        : this.daysBeforeOldStock
 
-    this.props.warningDays = aConfiguration.warningDays !== undefined
-      ? aConfiguration.warningDays
-      : this.warningDays;
+    this.props.warningDays =
+      aConfiguration.warningDays !== undefined
+        ? aConfiguration.warningDays
+        : this.warningDays
 
-    this.props.emailNotification = aConfiguration.emailNotification !== undefined
-      ? aConfiguration.emailNotification
-      : this.emailNotification;
+    this.props.emailNotification =
+      aConfiguration.emailNotification !== undefined
+        ? aConfiguration.emailNotification
+        : this.emailNotification
 
-    this.props.systemNotification = aConfiguration.systemNotification !== undefined
-      ? aConfiguration.systemNotification
-      : this.systemNotification;
+    this.props.systemNotification =
+      aConfiguration.systemNotification !== undefined
+        ? aConfiguration.systemNotification
+        : this.systemNotification
 
-    this.props.autoDiscardAfterExpiration = aConfiguration.autoDiscardAfterExpiration !== undefined
-      ? aConfiguration.autoDiscardAfterExpiration
-      : this.autoDiscardAfterExpiration;
+    this.props.autoDiscardAfterExpiration =
+      aConfiguration.autoDiscardAfterExpiration !== undefined
+        ? aConfiguration.autoDiscardAfterExpiration
+        : this.autoDiscardAfterExpiration
 
-    this.props.freeShippingOnOldStock = aConfiguration.freeShippingOnOldStock !== undefined
-      ? aConfiguration.freeShippingOnOldStock
-      : this.freeShippingOnOldStock;
+    this.props.freeShippingOnOldStock =
+      aConfiguration.freeShippingOnOldStock !== undefined
+        ? aConfiguration.freeShippingOnOldStock
+        : this.freeShippingOnOldStock
 
-    this.props.reportFrequency = aConfiguration.reportFrequency !== undefined
-      ? aConfiguration.reportFrequency
-      : this.reportFrequency;
+    this.props.reportFrequency =
+      aConfiguration.reportFrequency !== undefined
+        ? aConfiguration.reportFrequency
+        : this.reportFrequency
 
     this.touch()
   }

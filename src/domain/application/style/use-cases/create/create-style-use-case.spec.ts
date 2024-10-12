@@ -1,10 +1,14 @@
-import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository"
-import { makeCompany } from "test/factories/make-company"
-import { CompaniesRepository } from "@/domain/enterprise/company/companies-repository"
-import { CreateStyleUseCase, CreateStyleUseCaseRequest } from "./create-style-use-case"
-import { StyleRepository } from "@/domain/enterprise/style/style-repository"
-import { InMemoryStyleRepository } from "test/repositories/in-memory-style-repository"
-import { faker } from "@faker-js/faker"
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { InMemoryStyleRepository } from 'test/repositories/in-memory-style-repository'
+import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { makeCompany } from 'test/factories/make-company'
+import { faker } from '@faker-js/faker'
+
+import {
+  CreateStyleUseCase,
+  CreateStyleUseCaseRequest,
+} from './create-style-use-case'
 
 let companiesRepository: CompaniesRepository
 let styleRepository: StyleRepository
@@ -16,10 +20,7 @@ describe('Create Style Use Case', () => {
     companiesRepository = new InMemoryCompaniesRepository()
     styleRepository = new InMemoryStyleRepository()
 
-    useCase = new CreateStyleUseCase(
-      companiesRepository,
-      styleRepository,
-    )
+    useCase = new CreateStyleUseCase(companiesRepository, styleRepository)
   })
 
   it('dependencies should be defined', (): void => {
@@ -72,6 +73,8 @@ describe('Create Style Use Case', () => {
       textColor: faker.color.rgb(),
     }
 
-    expect(useCase.execute(styleMock)).rejects.toThrowError('Erro ao criar estilização.')
+    expect(useCase.execute(styleMock)).rejects.toThrowError(
+      'Erro ao criar estilização.',
+    )
   })
 })

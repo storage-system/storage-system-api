@@ -1,10 +1,15 @@
-import { faker } from "@faker-js/faker"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Product, ProductProps, StatusProduct } from "@/domain/enterprise/product/product"
-import { FactoryProp } from "."
-import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
-import { Injectable } from "@nestjs/common"
-import { PrismaProductMapper } from "@/infrastructure/database/prisma/mappers/prisma-product-mapper"
+import { PrismaProductMapper } from '@/infrastructure/database/prisma/mappers/prisma-product-mapper'
+import {
+  Product,
+  ProductProps,
+  StatusProduct,
+} from '@/domain/enterprise/product/product'
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
+import { faker } from '@faker-js/faker'
+
+import { FactoryProp } from '.'
 
 export async function makeProduct({
   repository,
@@ -12,8 +17,7 @@ export async function makeProduct({
 }: FactoryProp<
   Product,
   Partial<
-    ProductProps &
-    {
+    ProductProps & {
       id: string
     }
   >
@@ -43,7 +47,7 @@ export async function makeProduct({
       }),
       quantityInStock: faker.number.int({
         max: 100,
-        min: 0
+        min: 0,
       }),
       validityInDays: faker.number.int({
         min: 1,
@@ -69,15 +73,13 @@ export async function makeProduct({
 
 @Injectable()
 export class ProductFactory {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  async makePrismaProduct(
-    data: Partial<ProductProps> = {},
-  ): Promise<Product> {
+  async makePrismaProduct(data: Partial<ProductProps> = {}): Promise<Product> {
     const product = await makeProduct({ override: data })
 
     await this.prisma.product.create({
-      data: PrismaProductMapper.toPersistence(product)
+      data: PrismaProductMapper.toPersistence(product),
     })
 
     return product

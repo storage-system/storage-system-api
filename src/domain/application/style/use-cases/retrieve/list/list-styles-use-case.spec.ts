@@ -1,10 +1,11 @@
-import { StyleRepository } from '@/domain/enterprise/style/style-repository'
-import { ListStylesUseCase } from './list-styles-use-case'
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { InMemoryStyleRepository } from 'test/repositories/in-memory-style-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
-import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { StyleRepository } from '@/domain/enterprise/style/style-repository'
 import { makeCompany } from 'test/factories/make-company'
 import { makeStyle } from 'test/factories/make-style'
+
+import { ListStylesUseCase } from './list-styles-use-case'
 
 let companyRepository: CompaniesRepository
 let styleRepository: StyleRepository
@@ -23,7 +24,7 @@ describe('List Styles Use Case', () => {
       repository: styleRepository,
       override: {
         companyId: company.id,
-      }
+      },
     })
   })
 

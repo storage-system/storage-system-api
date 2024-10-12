@@ -1,12 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
-import { FileRepository } from "@/domain/enterprise/file/file-repository";
-import { File } from "@/domain/enterprise/file/file";
-import { PrismaFileMapper } from "../mappers/prisma-file-mapper";
+import { FileRepository } from '@/domain/enterprise/file/file-repository'
+import { File } from '@/domain/enterprise/file/file'
+import { Injectable } from '@nestjs/common'
+
+import { PrismaFileMapper } from '../mappers/prisma-file-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaFileRepository implements FileRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(record: File): Promise<void> {
     const data = PrismaFileMapper.toPersistence(record)
@@ -19,8 +20,8 @@ export class PrismaFileRepository implements FileRepository {
   async findById(anId: string): Promise<File | null> {
     const file = await this.prisma.file.findUnique({
       where: {
-        id: anId
-      }
+        id: anId,
+      },
     })
 
     if (!file) {
@@ -33,11 +34,11 @@ export class PrismaFileRepository implements FileRepository {
   async delete(anId: string): Promise<void> {
     await this.prisma.file.update({
       where: {
-        id: anId
+        id: anId,
       },
       data: {
-        deletedAt: new Date()
-      }
+        deletedAt: new Date(),
+      },
     })
   }
 
@@ -46,7 +47,7 @@ export class PrismaFileRepository implements FileRepository {
 
     await this.prisma.file.update({
       where: {
-        id: data.id
+        id: data.id,
       },
       data,
     })

@@ -1,14 +1,15 @@
-import { AppModule } from '@/infrastructure/app.module'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { faker } from '@faker-js/faker'
+import { DatabaseModule } from '@/infrastructure/database/database.module'
+import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { HttpStatus, INestApplication } from '@nestjs/common'
+import { CompanyFactory } from 'test/factories/make-company'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { faker } from '@faker-js/faker'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+
 import { CreateStyleDTO } from '../dto/create-style.dto'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { UserFactory } from 'test/factories/make-user'
-import { CompanyFactory } from 'test/factories/make-company'
-import { DatabaseModule } from '@/infrastructure/database/database.module'
 
 describe('Create Style (E2E)', () => {
   let app: INestApplication
@@ -18,11 +19,7 @@ describe('Create Style (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [
-        UserFactory,
-        CompanyFactory,
-        AuthenticateFactory,
-      ]
+      providers: [UserFactory, CompanyFactory, AuthenticateFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -33,7 +30,8 @@ describe('Create Style (E2E)', () => {
   })
 
   test('[POST] /styles', async () => {
-    const { accessToken, companyId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, companyId } =
+      await authenticateFactory.makePrismaAuthenticate()
 
     const styleMock: CreateStyleDTO = {
       companyId,
@@ -53,8 +51,8 @@ describe('Create Style (E2E)', () => {
 
     const styleOnDatabase = await prisma.style.findUnique({
       where: {
-        id: response.body.styleId
-      }
+        id: response.body.styleId,
+      },
     })
 
     expect(response.statusCode).toBe(HttpStatus.CREATED)

@@ -1,7 +1,8 @@
-import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository";
-import { EditCompanyUseCase } from "./edit-company-use-case";
-import { makeCompany } from "test/factories/make-company";
-import { CompaniesRepository } from "../../../../enterprise/company/companies-repository";
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { makeCompany } from 'test/factories/make-company'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
+import { EditCompanyUseCase } from './edit-company-use-case'
 
 let repository: CompaniesRepository
 let useCase: EditCompanyUseCase
@@ -27,7 +28,7 @@ describe('Edit Company', () => {
       email: newCompany.email,
       responsible: newCompany.responsible,
       contact: newCompany.contact,
-      companyId: newCompany.id.toString()
+      companyId: newCompany.id.toString(),
     }
 
     await useCase.execute(updateCompany)
@@ -44,10 +45,11 @@ describe('Edit Company', () => {
       name: 'company-01',
       contact: 'contact-01',
       email: 'email-01@example.com',
-      responsible: 'responsible-01'
+      responsible: 'responsible-01',
     }
 
-    await expect(useCase.execute(nonExistentCompanyUpdate))
-      .rejects.toThrowError(`Empresa com ID ${companyId} não foi encontrado`)
+    await expect(
+      useCase.execute(nonExistentCompanyUpdate),
+    ).rejects.toThrowError(`Empresa com ID ${companyId} não foi encontrado`)
   })
 })

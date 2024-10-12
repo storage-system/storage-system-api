@@ -1,8 +1,9 @@
+import WrongCredentialsException from '@/core/exception/wrong-credentials-exception'
 import { Injectable, NotFoundException } from '@nestjs/common'
+
+import { UsersRepository } from '../../enterprise/user/users-repository'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { Encrypter } from '../cryptography/encrypter'
-import WrongCredentialsException from '@/core/exception/wrong-credentials-exception'
-import { UsersRepository } from '../../enterprise/user/users-repository'
 
 interface AuthenticateUseCaseRequest {
   email: string
@@ -19,7 +20,7 @@ export class AuthenticateUseCase {
     private usersRepository: UsersRepository,
     private hashComparer: HashComparer,
     private encrypter: Encrypter,
-  ) { }
+  ) {}
 
   async execute({
     email,
@@ -47,7 +48,7 @@ export class AuthenticateUseCase {
       phone: user.phone,
       companyId: user.companyId?.toString(),
       roles: user.roles,
-    };
+    }
 
     const accessToken = await this.encrypter.encrypt(accessTokenPayload)
 

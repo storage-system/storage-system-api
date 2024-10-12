@@ -1,5 +1,5 @@
-import { User } from "@/domain/enterprise/user/user";
-import { User as PrismaUser } from "@prisma/client";
+import { User } from '@/domain/enterprise/user/user'
+import { User as PrismaUser } from '@prisma/client'
 
 export class UserPresenter {
   static toHTTP(user: User): Partial<PrismaUser> {

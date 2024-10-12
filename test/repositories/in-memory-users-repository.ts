@@ -1,11 +1,14 @@
-import { PaginationProps, Pagination } from "@/core/entities/pagination";
-import { UsersRepository } from "@/domain/enterprise/user/users-repository";
-import { User } from "@/domain/enterprise/user/user";
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { PaginationProps, Pagination } from '@/core/entities/pagination'
+import { User } from '@/domain/enterprise/user/user'
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = []
 
-  async findAll({ page, perPage }: PaginationProps<User>): Promise<Pagination<User>> {
+  async findAll({
+    page,
+    perPage,
+  }: PaginationProps<User>): Promise<Pagination<User>> {
     const items = this.items.slice((page - 1) * perPage, page * perPage)
 
     return new Pagination({
@@ -57,7 +60,9 @@ export class InMemoryUsersRepository implements UsersRepository {
   }
 
   async delete(anId: string): Promise<void> {
-    const filteredUsers = this.items.filter((user) => user.id.toString() !== anId)
+    const filteredUsers = this.items.filter(
+      (user) => user.id.toString() !== anId,
+    )
 
     this.items = filteredUsers
   }

@@ -1,10 +1,11 @@
-import { FakeHasher } from "test/cryptography/fake-hasher"
-import { CreateUserUseCase } from "./create-user-use-case"
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository"
-import { UserRoles } from "@/domain/enterprise/user/user-types"
-import { faker } from "@faker-js/faker"
-import { makeUser } from "test/factories/make-user"
-import { UsersRepository } from "../../../../enterprise/user/users-repository"
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { makeUser } from 'test/factories/make-user'
+import { faker } from '@faker-js/faker'
+
+import { UsersRepository } from '../../../../enterprise/user/users-repository'
+import { CreateUserUseCase } from './create-user-use-case'
 
 let repository: UsersRepository
 let fakeHasher: FakeHasher
@@ -31,7 +32,7 @@ describe('Create User', () => {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: faker.string.alphanumeric({
-        length: 8
+        length: 8,
       }),
       phone: faker.phone.number(),
       roles: [UserRoles.MEMBER],
@@ -45,7 +46,7 @@ describe('Create User', () => {
 
   it('should hash user password upon registration', async () => {
     const passwordMocked = faker.string.alphanumeric({
-      length: 8
+      length: 8,
     })
 
     const result = await useCase.execute({
@@ -73,7 +74,7 @@ describe('Create User', () => {
       name: faker.person.fullName(),
       email: firstUser.email,
       password: faker.string.alphanumeric({
-        length: 8
+        length: 8,
       }),
       phone: faker.phone.number(),
       roles: [UserRoles.MEMBER],

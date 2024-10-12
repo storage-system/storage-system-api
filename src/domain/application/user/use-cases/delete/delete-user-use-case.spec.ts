@@ -1,8 +1,9 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
-import { DeleteUserUseCase } from './delete-user-use-case'
 import { makeUser } from 'test/factories/make-user'
 import { faker } from '@faker-js/faker'
+
 import { UsersRepository } from '../../../../enterprise/user/users-repository'
+import { DeleteUserUseCase } from './delete-user-use-case'
 
 let repository: UsersRepository
 let useCase: DeleteUserUseCase
@@ -20,12 +21,12 @@ describe('Delete User', () => {
 
   it('should be able to delete an user', async () => {
     const userId = faker.string.alphanumeric({
-      length: 8
+      length: 8,
     })
 
     const newUser = await makeUser({
       override: {
-        id: userId
+        id: userId,
       },
       repository,
     })
@@ -43,13 +44,15 @@ describe('Delete User', () => {
 
   it('should not be able to delete an user that does not exist', async () => {
     const userId = faker.string.alphanumeric({
-      length: 8
+      length: 8,
     })
 
     const response = useCase.execute({
       userId,
     })
 
-    expect(response).rejects.toThrow(`Usuário com ID ${userId} não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Usuário com ID ${userId} não foi encontrado`,
+    )
   })
 })

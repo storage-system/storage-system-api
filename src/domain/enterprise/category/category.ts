@@ -1,9 +1,10 @@
-import { Slug } from '../slug/slug'
-import { Entity } from '@/core/entities/entity'
-import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+import { Entity } from '@/core/entities/entity'
+
 import { CompanyID } from '../company/company'
 import { FileID } from '../file/file'
+import { Slug } from '../slug/slug'
 
 export class CategoryID extends UniqueEntityID {}
 

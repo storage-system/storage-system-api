@@ -1,12 +1,12 @@
-import { AppModule } from "@/infrastructure/app.module"
-import { DatabaseModule } from "@/infrastructure/database/database.module"
-import { INestApplication } from "@nestjs/common"
-import { JwtService } from "@nestjs/jwt"
-import { Test } from "@nestjs/testing"
-import { CategoryFactory } from "test/factories/make-category"
-import { CompanyFactory } from "test/factories/make-company"
+import { DatabaseModule } from '@/infrastructure/database/database.module'
+import { CategoryFactory } from 'test/factories/make-category'
+import { CompanyFactory } from 'test/factories/make-company'
+import { MainConfig } from '@/infrastructure/main.config'
+import { AppModule } from '@/infrastructure/app.module'
+import { INestApplication } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { Test } from '@nestjs/testing'
 import request from 'supertest'
-import { MainConfig } from "@/infrastructure/main.config"
 
 describe('Fetch categories (E2E)', () => {
   let app: INestApplication

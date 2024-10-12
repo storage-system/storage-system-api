@@ -1,11 +1,15 @@
-import { Configuration } from "@/domain/enterprise/configuration/configuration";
-import { ConfigurationRepository } from "@/domain/enterprise/configuration/configuration-repository";
+import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
+import { Configuration } from '@/domain/enterprise/configuration/configuration'
 
-export class InMemoryConfigurationRepository implements ConfigurationRepository {
+export class InMemoryConfigurationRepository
+  implements ConfigurationRepository
+{
   public items: Configuration[] = []
 
   async findById(id: string): Promise<Configuration | null> {
-    const configuration = this.items.find((configuration) => configuration.id.toString() === id)
+    const configuration = this.items.find(
+      (configuration) => configuration.id.toString() === id,
+    )
 
     if (!configuration) {
       return null
@@ -19,12 +23,16 @@ export class InMemoryConfigurationRepository implements ConfigurationRepository 
   }
 
   async update(configuration: Configuration): Promise<void> {
-    const itemIndex = this.items.findIndex((item) => item.id === configuration.id)
+    const itemIndex = this.items.findIndex(
+      (item) => item.id === configuration.id,
+    )
     this.items[itemIndex] = configuration
   }
 
   async delete(configurationId: string): Promise<void> {
-    const filteredConfigurations = this.items.filter((configuration) => configuration.id.toString() !== configurationId)
+    const filteredConfigurations = this.items.filter(
+      (configuration) => configuration.id.toString() !== configurationId,
+    )
     this.items = filteredConfigurations
   }
 }

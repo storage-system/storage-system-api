@@ -1,8 +1,9 @@
-import { makeCategory } from 'test/factories/make-category'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { ListCategoriesUseCase } from './list-categories-use-case'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { makeCategory } from 'test/factories/make-category'
+
 import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
+import { ListCategoriesUseCase } from './list-categories-use-case'
 
 let repository: CategoriesRepository
 let useCase: ListCategoriesUseCase
@@ -14,7 +15,7 @@ describe('List Categories Use Case', () => {
 
     await makeCategory({
       override: {
-        companyId: new UniqueEntityID('company-01')
+        companyId: new UniqueEntityID('company-01'),
       },
       repository,
     })

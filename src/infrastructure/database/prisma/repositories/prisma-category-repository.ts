@@ -1,20 +1,21 @@
-import { PaginationProps, Pagination } from "@/core/entities/pagination";
-import { CategoriesRepository } from "@/domain/enterprise/category/categories-repository";
-import { Category } from "@/domain/enterprise/category/category";
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
-import { PrismaCategoryMapper } from "../mappers/prisma-category-mapper";
+import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
+import { PaginationProps, Pagination } from '@/core/entities/pagination'
+import { Category } from '@/domain/enterprise/category/category'
+import { Injectable } from '@nestjs/common'
+
+import { PrismaCategoryMapper } from '../mappers/prisma-category-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaCategoriesRepository implements CategoriesRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async findById(id: string): Promise<Category | null> {
     const category = await this.prisma.category.findUnique({
       where: {
         id,
-        deletedAt: null
-      }
+        deletedAt: null,
+      },
     })
 
     if (!category) {
@@ -24,7 +25,9 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     return PrismaCategoryMapper.toDomain(category)
   }
 
-  async findAll(params: PaginationProps<Category>): Promise<Pagination<Category>> {
+  async findAll(
+    params: PaginationProps<Category>,
+  ): Promise<Pagination<Category>> {
     const categories = await this.prisma.category.findMany({
       where: {
         deletedAt: null,
@@ -41,17 +44,17 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
         icon: {
           select: {
             id: true,
-          }
-        }
+          },
+        },
       },
       take: params.perPage,
-      skip: (params.page - 1) * params.perPage
+      skip: (params.page - 1) * params.perPage,
     })
 
     const totalCategories = await this.prisma.category.count({
       where: {
         deletedAt: null,
-      }
+      },
     })
 
     return new Pagination({
@@ -67,7 +70,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
       where: {
         slug,
         deletedAt: null,
-      }
+      },
     })
 
     if (!category) return null
@@ -77,8 +80,6 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 
   async create(category: Category): Promise<void> {
     const data = PrismaCategoryMapper.toPersistence(category)
-
-    console.log("data", data)
 
     await this.prisma.category.create({
       data,
@@ -103,8 +104,8 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
         deletedAt: null,
       },
       data: {
-        deletedAt: new Date()
-      }
+        deletedAt: new Date(),
+      },
     })
   }
 }

@@ -1,4 +1,4 @@
-import { UniqueEntityID } from '../entities/unique-entity-id';
+import { UniqueEntityID } from '../entities/unique-entity-id'
 import DomainException from './domain-exception'
 
 export default class ResourceNotFoundException extends DomainException {
@@ -6,8 +6,11 @@ export default class ResourceNotFoundException extends DomainException {
     super(aMessage, anErrors)
   }
 
-  public static with(anAggregate: string, anId: UniqueEntityID): ResourceNotFoundException {
-    const anError = `${anAggregate} com ID ${anId.toString()} não foi encontrado`;
-    return new ResourceNotFoundException(anError, new Array<Error>());
+  public static with(
+    anAggregate: string,
+    anId: UniqueEntityID,
+  ): ResourceNotFoundException {
+    const anError = `${anAggregate} com ID ${anId.toString()} não foi encontrado`
+    return new ResourceNotFoundException(anError, new Array<Error>())
   }
 }

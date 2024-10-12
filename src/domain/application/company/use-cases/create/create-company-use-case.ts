@@ -1,11 +1,12 @@
-import { Either, right } from '@/core/either'
-import { Injectable } from '@nestjs/common'
-import { HashGenerator } from '../../../cryptography/hash-generator'
-import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
-import { Company } from '@/domain/enterprise/company/company'
-import { Notification } from '@/core/validation/notification'
 import NotificationException from '@/core/exception/notification-exception'
 import { AlreadyExistsError } from '@/core/errors/already-exists-error'
+import { Company } from '@/domain/enterprise/company/company'
+import { Notification } from '@/core/validation/notification'
+import { Either, right } from '@/core/either'
+import { Injectable } from '@nestjs/common'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
+import { HashGenerator } from '../../../cryptography/hash-generator'
 
 interface CreateCompanyUseCaseRequest {
   name: string
@@ -25,7 +26,7 @@ export class CreateCompanyUseCase {
   constructor(
     private companiesRepository: CompaniesRepository,
     private hashGenerator: HashGenerator,
-  ) { }
+  ) {}
 
   async execute({
     name,
@@ -62,7 +63,7 @@ export class CreateCompanyUseCase {
     await this.companiesRepository.create(company)
 
     return {
-      companyId: company.id.toString()
+      companyId: company.id.toString(),
     }
   }
 }

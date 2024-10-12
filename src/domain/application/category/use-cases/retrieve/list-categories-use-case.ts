@@ -1,8 +1,8 @@
-
-import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
+import { CategoryPresenter } from '@/infrastructure/http/presenters/category-presenter'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Injectable } from '@nestjs/common'
-import { CategoryPresenter } from '@/infrastructure/http/presenters/category-presenter'
+
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 
 interface ListCategoriesUseCaseRequest {
   page: number
@@ -13,7 +13,7 @@ type ListCategoriesUseCaseResponse = PaginationProps<CategoryPresenter>
 
 @Injectable()
 export class ListCategoriesUseCase {
-  constructor(private categoriesRepository: CategoriesRepository) { }
+  constructor(private categoriesRepository: CategoriesRepository) {}
 
   async execute({
     page,

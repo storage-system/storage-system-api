@@ -1,6 +1,6 @@
-import { StatusProduct } from "@/domain/enterprise/product/product"
-import { createZodDto } from "nestjs-zod"
-import { z } from "nestjs-zod/z"
+import { StatusProduct } from '@/domain/enterprise/product/product'
+import { createZodDto } from 'nestjs-zod'
+import { z } from 'nestjs-zod/z'
 
 export const createProductBodySchema = z.object({
   name: z.string(),
@@ -9,9 +9,7 @@ export const createProductBodySchema = z.object({
   finalPrice: z.number(),
   discountPercentage: z.number(),
   quantityInStock: z.number(),
-  manufactureDate: z
-    .string()
-    .transform((v) => new Date(v)),
+  manufactureDate: z.string().transform((v) => new Date(v)),
   validityInDays: z.number(),
   unitOfMeasure: z.string(),
   weight: z.number(),
@@ -22,7 +20,7 @@ export const createProductBodySchema = z.object({
   batch: z.string().optional(),
   status: z.nativeEnum(StatusProduct),
   companyId: z.string().uuid(),
-  categoryIds: z.array(z.string())
+  categoryIds: z.array(z.string()),
 })
 
-export class CreateProductDTO extends createZodDto(createProductBodySchema) { }
+export class CreateProductDTO extends createZodDto(createProductBodySchema) {}

@@ -1,5 +1,5 @@
-import { File } from '@/domain/enterprise/file/file'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
+import { File } from '@/domain/enterprise/file/file'
 
 export class InMemoryFileRepository implements FileRepository {
   public items: File[] = []
@@ -23,7 +23,9 @@ export class InMemoryFileRepository implements FileRepository {
   }
 
   async delete(anId: string): Promise<void> {
-    const filteredFiles = this.items.filter((file) => file.id.toString() !== anId)
+    const filteredFiles = this.items.filter(
+      (file) => file.id.toString() !== anId,
+    )
     this.items = filteredFiles
   }
 }

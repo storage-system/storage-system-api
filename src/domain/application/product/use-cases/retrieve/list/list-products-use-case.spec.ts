@@ -1,12 +1,13 @@
-import { ProductsRepository } from '../../../../../enterprise/product/products-repository'
+import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { makeProduct } from 'test/factories/make-product'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
-import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
-import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { makeCompany } from 'test/factories/make-company'
 import { makeCategory } from 'test/factories/make-category'
+import { makeProduct } from 'test/factories/make-product'
+import { makeCompany } from 'test/factories/make-company'
+
+import { ProductsRepository } from '../../../../../enterprise/product/products-repository'
 import { ListProductsUseCase } from './list-products-use-case'
 
 let productsRepository: ProductsRepository
@@ -20,10 +21,7 @@ describe('List Products Use Case', () => {
     companiesRepository = new InMemoryCompaniesRepository()
     categoriesRepository = new InMemoryCategoriesRepository()
 
-    useCase = new ListProductsUseCase(
-      productsRepository,
-      categoriesRepository,
-    )
+    useCase = new ListProductsUseCase(productsRepository, categoriesRepository)
   })
 
   it('dependencies should be defined', (): void => {
@@ -39,15 +37,15 @@ describe('List Products Use Case', () => {
     })
 
     const category = await makeCategory({
-      repository: categoriesRepository
+      repository: categoriesRepository,
     })
 
     await makeProduct({
       repository: productsRepository,
       override: {
         companyId: company.id,
-        categoryIds: [category.id]
-      }
+        categoryIds: [category.id],
+      },
     })
 
     const result = await useCase.execute({

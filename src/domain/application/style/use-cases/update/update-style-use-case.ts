@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
 
 export interface UpdateStyleUseCaseRequest {
   styleId: string
@@ -15,7 +15,7 @@ export interface UpdateStyleUseCaseRequest {
 
 @Injectable()
 export class UpdateStyleUseCase {
-  constructor(private styleRepository: StyleRepository) { }
+  constructor(private styleRepository: StyleRepository) {}
 
   async execute(props: UpdateStyleUseCaseRequest) {
     const style = await this.styleRepository.findById(props.styleId)
@@ -23,8 +23,8 @@ export class UpdateStyleUseCase {
     if (!style) {
       throw ResourceNotFoundException.with(
         'Estilo',
-        new UniqueEntityID(props.styleId)
-      );
+        new UniqueEntityID(props.styleId),
+      )
     }
 
     style.update(props)

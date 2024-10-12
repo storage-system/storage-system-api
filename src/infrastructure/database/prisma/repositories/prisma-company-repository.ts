@@ -1,12 +1,13 @@
-import { CompaniesRepository } from "@/domain/enterprise/company/companies-repository";
-import { Company } from "@/domain/enterprise/company/company";
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
-import { PrismaCompanyMapper } from "../mappers/prisma-company-mapper";
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { Company } from '@/domain/enterprise/company/company'
+import { Injectable } from '@nestjs/common'
+
+import { PrismaCompanyMapper } from '../mappers/prisma-company-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaCompaniesRepository implements CompaniesRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async findByEmail(email: string): Promise<Company | null> {
     const company = await this.prisma.company.findUnique({
@@ -16,9 +17,9 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
       include: {
         users: {
           select: {
-            id: true
-          }
-        }
+            id: true,
+          },
+        },
       },
     })
 
@@ -38,9 +39,9 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
         users: {
           select: {
             id: true,
-          }
+          },
         },
-      }
+      },
     })
 
     if (!company) {
@@ -65,7 +66,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
       where: {
         id: data.id,
       },
-      data
+      data,
     })
   }
 
@@ -76,8 +77,8 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
         deletedAt: null,
       },
       data: {
-        deletedAt: new Date()
-      }
+        deletedAt: new Date(),
+      },
     })
   }
 
@@ -88,9 +89,9 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
       },
       data: {
         users: {
-          deleteMany: userIds.map(id => ({ id }))
-        }
-      }
+          deleteMany: userIds.map((id) => ({ id })),
+        },
+      },
     })
   }
 }

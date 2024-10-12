@@ -1,10 +1,11 @@
-import { makeCompany } from 'test/factories/make-company'
-import { StyleRepository } from '@/domain/enterprise/style/style-repository'
-import { GetStyleUseCase } from './get-style-use-case'
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { InMemoryStyleRepository } from 'test/repositories/in-memory-style-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
-import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { makeCompany } from 'test/factories/make-company'
 import { makeStyle } from 'test/factories/make-style'
+
+import { GetStyleUseCase } from './get-style-use-case'
 
 let styleRepository: StyleRepository
 let companyRepository: CompaniesRepository
@@ -15,9 +16,7 @@ describe('Get Style Use Case', () => {
     companyRepository = new InMemoryCompaniesRepository()
     styleRepository = new InMemoryStyleRepository()
 
-    useCase = new GetStyleUseCase(
-      styleRepository
-    )
+    useCase = new GetStyleUseCase(styleRepository)
   })
 
   it('dependencies should be defined', (): void => {
@@ -35,11 +34,11 @@ describe('Get Style Use Case', () => {
       repository: styleRepository,
       override: {
         companyId: company.id,
-      }
+      },
     })
 
     const result = await useCase.execute({
-      styleId: style.id.toString()
+      styleId: style.id.toString(),
     })
 
     expect(result).toBeDefined()
@@ -57,6 +56,8 @@ describe('Get Style Use Case', () => {
 
     const response = useCase.execute({ styleId: invalidStyleId })
 
-    expect(response).rejects.toThrow(`Estilização com ID ${invalidStyleId} não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Estilização com ID ${invalidStyleId} não foi encontrado`,
+    )
   })
 })

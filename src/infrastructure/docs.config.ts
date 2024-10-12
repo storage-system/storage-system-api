@@ -12,7 +12,10 @@ export function DocumentConfig(app: INestApplication): void {
     .setDescription(
       'API Rest da aplicação responsável por controlar estoque velho de uma empresa. Storage system',
     )
-    .setLicense('Apache License 2.0', 'http://www.apache.org/licenses/LICENSE-2.0')
+    .setLicense(
+      'Apache License 2.0',
+      'http://www.apache.org/licenses/LICENSE-2.0',
+    )
     .addBearerAuth()
     .addSecurityRequirements('bearer')
     .build()

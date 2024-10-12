@@ -1,8 +1,9 @@
-import { UserFactory } from './make-user'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+
 import { CompanyFactory } from './make-company'
-import { UserRoles } from '@/domain/enterprise/user/user-types'
+import { UserFactory } from './make-user'
 
 interface AuthenticateFactoryResponse {
   accessToken: string
@@ -15,8 +16,8 @@ export class AuthenticateFactory {
   constructor(
     private jwt: JwtService,
     private userFactory: UserFactory,
-    private companyFactory: CompanyFactory
-  ) { }
+    private companyFactory: CompanyFactory,
+  ) {}
 
   async makePrismaAuthenticate(): Promise<AuthenticateFactoryResponse> {
     const company = await this.companyFactory.makePrismaCompany()
@@ -29,7 +30,7 @@ export class AuthenticateFactory {
     return {
       accessToken,
       userId: user.id.toString(),
-      companyId: company.id.toString()
+      companyId: company.id.toString(),
     }
   }
 }

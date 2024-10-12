@@ -1,5 +1,5 @@
-import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
+import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Category } from '@/domain/enterprise/category/category'
 
 export class InMemoryCategoriesRepository implements CategoriesRepository {
@@ -47,7 +47,9 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
   }
 
   async delete(categoryId: string) {
-    const itemIndex = this.items.findIndex((item) => item.id.toString() === categoryId)
+    const itemIndex = this.items.findIndex(
+      (item) => item.id.toString() === categoryId,
+    )
 
     this.items.splice(itemIndex, 1)
   }

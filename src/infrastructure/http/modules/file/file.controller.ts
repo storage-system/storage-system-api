@@ -8,13 +8,13 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
-import { Response } from 'express'
-import { ApiTags } from '@nestjs/swagger'
-import { FileInterceptor } from '@nestjs/platform-express'
+import { DownloadFileUseCase } from '@/domain/application/file/use-cases/download/download-file-use-case'
 import { UploadFileUseCase } from '@/domain/application/file/use-cases/upload/upload-file-use-case'
 import { DeleteFileUseCase } from '@/domain/application/file/use-cases/delete/delete-file-use-case'
-import { DownloadFileUseCase } from '@/domain/application/file/use-cases/download/download-file-use-case'
 import { GetFileUrlUseCase } from '@/domain/application/file/use-cases/get/get-file-url-use-case'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiTags } from '@nestjs/swagger'
+import { Response } from 'express'
 
 @ApiTags('Files')
 @Controller('/files')
@@ -28,9 +28,7 @@ export class FileController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
-  ) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const { fileId } = await this.uploadFileUseCase.execute(file)
     return fileId
   }

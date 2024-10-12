@@ -1,8 +1,9 @@
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
-import { UpdateUserUseCase } from "./update-user-use-case";
-import { makeUser } from "test/factories/make-user";
-import { faker } from "@faker-js/faker";
-import { UsersRepository } from "../../../../enterprise/user/users-repository";
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { makeUser } from 'test/factories/make-user'
+import { faker } from '@faker-js/faker'
+
+import { UsersRepository } from '../../../../enterprise/user/users-repository'
+import { UpdateUserUseCase } from './update-user-use-case'
 
 let repository: UsersRepository
 let useCase: UpdateUserUseCase
@@ -20,7 +21,7 @@ describe('Update User', () => {
 
   it('should be able to edit an user', async () => {
     const userId = faker.string.alphanumeric({
-      length: 8
+      length: 8,
     })
 
     const newUser = await makeUser({
@@ -46,14 +47,15 @@ describe('Update User', () => {
 
   it('should not be able to edit an user that does not exist', async () => {
     const userId = faker.string.alphanumeric({
-      length: 8
+      length: 8,
     })
 
     const nonExistentUserUpdate = {
       userId,
     }
 
-    await expect(useCase.execute(nonExistentUserUpdate))
-      .rejects.toThrowError(`Usuário com ID ${userId} não foi encontrado`)
+    await expect(useCase.execute(nonExistentUserUpdate)).rejects.toThrowError(
+      `Usuário com ID ${userId} não foi encontrado`,
+    )
   })
 })

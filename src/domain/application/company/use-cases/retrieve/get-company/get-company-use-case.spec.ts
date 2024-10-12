@@ -1,10 +1,11 @@
-import { makeUser } from 'test/factories/make-user'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
-import { GetCompanyUseCase } from './get-company-use-case'
-import { makeCompany } from 'test/factories/make-company'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+
 import { CompaniesRepository } from '../../../../../enterprise/company/companies-repository'
+import { GetCompanyUseCase } from './get-company-use-case'
 
 let companiesRepository: CompaniesRepository
 let usersRepository: UsersRepository
@@ -28,7 +29,7 @@ describe('List Users By Company Use Case', () => {
     })
 
     const result = await useCase.execute({
-      companyId: company.id.toString()
+      companyId: company.id.toString(),
     })
 
     expect(result.id).toBe(company.id.toString())
@@ -43,13 +44,13 @@ describe('List Users By Company Use Case', () => {
 
     const company = await makeCompany({
       override: {
-        users: [user.id.toString()]
+        users: [user.id.toString()],
       },
       repository: companiesRepository,
     })
 
     const result = await useCase.execute({
-      companyId: company.id.toString()
+      companyId: company.id.toString(),
     })
 
     expect(result.id).toBe(company.id.toString())
@@ -64,6 +65,8 @@ describe('List Users By Company Use Case', () => {
 
     const response = useCase.execute({ companyId: invalidCompanyId })
 
-    expect(response).rejects.toThrow(`Empresa com ID invalid-id não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Empresa com ID invalid-id não foi encontrado`,
+    )
   })
 })

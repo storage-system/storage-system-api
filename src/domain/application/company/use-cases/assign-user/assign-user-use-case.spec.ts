@@ -1,10 +1,11 @@
-import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository";
-import { makeCompany } from "test/factories/make-company";
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
-import { AssignUserUseCase } from "./assign-user-use-case";
-import { makeUser } from "test/factories/make-user";
-import { UsersRepository } from "@/domain/enterprise/user/users-repository";
-import { CompaniesRepository } from "../../../../enterprise/company/companies-repository";
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
+import { AssignUserUseCase } from './assign-user-use-case'
 
 let companiesRepository: CompaniesRepository
 let usersRepository: UsersRepository
@@ -30,17 +31,19 @@ describe('Assign User Use Case', () => {
 
     const user = await makeUser({
       override: {
-        companyId: company.id
+        companyId: company.id,
       },
       repository: usersRepository,
     })
 
     await useCase.execute({
       companyId: company.id.toString(),
-      userId: user.id.toString()
+      userId: user.id.toString(),
     })
 
-    const companyOnDatabase = await companiesRepository.findById(company.id.toString())
+    const companyOnDatabase = await companiesRepository.findById(
+      company.id.toString(),
+    )
 
     expect(companyOnDatabase?.users).toContain(user.id.toString())
   })
@@ -55,6 +58,8 @@ describe('Assign User Use Case', () => {
       userId: user.id.toString(),
     })
 
-    expect(response).rejects.toThrow(`Empresa com ID company-01 não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Empresa com ID company-01 não foi encontrado`,
+    )
   })
 })

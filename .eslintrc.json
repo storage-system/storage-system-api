@@ -9,6 +9,7 @@
   ],
   "rules": {
     "no-new": "off",
+    "no-undef": "warn",
     "no-console": "error",
     "no-unused-vars": "off",
     "no-useless-constructor": "off",
@@ -22,15 +23,19 @@
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
-        "argsIgnorePattern": "^_|^_$"
+        "argsIgnorePattern": "^|^$"
       }
     ],
     "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-use-before-define": "warn",
+    "no-array-constructor": "warn",
+    "no-unused-expressions": "warn",
+    "no-sequences": "warn",
     "perfectionist/sort-imports": [
       "warn",
       {
@@ -63,8 +68,8 @@
         },
         "newlines-between": "always",
         "internal-pattern": [
-          "@/**",
-          "@test/**"
+          "@/",
+          "@test/"
         ]
       }
     ]

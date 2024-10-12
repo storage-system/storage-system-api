@@ -1,6 +1,7 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+
 import { Category } from './category'
 import { Slug } from '../slug/slug'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 describe('Category Entity', () => {
   it('should create a category with provided props', () => {

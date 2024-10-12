@@ -1,15 +1,26 @@
-import { CreateCategoryUseCase } from "@/domain/application/category/use-cases/create/create-category-use-case";
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from "@nestjs/common";
-import { CreateCategoryDTO } from "./dto/create-category.dto";
-import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
-import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
-import { ListCategoriesUseCase } from "@/domain/application/category/use-cases/retrieve/list-categories-use-case";
-import { EditCategoryUseCase } from "@/domain/application/category/use-cases/update/edit-category-use-case";
-import { EditCategoryDTO } from "./dto/edit-category.dto";
-import { DeleteCategoryUseCase } from "@/domain/application/category/use-cases/delete/delete-category-use-case";
-import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
-import { ParsePositiveIntPipe } from "../../pipes/parse-positive-int.pipe";
-import { HttpCategoryListResponse } from "../../docs/category/http-category-list-response";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common'
+import { ListCategoriesUseCase } from '@/domain/application/category/use-cases/retrieve/list-categories-use-case'
+import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create/create-category-use-case'
+import { DeleteCategoryUseCase } from '@/domain/application/category/use-cases/delete/delete-category-use-case'
+import { EditCategoryUseCase } from '@/domain/application/category/use-cases/update/edit-category-use-case'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
+
+import { HttpCategoryListResponse } from '../../docs/category/http-category-list-response'
+import { ParsePositiveIntPipe } from '../../pipes/parse-positive-int.pipe'
+import { CreateCategoryDTO } from './dto/create-category.dto'
+import { EditCategoryDTO } from './dto/edit-category.dto'
 
 @ApiTags('Category')
 @Controller('/categories')
@@ -19,12 +30,10 @@ export class CategoryController {
     private listCategoriesUseCase: ListCategoriesUseCase,
     private editCategoryUseCase: EditCategoryUseCase,
     private deleteCategoryUseCase: DeleteCategoryUseCase,
-  ) { }
+  ) {}
 
   @Post()
-  async create(
-    @Body() body: CreateCategoryDTO,
-  ) {
+  async create(@Body() body: CreateCategoryDTO) {
     return await this.createCategoryUseCase.execute(body)
   }
 
@@ -58,9 +67,7 @@ export class CategoryController {
   }
 
   @Delete('/:id')
-  async delete(
-    @Param('id') categoryId: string,
-  ) {
+  async delete(@Param('id') categoryId: string) {
     return await this.deleteCategoryUseCase.execute({
       categoryId,
     })

@@ -1,11 +1,12 @@
-import { ProductsRepository } from '../../../../enterprise/product/products-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
+import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { makeCategory } from 'test/factories/make-category'
 import { makeProduct } from 'test/factories/make-product'
 import { makeCompany } from 'test/factories/make-company'
-import { makeCategory } from 'test/factories/make-category'
+
+import { ProductsRepository } from '../../../../enterprise/product/products-repository'
 import { DeleteProductUseCase } from './delete-product-use-case'
-import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
-import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository
@@ -30,15 +31,15 @@ describe('Delete Product Use Case', () => {
     })
 
     const category = await makeCategory({
-      repository: categoriesRepository
+      repository: categoriesRepository,
     })
 
     const product = await makeProduct({
       repository: productsRepository,
       override: {
         companyId: company.id,
-        categoryIds: [category.id]
-      }
+        categoryIds: [category.id],
+      },
     })
 
     const productId = product.id.toString()
@@ -59,6 +60,8 @@ describe('Delete Product Use Case', () => {
       productId: fakeProductId,
     })
 
-    expect(response).rejects.toThrow(`Produto com ID ${fakeProductId} não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Produto com ID ${fakeProductId} não foi encontrado`,
+    )
   })
 })

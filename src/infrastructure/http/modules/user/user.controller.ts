@@ -1,17 +1,27 @@
-import { ApiTags } from "@nestjs/swagger";
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common'
+import { ListUsersUseCase } from '@/domain/application/user/use-cases/retrieve/list/list-users-use-case'
+import { CreateUserUseCase } from '@/domain/application/user/use-cases/create/create-user-use-case'
+import { DeleteUserUseCase } from '@/domain/application/user/use-cases/delete/delete-user-use-case'
+import { UpdateUserUseCase } from '@/domain/application/user/use-cases/update/update-user-use-case'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
+import { Public } from '@/infrastructure/auth/public'
+import { ApiTags } from '@nestjs/swagger'
 
-import { CreateUserDTO } from "./dto/create-user.dto";
-import { UpdateUserDTO } from "./dto/update-user.dto";
-
-import { CreateUserUseCase } from "@/domain/application/user/use-cases/create/create-user-use-case";
-import { DeleteUserUseCase } from "@/domain/application/user/use-cases/delete/delete-user-use-case";
-import { ListUsersUseCase } from "@/domain/application/user/use-cases/retrieve/list/list-users-use-case";
-import { UpdateUserUseCase } from "@/domain/application/user/use-cases/update/update-user-use-case";
-import { Public } from "@/infrastructure/auth/public";
-import { CurrentUser } from "@/infrastructure/decorators/current-user.decorator";
-import { UserPayload } from "@/infrastructure/auth/jwt.strategy";
-import { QueryParamsDTO } from "../query-params/query-params.dto";
+import { QueryParamsDTO } from '../query-params/query-params.dto'
+import { CreateUserDTO } from './dto/create-user.dto'
+import { UpdateUserDTO } from './dto/update-user.dto'
 
 @ApiTags('Users')
 @Controller('/users')
@@ -21,7 +31,7 @@ export class UserController {
     private listUserUseCase: ListUsersUseCase,
     private updateUserUseCase: UpdateUserUseCase,
     private deleteUserUseCase: DeleteUserUseCase,
-  ) { }
+  ) {}
 
   @Post()
   @Public()
@@ -31,10 +41,7 @@ export class UserController {
   }
 
   @Get()
-  async list(
-    @CurrentUser() user: UserPayload,
-    @Query() query: QueryParamsDTO
-  ) {
+  async list(@CurrentUser() user: UserPayload, @Query() query: QueryParamsDTO) {
     return await this.listUserUseCase.execute({
       ...query,
       companyId: user.companyId,
@@ -44,20 +51,15 @@ export class UserController {
 
   @Patch('/:id')
   @HttpCode(204)
-  async update(
-    @Body() body: UpdateUserDTO,
-    @Param('id') userId: string,
-  ) {
+  async update(@Body() body: UpdateUserDTO, @Param('id') userId: string) {
     return await this.updateUserUseCase.execute({
       userId,
-      ...body
+      ...body,
     })
   }
 
   @Delete('/:id')
-  async delete(
-    @Param('id') userId: string,
-  ) {
+  async delete(@Param('id') userId: string) {
     return await this.deleteUserUseCase.execute({
       userId,
     })

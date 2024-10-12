@@ -1,41 +1,46 @@
-import { Pagination } from "@/core/entities/pagination";
-import { ListStylesCommand } from "@/domain/application/style/use-cases/retrieve/list/list-styles-command";
-import { Style } from "@/domain/enterprise/style/style";
-import { StyleRepository } from "@/domain/enterprise/style/style-repository";
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
-import { PrismaStyleMapper } from "../mappers/prisma-style-mapper";
+import { ListStylesCommand } from '@/domain/application/style/use-cases/retrieve/list/list-styles-command'
+import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { Pagination } from '@/core/entities/pagination'
+import { Style } from '@/domain/enterprise/style/style'
+import { Injectable } from '@nestjs/common'
+
+import { PrismaStyleMapper } from '../mappers/prisma-style-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaStyleRepository implements StyleRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  async findAll({ page, perPage, companyId }: ListStylesCommand): Promise<Pagination<Style>> {
+  async findAll({
+    page,
+    perPage,
+    companyId,
+  }: ListStylesCommand): Promise<Pagination<Style>> {
     const [users, count] = await this.prisma.$transaction([
       this.prisma.style.findMany({
         where: {
           deletedAt: null,
-          companyId: companyId,
+          companyId,
         },
         take: perPage,
         skip: (page - 1) * perPage,
         orderBy: {
-          createdAt: 'desc'
+          createdAt: 'desc',
         },
       }),
       this.prisma.style.count({
         where: {
           deletedAt: null,
-          companyId: companyId,
-        }
-      })
+          companyId,
+        },
+      }),
     ])
 
     return new Pagination({
       total: count,
       page,
       perPage,
-      items: users.map(PrismaStyleMapper.toDomain)
+      items: users.map(PrismaStyleMapper.toDomain),
     })
   }
 
@@ -43,8 +48,8 @@ export class PrismaStyleRepository implements StyleRepository {
     const activeStyle = await this.prisma.style.findFirst({
       where: {
         companyId,
-        isActive: true
-      }
+        isActive: true,
+      },
     })
 
     if (!activeStyle) {
@@ -67,7 +72,7 @@ export class PrismaStyleRepository implements StyleRepository {
 
     await this.prisma.style.update({
       where: {
-        id: data.id
+        id: data.id,
       },
       data,
     })
@@ -79,18 +84,18 @@ export class PrismaStyleRepository implements StyleRepository {
         id: anId,
       },
       data: {
-        deletedAt: new Date()
-      }
+        deletedAt: new Date(),
+      },
     })
   }
 
   async findById(anId: string): Promise<Style | null> {
     const style = await this.prisma.style.findUnique({
       where: {
-        id: anId
-      }
+        id: anId,
+      },
     })
-    
+
     if (!style) {
       return null
     }

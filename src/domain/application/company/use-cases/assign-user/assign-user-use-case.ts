@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common'
-import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
 
 interface AssignUserUseCaseRequest {
   companyId: string
@@ -14,7 +15,7 @@ export class AssignUserUseCase {
   constructor(
     private companiesRepository: CompaniesRepository,
     private usersRepository: UsersRepository,
-  ) { }
+  ) {}
 
   async execute({
     companyId,
@@ -23,13 +24,19 @@ export class AssignUserUseCase {
     const company = await this.companiesRepository.findById(companyId)
 
     if (!company) {
-      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(companyId));
+      throw ResourceNotFoundException.with(
+        'Empresa',
+        new UniqueEntityID(companyId),
+      )
     }
 
     const user = await this.usersRepository.findById(userId)
 
     if (!user) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(userId))
+      throw ResourceNotFoundException.with(
+        'Usuário',
+        new UniqueEntityID(userId),
+      )
     }
 
     company.assignCompany(userId)

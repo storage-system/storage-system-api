@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common'
-
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
-import { File } from '@/domain/enterprise/file/file'
+import NotificationException from '@/core/exception/notification-exception'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
-import NotificationException from '@/core/exception/notification-exception';
-import { Notification } from '@/core/validation/notification';
+import { Notification } from '@/core/validation/notification'
+import { File } from '@/domain/enterprise/file/file'
+import { Injectable } from '@nestjs/common'
 
 interface UploadFileUseCaseResponse {
   fileId: string
@@ -25,18 +24,18 @@ export class UploadFileUseCase {
       .catch(() => {
         throw new NotificationException(
           'Impossível realizar upload do arquivo',
-          notification
-        );
-      });;
-    
+          notification,
+        )
+      })
+
     const newFile = File.create({
       filename: file.originalname,
-      path: uploadedFileName, 
+      path: uploadedFileName,
       size: file.size,
-    });
+    })
 
-    await this.fileRepository.create(newFile);
+    await this.fileRepository.create(newFile)
 
-    return { fileId: newFile.id.toString() };
+    return { fileId: newFile.id.toString() }
   }
 }

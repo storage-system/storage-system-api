@@ -1,12 +1,12 @@
-import request from 'supertest'
-import { Test } from "@nestjs/testing"
-import { INestApplication } from "@nestjs/common"
-import { UserFactory } from "test/factories/make-user"
-import { AppModule } from "@/infrastructure/app.module"
-import { DatabaseModule } from "@/infrastructure/database/database.module"
+import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { CompanyFactory } from 'test/factories/make-company'
 import { MainConfig } from '@/infrastructure/main.config'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
 
 describe('Fetch users (E2E)', () => {
   let app: INestApplication

@@ -1,22 +1,21 @@
-import { SearchQuery } from "@/core/entities/search-query";
-
+import { SearchQuery } from '@/core/entities/search-query'
 
 export interface ListProductsCommandProps {
-  page: number;
-  perPage: number;
-  companyId: string;
+  page: number
+  perPage: number
+  companyId: string
 }
 
 export class ListProductsCommand extends SearchQuery {
-  companyId?: string;
+  companyId?: string
 
   protected constructor({
     page = 1,
     perPage = 10,
     companyId,
   }: Partial<ListProductsCommandProps>) {
-    super(page, perPage);
-    this.companyId = companyId;
+    super(page, perPage)
+    this.companyId = companyId
   }
 
   static create({
@@ -28,6 +27,6 @@ export class ListProductsCommand extends SearchQuery {
       page,
       perPage,
       companyId,
-    });
+    })
   }
 }

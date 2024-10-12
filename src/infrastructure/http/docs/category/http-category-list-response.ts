@@ -1,7 +1,7 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ApiProperty } from '@nestjs/swagger'
 
 import { HttpPaginationResponse } from '../shared/http-pagination-response'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 class HttpEachCategoryListResponse {
   @ApiProperty({ type: String, example: new UniqueEntityID().toString() })

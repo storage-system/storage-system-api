@@ -1,14 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../database/prisma/prisma.service';
-import { MetricsOutput, OldStockMetrics, ProductMetrics } from '@/domain/enterprise/metrics/metrics-output';
-import ResourceNotFoundException from '@/core/exception/not-found-exception';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import NotificationException from '@/core/exception/notification-exception';
-import { Notification } from '@/core/validation/notification';
+import {
+  MetricsOutput,
+  OldStockMetrics,
+  ProductMetrics,
+} from '@/domain/enterprise/metrics/metrics-output'
+import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import NotificationException from '@/core/exception/notification-exception'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Notification } from '@/core/validation/notification'
+import { Injectable } from '@nestjs/common'
+
+import { PrismaService } from '../../../database/prisma/prisma.service'
 
 @Injectable()
 export class MetricsService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async findMetrics(userId: string): Promise<MetricsOutput> {
     const user = await this.getUser(userId)
@@ -20,7 +25,7 @@ export class MetricsService {
 
     return {
       oldStockMetrics,
-      productMetrics
+      productMetrics,
     }
   }
 
@@ -45,45 +50,47 @@ export class MetricsService {
             emailNotification: true,
             freeShippingOnOldStock: true,
             createdAt: true,
-            updatedAt: true
-          }
-        }
-      }
+            updatedAt: true,
+          },
+        },
+      },
     })
 
     if (!user) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID)
+      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID())
     }
 
     return user
   }
 
-  private async findOldStockMetrics(companyId: string): Promise<OldStockMetrics> {
-    const now = new Date();
-    const in30Days = new Date(now);
-    in30Days.setDate(now.getDate() + 30);
+  private async findOldStockMetrics(
+    companyId: string,
+  ): Promise<OldStockMetrics> {
+    const now = new Date()
+    const in30Days = new Date(now)
+    in30Days.setDate(now.getDate() + 30)
 
-    const in60Days = new Date(now);
-    in60Days.setDate(now.getDate() + 60);
+    const in60Days = new Date(now)
+    in60Days.setDate(now.getDate() + 60)
 
-    const in90Days = new Date(now);
-    in90Days.setDate(now.getDate() + 90);
-    
+    const in90Days = new Date(now)
+    in90Days.setDate(now.getDate() + 90)
+
     const [
       totalProductOldStock,
       totalOldStockValue,
       expiringIn30Days,
       expiringIn60Days,
-      expiringIn90Days
+      expiringIn90Days,
     ] = await this.prisma.$transaction([
       this.prisma.product.count({
         where: {
           deletedAt: null,
           companyId,
           dueDate: {
-            lt: now
+            lt: now,
           },
-        }
+        },
       }),
       this.prisma.$queryRaw`
         SELECT SUM(original_price * quantity_in_stock) AS totalOldStockValue
@@ -91,7 +98,7 @@ export class MetricsService {
         WHERE deleted_at IS NULL
         AND company_id = ${companyId}
         AND due_date < NOW();
-    ` ,
+    `,
       this.prisma.product.count({
         where: {
           deletedAt: null,
@@ -124,7 +131,9 @@ export class MetricsService {
       }),
     ])
 
-    const totalOldStockValueResult = Number((totalOldStockValue as any)[0].totaloldstockvalue)
+    const totalOldStockValueResult = Number(
+      (totalOldStockValue as any)[0].totaloldstockvalue,
+    )
 
     return {
       totalProductOldStock,
@@ -136,61 +145,63 @@ export class MetricsService {
   }
 
   private async findProductMetrics(companyId: string): Promise<ProductMetrics> {
-    const currentDate = new Date();
-    
+    const currentDate = new Date()
+
     const configuration = await this.prisma.configuration.findFirst({
       where: {
         companyId,
       },
-    });
-  
+    })
+
     if (!configuration) {
-      throw new NotificationException('Configuração não cadastrada', Notification.create())
+      throw new NotificationException(
+        'Configuração não cadastrada',
+        Notification.create(),
+      )
     }
 
-    const warningDays = configuration?.warningDays;
-    const warningDate = new Date();
-    warningDate.setDate(currentDate.getDate() + warningDays);
-  
-    const [
-      totalStockQuantity,
-      totalStockValue,
-      productsInWarningDays,
-    ] = await this.prisma.$transaction([
-      this.prisma.product.count({
-        where: {
-          deletedAt: null,
-          companyId,
-          dueDate: {
-            gt: currentDate
+    const warningDays = configuration?.warningDays
+    const warningDate = new Date()
+    warningDate.setDate(currentDate.getDate() + warningDays)
+
+    const [totalStockQuantity, totalStockValue, productsInWarningDays] =
+      await this.prisma.$transaction([
+        this.prisma.product.count({
+          where: {
+            deletedAt: null,
+            companyId,
+            dueDate: {
+              gt: currentDate,
+            },
           },
-        }
-      }),
-      this.prisma.$queryRaw`
+        }),
+        this.prisma.$queryRaw`
         SELECT SUM(original_price * quantity_in_stock) AS totalStockValue
         FROM products
         WHERE deleted_at IS NULL
         AND company_id = ${companyId}
         AND due_date > NOW();
       `,
-    this.prisma.product.count({
-      where: {
-        deletedAt: null,
-        companyId,
-        dueDate: {
-          lte: warningDate,
-          gte: currentDate
-        }
-      }
-    })
-    ]);
+        this.prisma.product.count({
+          where: {
+            deletedAt: null,
+            companyId,
+            dueDate: {
+              lte: warningDate,
+              gte: currentDate,
+            },
+          },
+        }),
+      ])
 
-    const totalStockValueResult = Number((totalStockValue as any)[0].totalstockvalue)
-  
+    const totalStockValueResult = Number(
+      (totalStockValue as any)[0].totalstockvalue,
+    )
+
     return {
       totalStockQuantity,
       totalStockValue: totalStockValueResult,
       productsInWarningDays,
-    };
+    }
   }
 }

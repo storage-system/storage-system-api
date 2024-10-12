@@ -1,5 +1,5 @@
-import { createZodDto } from "nestjs-zod"
-import { z } from "nestjs-zod/z"
+import { createZodDto } from 'nestjs-zod'
+import { z } from 'nestjs-zod/z'
 
 const createStyleBodySchema = z.object({
   companyId: z.string().uuid(),
@@ -12,4 +12,4 @@ const createStyleBodySchema = z.object({
   tertiaryColor: z.string(),
 })
 
-export class CreateStyleDTO extends createZodDto(createStyleBodySchema) { }
+export class CreateStyleDTO extends createZodDto(createStyleBodySchema) {}

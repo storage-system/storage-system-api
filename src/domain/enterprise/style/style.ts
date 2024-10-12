@@ -1,6 +1,6 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Entity } from "@/core/entities/entity"
-import { Optional } from "@/core/types/optional"
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+import { Entity } from '@/core/entities/entity'
 
 export interface StyleProps {
   companyId: UniqueEntityID
@@ -16,13 +16,10 @@ export interface StyleProps {
   deletedAt?: Date | null
 }
 
-export class StyleID extends UniqueEntityID { }
+export class StyleID extends UniqueEntityID {}
 
 export class Style extends Entity<StyleProps> {
-  static create(
-    props: Optional<StyleProps, 'createdAt'>,
-    id?: StyleID,
-  ) {
+  static create(props: Optional<StyleProps, 'createdAt'>, id?: StyleID) {
     const style = new Style(
       {
         createdAt: new Date(),
@@ -53,7 +50,7 @@ export class Style extends Entity<StyleProps> {
   }
 
   delete() {
-    this.props.deletedAt = new Date();
+    this.props.deletedAt = new Date()
   }
 
   get name() {

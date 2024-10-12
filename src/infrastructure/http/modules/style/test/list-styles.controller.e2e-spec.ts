@@ -1,14 +1,14 @@
-import request from 'supertest'
-import { Test } from "@nestjs/testing"
-import { INestApplication } from "@nestjs/common"
-import { UserFactory } from "test/factories/make-user"
-import { AppModule } from "@/infrastructure/app.module"
-import { DatabaseModule } from "@/infrastructure/database/database.module"
+import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { CompanyFactory } from 'test/factories/make-company'
 import { MainConfig } from '@/infrastructure/main.config'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { StyleFactory } from 'test/factories/make-style'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
 
 describe('List Styles (E2E)', () => {
   let app: INestApplication
@@ -18,7 +18,12 @@ describe('List Styles (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [CompanyFactory, UserFactory, AuthenticateFactory, StyleFactory],
+      providers: [
+        CompanyFactory,
+        UserFactory,
+        AuthenticateFactory,
+        StyleFactory,
+      ],
     }).compile()
     app = moduleRef.createNestApplication()
 
@@ -31,14 +36,15 @@ describe('List Styles (E2E)', () => {
   })
 
   test('[GET] /styles', async () => {
-    const { accessToken, companyId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, companyId } =
+      await authenticateFactory.makePrismaAuthenticate()
 
     await Promise.all([
       styleFactory.makePrismaStyle({
-        companyId: new UniqueEntityID(companyId)
+        companyId: new UniqueEntityID(companyId),
       }),
       styleFactory.makePrismaStyle({
-        companyId: new UniqueEntityID(companyId)
+        companyId: new UniqueEntityID(companyId),
       }),
     ])
 

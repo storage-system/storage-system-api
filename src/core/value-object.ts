@@ -1,4 +1,5 @@
 import { isEqual } from 'lodash'
+
 import { deepFreeze } from './object'
 
 interface ValueObjectProps {

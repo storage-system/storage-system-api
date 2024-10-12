@@ -1,5 +1,5 @@
-import { Category } from "@/domain/enterprise/category/category";
-import { Category as PrismaCategory } from "@prisma/client";
+import { Category } from '@/domain/enterprise/category/category'
+import { Category as PrismaCategory } from '@prisma/client'
 
 export class CategoryPresenter {
   static toHTTP(category: Category): Partial<PrismaCategory> {

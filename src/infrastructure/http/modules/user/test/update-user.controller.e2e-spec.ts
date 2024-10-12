@@ -1,12 +1,12 @@
-import request from 'supertest'
-import { Test } from "@nestjs/testing"
-import { INestApplication } from "@nestjs/common"
-import { UserFactory } from "test/factories/make-user"
-import { AppModule } from "@/infrastructure/app.module"
-import { DatabaseModule } from "@/infrastructure/database/database.module"
-import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { CompanyFactory } from 'test/factories/make-company'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
 
 describe('Update user (E2E)', () => {
   let app: INestApplication
@@ -27,7 +27,8 @@ describe('Update user (E2E)', () => {
   })
 
   test('[PATCH] /users/:id', async () => {
-    const { accessToken, userId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, userId } =
+      await authenticateFactory.makePrismaAuthenticate()
 
     const updateUser = {
       name: 'user-updated-01',
@@ -43,7 +44,7 @@ describe('Update user (E2E)', () => {
     const userOnDatabase = await prisma.user.findFirst({
       where: {
         name: updateUser.name,
-      }
+      },
     })
 
     expect(userOnDatabase).toBeTruthy()

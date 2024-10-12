@@ -1,13 +1,14 @@
-import { GetConfigurationUseCase } from './get-configuration-use-case'
-import { makeCompany } from 'test/factories/make-company'
-import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
 import { InMemoryConfigurationRepository } from 'test/repositories/in-memory-configuration-repository'
-import { makeUser } from 'test/factories/make-user'
-import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { makeConfiguration } from 'test/factories/make-configuration'
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+
+import { GetConfigurationUseCase } from './get-configuration-use-case'
 
 let companyRepository: CompaniesRepository
 let userRepository: UsersRepository
@@ -20,9 +21,7 @@ describe('Get Product Use Case', () => {
     companyRepository = new InMemoryCompaniesRepository()
     configurationRepository = new InMemoryConfigurationRepository()
 
-    useCase = new GetConfigurationUseCase(
-      configurationRepository
-    )
+    useCase = new GetConfigurationUseCase(configurationRepository)
   })
 
   it('dependencies should be defined', (): void => {
@@ -36,19 +35,19 @@ describe('Get Product Use Case', () => {
     })
 
     const user = await makeUser({
-      repository: userRepository
+      repository: userRepository,
     })
 
     const configuration = await makeConfiguration({
       repository: configurationRepository,
       override: {
         companyId: company.id,
-        userId: user.id
-      }
+        userId: user.id,
+      },
     })
 
     const result = await useCase.execute({
-      configurationId: configuration.id.toString()
+      configurationId: configuration.id.toString(),
     })
 
     expect(result).toBeDefined()

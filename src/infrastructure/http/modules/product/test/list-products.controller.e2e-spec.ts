@@ -1,14 +1,14 @@
-import request from 'supertest'
-import { Test } from "@nestjs/testing"
-import { INestApplication } from "@nestjs/common"
-import { UserFactory } from "test/factories/make-user"
-import { AppModule } from "@/infrastructure/app.module"
-import { DatabaseModule } from "@/infrastructure/database/database.module"
+import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { CompanyFactory } from 'test/factories/make-company'
-import { MainConfig } from '@/infrastructure/main.config'
-import { ProductFactory } from 'test/factories/make-product'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { CompanyFactory } from 'test/factories/make-company'
+import { ProductFactory } from 'test/factories/make-product'
+import { MainConfig } from '@/infrastructure/main.config'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
 
 describe('List products (E2E)', () => {
   let app: INestApplication
@@ -18,7 +18,12 @@ describe('List products (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [CompanyFactory, UserFactory, AuthenticateFactory, ProductFactory],
+      providers: [
+        CompanyFactory,
+        UserFactory,
+        AuthenticateFactory,
+        ProductFactory,
+      ],
     }).compile()
     app = moduleRef.createNestApplication()
 
@@ -31,14 +36,15 @@ describe('List products (E2E)', () => {
   })
 
   test('[GET] /products', async () => {
-    const { accessToken, companyId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, companyId } =
+      await authenticateFactory.makePrismaAuthenticate()
 
     await Promise.all([
       productFactory.makePrismaProduct({
-        companyId: new UniqueEntityID(companyId)
+        companyId: new UniqueEntityID(companyId),
       }),
       productFactory.makePrismaProduct({
-        companyId: new UniqueEntityID(companyId)
+        companyId: new UniqueEntityID(companyId),
       }),
     ])
 

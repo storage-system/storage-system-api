@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
+
 import { UsersRepository } from '../../../../enterprise/user/users-repository'
 
 interface DeleteUserUseCaseRequest {
@@ -9,15 +10,16 @@ interface DeleteUserUseCaseRequest {
 
 @Injectable()
 export class DeleteUserUseCase {
-  constructor(private usersRepository: UsersRepository) { }
+  constructor(private usersRepository: UsersRepository) {}
 
-  async execute({
-    userId,
-  }: DeleteUserUseCaseRequest) {
+  async execute({ userId }: DeleteUserUseCaseRequest) {
     const user = await this.usersRepository.findById(userId)
 
     if (!user) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(userId));
+      throw ResourceNotFoundException.with(
+        'Usuário',
+        new UniqueEntityID(userId),
+      )
     }
 
     await this.usersRepository.delete(userId)

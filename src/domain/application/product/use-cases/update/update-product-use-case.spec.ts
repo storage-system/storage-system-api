@@ -1,13 +1,17 @@
-import { ProductsRepository } from '../../../../enterprise/product/products-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
-import { makeProduct } from 'test/factories/make-product'
-import { makeUser } from 'test/factories/make-user'
-import { makeCompany } from 'test/factories/make-company'
-import { makeCategory } from 'test/factories/make-category'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
-import { UpdateProductUseCase, UpdateProductUseCaseRequest } from './update-product-use-case'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { makeCategory } from 'test/factories/make-category'
+import { makeProduct } from 'test/factories/make-product'
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+
+import {
+  UpdateProductUseCase,
+  UpdateProductUseCaseRequest,
+} from './update-product-use-case'
+import { ProductsRepository } from '../../../../enterprise/product/products-repository'
 
 let productsRepository: ProductsRepository
 let usersRepository: UsersRepository
@@ -29,7 +33,7 @@ describe('Update Product Use Case', () => {
 
   it('should be able to update product', async () => {
     const user = await makeUser({
-      repository: usersRepository
+      repository: usersRepository,
     })
 
     const company = await makeCompany({
@@ -37,22 +41,22 @@ describe('Update Product Use Case', () => {
     })
 
     const category = await makeCategory({
-      repository: categoriesRepository
+      repository: categoriesRepository,
     })
 
     const product = await makeProduct({
       repository: productsRepository,
       override: {
         companyId: company.id,
-        categoryIds: [category.id]
-      }
+        categoryIds: [category.id],
+      },
     })
 
     const productId = product.id.toString()
 
     const updateProductProps: UpdateProductUseCaseRequest = {
       productId,
-      name: 'product-updated'
+      name: 'product-updated',
     }
 
     await useCase.execute(updateProductProps)
@@ -70,6 +74,8 @@ describe('Update Product Use Case', () => {
       productId: fakeProductId,
     })
 
-    expect(response).rejects.toThrow(`Produto com ID ${fakeProductId} não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Produto com ID ${fakeProductId} não foi encontrado`,
+    )
   })
 })

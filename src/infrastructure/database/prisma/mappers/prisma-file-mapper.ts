@@ -1,4 +1,4 @@
-import { File, FileID } from '@/domain/enterprise/file/file';
+import { File, FileID } from '@/domain/enterprise/file/file'
 import { Prisma, File as PrismaFile } from '@prisma/client'
 
 export class PrismaFileMapper {

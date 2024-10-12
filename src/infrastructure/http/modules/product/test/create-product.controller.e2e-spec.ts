@@ -1,18 +1,19 @@
-import request from 'supertest'
-import { Test } from "@nestjs/testing"
-import { AppModule } from "@/infrastructure/app.module"
-import { CompanyFactory } from "test/factories/make-company"
-import { HttpStatus, INestApplication } from "@nestjs/common"
-import { DatabaseModule } from "@/infrastructure/database/database.module"
-import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { UserFactory } from 'test/factories/make-user'
-import { MainConfig } from '@/infrastructure/main.config'
-import { CreateProductDTO } from '../dto/create-product-dto'
-import { faker } from '@faker-js/faker'
 import { StatusProduct } from '@/domain/enterprise/product/product'
-import { CategoryFactory } from 'test/factories/make-category'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { CategoryFactory } from 'test/factories/make-category'
+import { HttpStatus, INestApplication } from '@nestjs/common'
+import { CompanyFactory } from 'test/factories/make-company'
+import { MainConfig } from '@/infrastructure/main.config'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { faker } from '@faker-js/faker'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
+
+import { CreateProductDTO } from '../dto/create-product-dto'
 
 describe('Create Product (E2E)', () => {
   let app: INestApplication
@@ -27,7 +28,7 @@ describe('Create Product (E2E)', () => {
         CompanyFactory,
         CategoryFactory,
         UserFactory,
-        AuthenticateFactory
+        AuthenticateFactory,
       ],
     }).compile()
     app = moduleRef.createNestApplication()
@@ -42,7 +43,8 @@ describe('Create Product (E2E)', () => {
   })
 
   test('[POST] /products', async () => {
-    const { accessToken, companyId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, companyId } =
+      await authenticateFactory.makePrismaAuthenticate()
 
     const category = await categoryFactory.makePrismaCategory({
       name: 'category-01',
@@ -68,7 +70,7 @@ describe('Create Product (E2E)', () => {
       }),
       quantityInStock: faker.number.int({
         max: 100,
-        min: 0
+        min: 0,
       }),
       validityInDays: faker.number.int({
         min: 1,

@@ -1,12 +1,13 @@
-import { PrismaService } from "../prisma.service";
-import { Configuration } from "@/domain/enterprise/configuration/configuration";
-import { PrismaConfigurationMapper } from "../mappers/prisma-configuration-mapper";
-import { ConfigurationRepository } from "@/domain/enterprise/configuration/configuration-repository";
-import { Injectable } from "@nestjs/common";
+import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
+import { Configuration } from '@/domain/enterprise/configuration/configuration'
+import { Injectable } from '@nestjs/common'
+
+import { PrismaConfigurationMapper } from '../mappers/prisma-configuration-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaConfigurationRepository implements ConfigurationRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(record: Configuration): Promise<void> {
     const data = PrismaConfigurationMapper.toPersistence(record)
@@ -20,7 +21,7 @@ export class PrismaConfigurationRepository implements ConfigurationRepository {
     const configuration = await this.prisma.configuration.findUnique({
       where: {
         id: anId,
-      }
+      },
     })
 
     if (!configuration) {
@@ -48,7 +49,7 @@ export class PrismaConfigurationRepository implements ConfigurationRepository {
       },
       data: {
         deletedAt: new Date(),
-      }
+      },
     })
   }
 }

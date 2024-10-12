@@ -1,6 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger'
-
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ApiProperty } from '@nestjs/swagger'
 
 export class HttpFileResponse {
   @ApiProperty({ type: String, example: new UniqueEntityID().toString() })

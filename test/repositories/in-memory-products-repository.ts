@@ -1,6 +1,6 @@
-import { PaginationProps, Pagination } from "@/core/entities/pagination";
-import { ProductsRepository } from "@/domain/enterprise/product/products-repository";
-import { Product } from "@/domain/enterprise/product/product";
+import { ProductsRepository } from '@/domain/enterprise/product/products-repository'
+import { PaginationProps, Pagination } from '@/core/entities/pagination'
+import { Product } from '@/domain/enterprise/product/product'
 
 export class InMemoryProductsRepository implements ProductsRepository {
   public items: Product[] = []
@@ -15,7 +15,10 @@ export class InMemoryProductsRepository implements ProductsRepository {
     return product
   }
 
-  async findAll({ page, perPage }: PaginationProps<Product>): Promise<Pagination<Product>> {
+  async findAll({
+    page,
+    perPage,
+  }: PaginationProps<Product>): Promise<Pagination<Product>> {
     const items = this.items.slice((page - 1) * perPage, page * perPage)
 
     return new Pagination({
@@ -36,7 +39,9 @@ export class InMemoryProductsRepository implements ProductsRepository {
   }
 
   async delete(productId: string): Promise<void> {
-    const filteredProducts = this.items.filter((product) => product.id.toString() !== productId)
+    const filteredProducts = this.items.filter(
+      (product) => product.id.toString() !== productId,
+    )
     this.items = filteredProducts
   }
 }

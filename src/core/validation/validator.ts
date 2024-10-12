@@ -1,4 +1,4 @@
-import { ValidationHandler } from "./validation-handler"
+import { ValidationHandler } from './validation-handler'
 
 export default abstract class Validator {
   abstract validate(): void

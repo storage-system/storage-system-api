@@ -1,10 +1,11 @@
-import { InMemoryCompaniesRepository } from "test/repositories/in-memory-companies-repository";
-import { makeCompany } from "test/factories/make-company";
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
-import { makeUser } from "test/factories/make-user";
-import { RemoveUsersUseCase } from "./remove-users-use-case";
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { CompaniesRepository } from "../../../../enterprise/company/companies-repository";
+import { makeCompany } from 'test/factories/make-company'
+import { makeUser } from 'test/factories/make-user'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
+import { RemoveUsersUseCase } from './remove-users-use-case'
 
 let companiesRepository: CompaniesRepository
 let usersRepository: UsersRepository
@@ -30,7 +31,7 @@ describe('Remove Users Use Case', () => {
 
     const user = await makeUser({
       override: {
-        companyId: company.id
+        companyId: company.id,
       },
       repository: usersRepository,
     })
@@ -41,7 +42,7 @@ describe('Remove Users Use Case', () => {
 
     await useCase.execute({
       companyId,
-      userIds: [user.id.toString()]
+      userIds: [user.id.toString()],
     })
 
     const companyOnDatabase = await companiesRepository.findById(companyId)

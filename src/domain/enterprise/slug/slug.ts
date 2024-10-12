@@ -31,18 +31,18 @@ export class Slug {
   }
 
   /**
- * Receives a string and normalized to remove accents.
- *
- * Example: "Eletrônicos" = "eletronicos"
- *
- * @param text {string}
- */
+   * Receives a string and normalized to remove accents.
+   *
+   * Example: "Eletrônicos" = "eletronicos"
+   *
+   * @param text {string}
+   */
   static convertToSlug(value: string): string {
     return value
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-');
+      .replace(/\s+/g, '-')
   }
 }

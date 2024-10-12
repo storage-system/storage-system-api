@@ -1,10 +1,11 @@
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { CreateCategoryUseCase } from './create-category-use-case'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
-import { makeCompany } from 'test/factories/make-company'
-import { Company } from '@/domain/enterprise/company/company'
-import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { Company } from '@/domain/enterprise/company/company'
+import { makeCompany } from 'test/factories/make-company'
+
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
+import { CreateCategoryUseCase } from './create-category-use-case'
 
 let categoriesRepository: CategoriesRepository
 let companiesRepository: CompaniesRepository
@@ -16,7 +17,10 @@ describe('Create Category', () => {
   beforeEach(async () => {
     categoriesRepository = new InMemoryCategoriesRepository()
     companiesRepository = new InMemoryCompaniesRepository()
-    useCase = new CreateCategoryUseCase(categoriesRepository, companiesRepository)
+    useCase = new CreateCategoryUseCase(
+      categoriesRepository,
+      companiesRepository,
+    )
 
     company = await makeCompany({
       repository: companiesRepository,
@@ -35,7 +39,9 @@ describe('Create Category', () => {
       isActive: true,
     })
 
-    const categoryOnDatabase = await categoriesRepository.findById(result.categoryId)
+    const categoryOnDatabase = await categoriesRepository.findById(
+      result.categoryId,
+    )
 
     expect(result).toBeDefined()
     expect(categoryOnDatabase?.id.toString()).toBe(result.categoryId)
@@ -51,6 +57,8 @@ describe('Create Category', () => {
     await useCase.execute(categoryMock)
     const response = useCase.execute(categoryMock)
 
-    expect(response).rejects.toThrow(`Category "${categoryMock.name}" already exists.`)
+    expect(response).rejects.toThrow(
+      `Category "${categoryMock.name}" already exists.`,
+    )
   })
 })

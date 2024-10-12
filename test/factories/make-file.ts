@@ -1,27 +1,25 @@
-import { faker } from "@faker-js/faker"
-import { FactoryProp } from "."
-import { File, FileProps } from "@/domain/enterprise/file/file"
+import { File, FileProps } from '@/domain/enterprise/file/file'
+import { faker } from '@faker-js/faker'
+
+import { FactoryProp } from '.'
 
 export async function makeFile({
   repository,
   override,
 }: FactoryProp<
-File,
+  File,
   Partial<
-  FileProps &
-    {
+    FileProps & {
       id: string
     }
   >
 > = {}): Promise<File> {
-  const file = File.create(
-    {
-      filename: faker.system.fileName(),
-      path: faker.system.filePath(),
-      size: faker.number.int(),
-      ...override,
-    }
-  )
+  const file = File.create({
+    filename: faker.system.fileName(),
+    path: faker.system.filePath(),
+    size: faker.number.int(),
+    ...override,
+  })
 
   if (repository) {
     await repository.create(file)

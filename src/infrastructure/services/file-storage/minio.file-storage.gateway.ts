@@ -1,9 +1,9 @@
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import { EnvService } from '@/infrastructure/env/env.service'
 import { Inject, Injectable } from '@nestjs/common'
+import { Readable } from 'stream'
 import { ReadStream } from 'fs'
 import * as Minio from 'minio'
-import { Readable } from 'stream'
 
 @Injectable()
 export class MinioFileStorageGateway implements FileStorageGateway {
@@ -12,16 +12,16 @@ export class MinioFileStorageGateway implements FileStorageGateway {
 
   constructor(
     @Inject(EnvService)
-    private readonly env: EnvService
+    private readonly env: EnvService,
   ) {
     this.minioClient = new Minio.Client({
       endPoint: this.env.get('MINIO_ENDPOINT'),
       port: Number(this.env.get('MINIO_PORT')),
       useSSL: this.env.get('MINIO_USE_SSL') === 'true',
       accessKey: this.env.get('MINIO_ACCESS_KEY'),
-      secretKey: this.env.get('MINIO_SECRET_KEY')
+      secretKey: this.env.get('MINIO_SECRET_KEY'),
     })
-    
+
     this.bucketName = this.env.get('MINIO_BUCKET_NAME')
   }
 
@@ -39,9 +39,9 @@ export class MinioFileStorageGateway implements FileStorageGateway {
       this.bucketName,
       fileName,
       file.buffer,
-      file.size
+      file.size,
     )
-    
+
     return fileName
   }
 
@@ -51,7 +51,7 @@ export class MinioFileStorageGateway implements FileStorageGateway {
       'GET',
       this.bucketName,
       fileName,
-      expiresTime
+      expiresTime,
     )
   }
 

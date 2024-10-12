@@ -1,37 +1,40 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { Product, StatusProduct } from '@/domain/enterprise/product/product';
-import { Slug } from '@/domain/enterprise/slug/slug';
+import { Product, StatusProduct } from '@/domain/enterprise/product/product'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Prisma, Product as PrismaProduct } from '@prisma/client'
+import { Slug } from '@/domain/enterprise/slug/slug'
 
 export class PrismaProductMapper {
   static toDomain(raw: PrismaProduct): Product {
-    return Product.create({
-      name: raw.name,
-      slug: Slug.create(raw.slug),
-      description: raw.description,
-      originalPrice: raw.originalPrice,
-      finalPrice: raw.finalPrice,
-      discountPercentage: raw.discountPercentage,
-      quantityInStock: raw.quantityInStock,
-      manufactureDate: raw.manufactureDate,
-      dueDate: raw.dueDate,
-      validityInDays: raw.validityInDays,
-      unitOfMeasure: raw.unitOfMeasure,
-      weight: raw.weight,
-      dimensions: {
-        height: raw.dimensionsHeight,
-        width: raw.dimensionsWidth,
-        depth: raw.dimensionsDepth
+    return Product.create(
+      {
+        name: raw.name,
+        slug: Slug.create(raw.slug),
+        description: raw.description,
+        originalPrice: raw.originalPrice,
+        finalPrice: raw.finalPrice,
+        discountPercentage: raw.discountPercentage,
+        quantityInStock: raw.quantityInStock,
+        manufactureDate: raw.manufactureDate,
+        dueDate: raw.dueDate,
+        validityInDays: raw.validityInDays,
+        unitOfMeasure: raw.unitOfMeasure,
+        weight: raw.weight,
+        dimensions: {
+          height: raw.dimensionsHeight,
+          width: raw.dimensionsWidth,
+          depth: raw.dimensionsDepth,
+        },
+        manufacturer: raw.manufacturer ?? undefined,
+        batch: raw.batch ?? undefined,
+        status: raw.status as StatusProduct,
+        companyId: new UniqueEntityID(raw.companyId),
+        categoryIds: [],
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt,
+        deletedAt: raw.deletedAt,
       },
-      manufacturer: raw.manufacturer ?? undefined,
-      batch: raw.batch ?? undefined,
-      status: raw.status as StatusProduct,
-      companyId: new UniqueEntityID(raw.companyId),
-      categoryIds: [],
-      createdAt: raw.createdAt,
-      updatedAt: raw.updatedAt,
-      deletedAt: raw.deletedAt,
-    }, new UniqueEntityID(raw.id))
+      new UniqueEntityID(raw.id),
+    )
   }
 
   static toPersistence(product: Product): Prisma.ProductUncheckedCreateInput {
@@ -56,11 +59,13 @@ export class PrismaProductMapper {
       batch: product.batch,
       status: product.status,
       companyId: product.companyId.toString(),
-      categories: product.categoryIds ? {
-        connect: product.categoryIds.map((categoryId) => ({
-          id: categoryId.toString(),
-        })),
-      } : undefined,
+      categories: product.categoryIds
+        ? {
+            connect: product.categoryIds.map((categoryId) => ({
+              id: categoryId.toString(),
+            })),
+          }
+        : undefined,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
       deletedAt: product.deletedAt,

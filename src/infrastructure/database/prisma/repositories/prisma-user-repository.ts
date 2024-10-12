@@ -1,41 +1,46 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
-import { UsersRepository } from "@/domain/enterprise/user/users-repository";
-import { Pagination } from "@/core/entities/pagination";
-import { User } from "@/domain/enterprise/user/user";
-import { PrismaUserMapper } from "../mappers/prisma-user-mapper";
-import { ListUsersCommand } from "@/domain/application/user/use-cases/retrieve/list/list-users-command";
+import { ListUsersCommand } from '@/domain/application/user/use-cases/retrieve/list/list-users-command'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { Pagination } from '@/core/entities/pagination'
+import { User } from '@/domain/enterprise/user/user'
+import { Injectable } from '@nestjs/common'
+
+import { PrismaUserMapper } from '../mappers/prisma-user-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  async findAll({ page, perPage, companyId }: ListUsersCommand): Promise<Pagination<User>> {
+  async findAll({
+    page,
+    perPage,
+    companyId,
+  }: ListUsersCommand): Promise<Pagination<User>> {
     const [users, count] = await this.prisma.$transaction([
       this.prisma.user.findMany({
         where: {
           deletedAt: null,
-          companyId: companyId,
+          companyId,
         },
         take: perPage,
         skip: (page - 1) * perPage,
         orderBy: {
-          createdAt: 'desc'
+          createdAt: 'desc',
         },
       }),
       this.prisma.user.count({
         where: {
           deletedAt: null,
-          companyId: companyId,
-        }
-      })
+          companyId,
+        },
+      }),
     ])
 
     return new Pagination({
       total: count,
       page,
       perPage,
-      items: users.map(PrismaUserMapper.toDomain)
+      items: users.map(PrismaUserMapper.toDomain),
     })
   }
 
@@ -49,7 +54,7 @@ export class PrismaUsersRepository implements UsersRepository {
     const user = await this.prisma.user.findUnique({
       where: {
         email,
-      }
+      },
     })
 
     if (!user) {
@@ -63,7 +68,7 @@ export class PrismaUsersRepository implements UsersRepository {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
-      }
+      },
     })
 
     if (!user) {
@@ -77,9 +82,9 @@ export class PrismaUsersRepository implements UsersRepository {
     const anUsers = await this.prisma.user.findMany({
       where: {
         id: {
-          in: ids
-        }
-      }
+          in: ids,
+        },
+      },
     })
 
     return anUsers.map((anUser) => PrismaUserMapper.toDomain(anUser))
@@ -110,8 +115,8 @@ export class PrismaUsersRepository implements UsersRepository {
         id: anId,
       },
       data: {
-        deletedAt: new Date()
-      }
+        deletedAt: new Date(),
+      },
     })
   }
 }

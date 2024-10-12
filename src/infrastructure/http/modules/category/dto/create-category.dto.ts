@@ -1,5 +1,5 @@
-import { createZodDto } from "nestjs-zod"
-import { z } from "nestjs-zod/z"
+import { createZodDto } from 'nestjs-zod'
+import { z } from 'nestjs-zod/z'
 
 export const createCategoryBodySchema = z.object({
   name: z.string(),
@@ -8,4 +8,4 @@ export const createCategoryBodySchema = z.object({
   fileId: z.string().uuid().optional(),
 })
 
-export class CreateCategoryDTO extends createZodDto(createCategoryBodySchema) { }
+export class CreateCategoryDTO extends createZodDto(createCategoryBodySchema) {}

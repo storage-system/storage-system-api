@@ -1,19 +1,19 @@
-import { faker } from "@faker-js/faker"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { FactoryProp } from "."
-import { Style, StyleProps } from "@/domain/enterprise/style/style"
-import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
-import { PrismaStyleMapper } from "@/infrastructure/database/prisma/mappers/prisma-style-mapper"
-import { Injectable } from "@nestjs/common"
+import { PrismaStyleMapper } from '@/infrastructure/database/prisma/mappers/prisma-style-mapper'
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { Style, StyleProps } from '@/domain/enterprise/style/style'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
+import { faker } from '@faker-js/faker'
+
+import { FactoryProp } from '.'
 
 export async function makeStyle({
   repository,
   override,
 }: FactoryProp<
-Style,
+  Style,
   Partial<
-  StyleProps &
-    {
+    StyleProps & {
       id: string
     }
   >
@@ -42,15 +42,13 @@ Style,
 
 @Injectable()
 export class StyleFactory {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  async makePrismaStyle(
-    data: Partial<StyleProps> = {},
-  ): Promise<Style> {
+  async makePrismaStyle(data: Partial<StyleProps> = {}): Promise<Style> {
     const style = await makeStyle({ override: data })
 
     await this.prisma.style.create({
-      data: PrismaStyleMapper.toPersistence(style)
+      data: PrismaStyleMapper.toPersistence(style),
     })
 
     return style

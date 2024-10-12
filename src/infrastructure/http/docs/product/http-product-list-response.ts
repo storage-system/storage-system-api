@@ -1,8 +1,8 @@
+import { StatusProduct } from '@/domain/enterprise/product/product'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ApiProperty } from '@nestjs/swagger'
 
 import { HttpPaginationResponse } from '../shared/http-pagination-response'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { StatusProduct } from '@/domain/enterprise/product/product'
 import { HttpItemResponse } from '../shared/http-item-response'
 
 class HttpEachProductListResponse {

@@ -1,16 +1,16 @@
-import { SearchQuery } from "@/core/entities/search-query";
-import { UserRoles } from "@/domain/enterprise/user/user-types";
+import { UserRoles } from '@/domain/enterprise/user/user-types'
+import { SearchQuery } from '@/core/entities/search-query'
 
 export interface ListUsersCommandProps {
-  page: number;
-  perPage: number;
-  companyId: string;
-  roles: UserRoles[];
+  page: number
+  perPage: number
+  companyId: string
+  roles: UserRoles[]
 }
 
 export class ListUsersCommand extends SearchQuery {
-  companyId?: string;
-  roles?: UserRoles[];
+  companyId?: string
+  roles?: UserRoles[]
 
   protected constructor({
     page = 1,
@@ -18,9 +18,9 @@ export class ListUsersCommand extends SearchQuery {
     companyId,
     roles,
   }: Partial<ListUsersCommandProps>) {
-    super(page, perPage);
-    this.companyId = companyId;
-    this.roles = roles;
+    super(page, perPage)
+    this.companyId = companyId
+    this.roles = roles
   }
 
   static create({
@@ -34,6 +34,6 @@ export class ListUsersCommand extends SearchQuery {
       perPage,
       companyId,
       roles,
-    });
+    })
   }
 }

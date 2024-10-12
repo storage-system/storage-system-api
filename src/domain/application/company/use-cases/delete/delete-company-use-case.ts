@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common'
-import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import NotAuthorizedException from '@/core/exception/not-authorized-exception'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { User } from '@/domain/enterprise/user/user'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Notification } from '@/core/validation/notification'
-import NotAuthorizedException from '@/core/exception/not-authorized-exception'
+import { User } from '@/domain/enterprise/user/user'
+import { Injectable } from '@nestjs/common'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
 
 interface EditCompanyUseCaseRequest {
   authorId: string
@@ -17,7 +18,7 @@ export class DeleteCompanyUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private companiesRepository: CompaniesRepository,
-  ) { }
+  ) {}
 
   async execute({
     authorId,
@@ -28,17 +29,26 @@ export class DeleteCompanyUseCase {
     const company = await this.companiesRepository.findById(companyId)
 
     if (!company) {
-      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(companyId));
+      throw ResourceNotFoundException.with(
+        'Empresa',
+        new UniqueEntityID(companyId),
+      )
     }
 
     const author = await this.usersRepository.findById(authorId)
 
     if (!author) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID(authorId));
+      throw ResourceNotFoundException.with(
+        'Usuário',
+        new UniqueEntityID(authorId),
+      )
     }
 
     if (!User.canDeleteCompany(author.roles)) {
-      throw new NotAuthorizedException('User not authorized to delete company', notification);
+      throw new NotAuthorizedException(
+        'User not authorized to delete company',
+        notification,
+      )
     }
 
     await this.companiesRepository.delete(companyId)

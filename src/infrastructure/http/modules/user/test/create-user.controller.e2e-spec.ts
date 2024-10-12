@@ -1,8 +1,8 @@
-import { UserRoles } from '@/domain/enterprise/user/user-types'
-import { AppModule } from '@/infrastructure/app.module'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { faker } from '@faker-js/faker'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { HttpStatus, INestApplication } from '@nestjs/common'
+import { AppModule } from '@/infrastructure/app.module'
+import { faker } from '@faker-js/faker'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
@@ -27,7 +27,7 @@ describe('Create user (E2E)', () => {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: faker.string.alphanumeric({
-        length: 8
+        length: 8,
       }),
       phone: faker.phone.number(),
       roles: [UserRoles.MEMBER],

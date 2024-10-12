@@ -1,6 +1,6 @@
-import { ReportFrequency } from "@/domain/enterprise/configuration/configuration"
-import { createZodDto } from "nestjs-zod"
-import { z } from "nestjs-zod/z"
+import { ReportFrequency } from '@/domain/enterprise/configuration/configuration'
+import { createZodDto } from 'nestjs-zod'
+import { z } from 'nestjs-zod/z'
 
 const updateConfigurationBodySchema = z.object({
   daysBeforeOldStock: z.number().min(1).max(999).optional(),
@@ -12,4 +12,6 @@ const updateConfigurationBodySchema = z.object({
   reportFrequency: z.nativeEnum(ReportFrequency).optional(),
 })
 
-export class UpdateConfigurationDTO extends createZodDto(updateConfigurationBodySchema) { }
+export class UpdateConfigurationDTO extends createZodDto(
+  updateConfigurationBodySchema,
+) {}

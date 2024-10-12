@@ -1,6 +1,7 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+
 import { Subcategory, SubcategoryProps } from './subcategory'
 import { Slug } from '../slug/slug'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 describe('Subcategory Entity', () => {
   it('should create a subcategory with provided props', () => {

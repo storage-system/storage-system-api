@@ -1,12 +1,13 @@
-import { Either, right } from "@/core/either"
-import { User } from "@/domain/enterprise/user/user"
-import { UserRoles } from "@/domain/enterprise/user/user-types"
-import { UsersRepository } from "../../../../enterprise/user/users-repository"
-import { Injectable } from "@nestjs/common"
-import { Notification } from "@/core/validation/notification"
-import { AlreadyExistsError } from "@/core/errors/already-exists-error"
-import { HashGenerator } from "@/domain/application/cryptography/hash-generator"
-import NotificationException from "@/core/exception/notification-exception"
+import { HashGenerator } from '@/domain/application/cryptography/hash-generator'
+import NotificationException from '@/core/exception/notification-exception'
+import { AlreadyExistsError } from '@/core/errors/already-exists-error'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
+import { Notification } from '@/core/validation/notification'
+import { User } from '@/domain/enterprise/user/user'
+import { Either, right } from '@/core/either'
+import { Injectable } from '@nestjs/common'
+
+import { UsersRepository } from '../../../../enterprise/user/users-repository'
 
 interface CreateUserUseCaseRequest {
   name: string
@@ -25,9 +26,15 @@ export class CreateUserUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private hashGenerator: HashGenerator,
-  ) { }
+  ) {}
 
-  async execute({ name, email, password, phone, roles }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+  async execute({
+    name,
+    email,
+    password,
+    phone,
+    roles,
+  }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
     const notification = Notification.create()
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
@@ -53,7 +60,7 @@ export class CreateUserUseCase {
     await this.usersRepository.create(user)
 
     return {
-      userId: user.id.toString()
+      userId: user.id.toString(),
     }
   }
 }

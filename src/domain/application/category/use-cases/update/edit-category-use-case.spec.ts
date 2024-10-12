@@ -1,10 +1,11 @@
-import { makeCategory } from 'test/factories/make-category'
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
-import { EditCategoryUseCase } from './edit-category-use-case'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
-import { makeCompany } from 'test/factories/make-company'
-import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { makeCategory } from 'test/factories/make-category'
+import { makeCompany } from 'test/factories/make-company'
+
+import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
+import { EditCategoryUseCase } from './edit-category-use-case'
 
 let categoriesRepository: CategoriesRepository
 let companiesRepository: CompaniesRepository
@@ -30,7 +31,7 @@ describe('Edit Category', () => {
 
     const newCategory = await makeCategory({
       override: {
-        companyId: company.id
+        companyId: company.id,
       },
       repository: categoriesRepository,
     })
@@ -41,7 +42,9 @@ describe('Edit Category', () => {
       name: 'category-update-01',
     })
 
-    const categoryOnDatabase = await categoriesRepository.findById(newCategory.id.toString())
+    const categoryOnDatabase = await categoriesRepository.findById(
+      newCategory.id.toString(),
+    )
 
     expect(categoryOnDatabase?.name).toBe('category-update-01')
   })
@@ -58,7 +61,9 @@ describe('Edit Category', () => {
       isActive: true,
     })
 
-    expect(response).rejects.toThrow(`Categoria com ID category-01 não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Categoria com ID category-01 não foi encontrado`,
+    )
   })
 
   it('should not be able to edit a category that company does not exist', async () => {
@@ -69,7 +74,9 @@ describe('Edit Category', () => {
       isActive: true,
     })
 
-    expect(response).rejects.toThrow(`Empresa com ID company-01 não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Empresa com ID company-01 não foi encontrado`,
+    )
   })
 
   it('should not be able to edit a category from another company', async () => {
@@ -84,7 +91,7 @@ describe('Edit Category', () => {
 
     const newCategory = await makeCategory({
       override: {
-        companyId: company.id
+        companyId: company.id,
       },
       repository: categoriesRepository,
     })

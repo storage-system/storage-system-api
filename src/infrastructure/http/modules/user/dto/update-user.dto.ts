@@ -1,6 +1,6 @@
-import { UserRoles } from "@/domain/enterprise/user/user-types"
-import { createZodDto } from "nestjs-zod"
-import { z } from "nestjs-zod/z"
+import { UserRoles } from '@/domain/enterprise/user/user-types'
+import { createZodDto } from 'nestjs-zod'
+import { z } from 'nestjs-zod/z'
 
 const updateUserBodySchema = z.object({
   name: z.string().optional(),
@@ -10,5 +10,4 @@ const updateUserBodySchema = z.object({
   roles: z.array(z.nativeEnum(UserRoles)).optional(),
 })
 
-
-export class UpdateUserDTO extends createZodDto(updateUserBodySchema) { }
+export class UpdateUserDTO extends createZodDto(updateUserBodySchema) {}

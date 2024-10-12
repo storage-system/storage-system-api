@@ -1,6 +1,6 @@
-import { Entity } from '@/core/entities/entity'
-import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+import { Entity } from '@/core/entities/entity'
 
 export class CompanyID extends UniqueEntityID {}
 
@@ -57,10 +57,7 @@ export class Company extends Entity<CompanyProps> {
     this.props.updatedAt = new Date()
   }
 
-  static create(
-    props: Optional<CompanyProps, 'createdAt'>,
-    id?: CompanyID,
-  ) {
+  static create(props: Optional<CompanyProps, 'createdAt'>, id?: CompanyID) {
     const company = new Company(
       {
         ...props,

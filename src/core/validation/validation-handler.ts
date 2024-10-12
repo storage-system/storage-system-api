@@ -1,4 +1,4 @@
-import Error from "./error"
+import Error from './error'
 
 export interface Validation<T> {
   validate(): T

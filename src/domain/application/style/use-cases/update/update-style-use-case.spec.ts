@@ -1,10 +1,14 @@
-import { makeCompany } from 'test/factories/make-company'
-import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
-import { UpdateStyleUseCase, UpdateStyleUseCaseRequest } from './update-style-use-case'
-import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { InMemoryStyleRepository } from 'test/repositories/in-memory-style-repository'
+import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { makeCompany } from 'test/factories/make-company'
 import { makeStyle } from 'test/factories/make-style'
+
+import {
+  UpdateStyleUseCase,
+  UpdateStyleUseCaseRequest,
+} from './update-style-use-case'
 
 let companyRepository: CompaniesRepository
 let styleRepository: StyleRepository
@@ -33,7 +37,7 @@ describe('Update Style Use Case', () => {
       repository: styleRepository,
       override: {
         companyId: company.id,
-      }
+      },
     })
 
     const styleId = style.id.toString()
@@ -60,6 +64,8 @@ describe('Update Style Use Case', () => {
       styleId: fakeStyleId,
     })
 
-    expect(response).rejects.toThrow(`Estilo com ID ${fakeStyleId} não foi encontrado`)
+    expect(response).rejects.toThrow(
+      `Estilo com ID ${fakeStyleId} não foi encontrado`,
+    )
   })
 })

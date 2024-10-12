@@ -1,10 +1,15 @@
-import { faker } from "@faker-js/faker"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { FactoryProp } from "."
-import { Configuration, ConfigurationProps, ReportFrequency } from "@/domain/enterprise/configuration/configuration"
-import { PrismaService } from "@/infrastructure/database/prisma/prisma.service"
-import { Injectable } from "@nestjs/common"
-import { PrismaConfigurationMapper } from "@/infrastructure/database/prisma/mappers/prisma-configuration-mapper"
+import {
+  Configuration,
+  ConfigurationProps,
+  ReportFrequency,
+} from '@/domain/enterprise/configuration/configuration'
+import { PrismaConfigurationMapper } from '@/infrastructure/database/prisma/mappers/prisma-configuration-mapper'
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
+import { faker } from '@faker-js/faker'
+
+import { FactoryProp } from '.'
 
 export async function makeConfiguration({
   repository,
@@ -12,8 +17,7 @@ export async function makeConfiguration({
 }: FactoryProp<
   Configuration,
   Partial<
-    ConfigurationProps &
-    {
+    ConfigurationProps & {
       id: string
     }
   >
@@ -49,7 +53,7 @@ export async function makeConfiguration({
 
 @Injectable()
 export class ConfigurationFactory {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async makeConfigurationProduct(
     data: Partial<ConfigurationProps> = {},
@@ -57,7 +61,7 @@ export class ConfigurationFactory {
     const configuration = await makeConfiguration({ override: data })
 
     await this.prisma.configuration.create({
-      data: PrismaConfigurationMapper.toPersistence(configuration)
+      data: PrismaConfigurationMapper.toPersistence(configuration),
     })
 
     return configuration

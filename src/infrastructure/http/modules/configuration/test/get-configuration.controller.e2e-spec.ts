@@ -1,14 +1,14 @@
-import { AppModule } from '@/infrastructure/app.module'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { HttpStatus, INestApplication } from '@nestjs/common'
-import { Test } from '@nestjs/testing'
-import request from 'supertest'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { UserFactory } from 'test/factories/make-user'
-import { CompanyFactory } from 'test/factories/make-company'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { ConfigurationFactory } from 'test/factories/make-configuration'
+import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { HttpStatus, INestApplication } from '@nestjs/common'
+import { CompanyFactory } from 'test/factories/make-company'
+import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
 
 describe('Get Configuration By Id (E2E)', () => {
   let app: INestApplication
@@ -24,7 +24,7 @@ describe('Get Configuration By Id (E2E)', () => {
         CompanyFactory,
         AuthenticateFactory,
         ConfigurationFactory,
-      ]
+      ],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -36,10 +36,11 @@ describe('Get Configuration By Id (E2E)', () => {
   })
 
   test('[GET] /configurations/:id', async () => {
-    const { accessToken, companyId, userId } = await authenticateFactory.makePrismaAuthenticate()
+    const { accessToken, companyId, userId } =
+      await authenticateFactory.makePrismaAuthenticate()
     const configuration = await configurationFactory.makeConfigurationProduct({
       userId: new UniqueEntityID(userId),
-      companyId: new UniqueEntityID(companyId)
+      companyId: new UniqueEntityID(companyId),
     })
     const configurationId = configuration.id.toString()
 
@@ -51,7 +52,9 @@ describe('Get Configuration By Id (E2E)', () => {
     expect(response.body.id).toBe(configurationId)
     expect(response.body.userId).toBe(userId)
     expect(response.body.companyId).toBe(companyId)
-    expect(response.body.daysBeforeOldStock).toBe(configuration.daysBeforeOldStock)
+    expect(response.body.daysBeforeOldStock).toBe(
+      configuration.daysBeforeOldStock,
+    )
     expect(response.body.reportFrequency).toBe(configuration.reportFrequency)
   })
 })

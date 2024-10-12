@@ -1,6 +1,6 @@
-import { ReportFrequency } from "@/domain/enterprise/configuration/configuration"
-import { createZodDto } from "nestjs-zod"
-import { z } from "nestjs-zod/z"
+import { ReportFrequency } from '@/domain/enterprise/configuration/configuration'
+import { createZodDto } from 'nestjs-zod'
+import { z } from 'nestjs-zod/z'
 
 const createConfigurationBodySchema = z.object({
   userId: z.string().uuid(),
@@ -11,7 +11,9 @@ const createConfigurationBodySchema = z.object({
   systemNotification: z.boolean(),
   autoDiscardAfterExpiration: z.boolean(),
   freeShippingOnOldStock: z.boolean(),
-  reportFrequency: z.nativeEnum(ReportFrequency)
+  reportFrequency: z.nativeEnum(ReportFrequency),
 })
 
-export class CreateConfigurationDTO extends createZodDto(createConfigurationBodySchema) { }
+export class CreateConfigurationDTO extends createZodDto(
+  createConfigurationBodySchema,
+) {}

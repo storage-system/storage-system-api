@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common'
-import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
+
+import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
 
 interface EditCompanyUseCaseRequest {
   name: string | undefined
@@ -13,7 +14,7 @@ interface EditCompanyUseCaseRequest {
 
 @Injectable()
 export class EditCompanyUseCase {
-  constructor(private companiesRepository: CompaniesRepository) { }
+  constructor(private companiesRepository: CompaniesRepository) {}
 
   async execute({
     name,
@@ -25,7 +26,10 @@ export class EditCompanyUseCase {
     const company = await this.companiesRepository.findById(companyId)
 
     if (!company) {
-      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID(companyId));
+      throw ResourceNotFoundException.with(
+        'Empresa',
+        new UniqueEntityID(companyId),
+      )
     }
 
     company.update({

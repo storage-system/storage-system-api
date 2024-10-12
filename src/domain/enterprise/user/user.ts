@@ -1,6 +1,7 @@
-import { Entity } from '@/core/entities/entity'
-import { Optional } from '@/core/types/optional'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+import { Entity } from '@/core/entities/entity'
+
 import { UserRoles } from './user-types'
 
 export interface UserProps {
@@ -37,7 +38,7 @@ export class User extends Entity<UserProps> {
   }
 
   public get companyId(): UniqueEntityID | undefined {
-    return this.props.companyId;
+    return this.props.companyId
   }
 
   get createdAt() {
@@ -56,10 +57,7 @@ export class User extends Entity<UserProps> {
     this.props.updatedAt = new Date()
   }
 
-  static create(
-    props: Optional<UserProps, 'createdAt'>,
-    id?: UniqueEntityID,
-  ) {
+  static create(props: Optional<UserProps, 'createdAt'>, id?: UniqueEntityID) {
     const user = new User(
       {
         ...props,

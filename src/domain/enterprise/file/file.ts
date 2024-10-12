@@ -1,4 +1,4 @@
- import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ValueObject } from '@/core/value-object'
 import { Replace } from '@/core/replace'
 
