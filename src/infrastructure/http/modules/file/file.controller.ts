@@ -16,7 +16,8 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 
-import { HttpFileCreatedResponse } from './dto/file'
+import { HttpFileCreatedResponse } from './dto/http-file-created-response'
+import { HttpGetFileUrlResponse } from './dto/http-get-file-url-response'
 
 @ApiTags('Files')
 @Controller('/files')
@@ -36,6 +37,7 @@ export class FileController {
     return { id: fileId }
   }
 
+  @ApiOkResponse({ type: HttpGetFileUrlResponse })
   @Get('url/:fileId')
   async getFileUrl(@Param('fileId') fileId: string) {
     return await this.getFileUrlUseCase.execute(fileId)
