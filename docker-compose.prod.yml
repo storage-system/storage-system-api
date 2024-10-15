@@ -1,0 +1,73 @@
+services:
+  api:
+    build: .
+    image: pveras/storage-system-api
+    container_name: storage-system-api
+    env_file:
+      - .env
+    depends_on:
+      postgres: 
+        condition: service_healthy
+      minio: 
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
+    ports:
+      - 3333:3333
+    
+  migrator:
+    build: .
+    image: pveras/storage-system-api
+    command: bash -c "npx prisma migrate deploy"
+    container_name: storage-system-migrator
+    env_file:
+      - .env
+    depends_on:
+      postgres: 
+        condition: service_healthy
+      minio: 
+        condition: service_healthy
+      
+  postgres:
+    container_name: storage-system-pg
+    image: postgres
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - storage_system_pg:/data/postgres
+
+  minio:
+    image: docker.io/bitnami/minio:2022
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://${MINIO_ENDPOINT}:${MINIO_PORT}/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - 'storage_system_minio:/data'
+
+volumes:
+  storage_system_pg:
+    external: true
+  storage_system_minio:
+    external: true
