@@ -39,7 +39,6 @@ model Company {
   email       String  @unique
   contact     String
   responsible String
-  password    String
   isActive    Boolean @default(true)
 
   createdAt DateTime  @default(now()) @map("created_at")

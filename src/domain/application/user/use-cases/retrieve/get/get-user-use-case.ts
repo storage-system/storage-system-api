@@ -22,7 +22,7 @@ export class GetUserUseCase {
 
     if (!user) {
       throw ResourceNotFoundException.with(
-        'Estilização',
+        'Usuário',
         new UniqueEntityID(anInput.userId),
       )
     }

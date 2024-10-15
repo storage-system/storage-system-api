@@ -8,7 +8,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common'
 import { GetCompanyUseCase } from '@/domain/application/company/use-cases/retrieve/get-company/get-company-use-case'
 import { RemoveUsersUseCase } from '@/domain/application/company/use-cases/remove-users/remove-users-use-case'
@@ -23,7 +22,7 @@ import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Public } from '@/infrastructure/auth/public'
 import { ApiTags } from '@nestjs/swagger'
 
-import { CreateAccountDTO } from './dto/create-account.dto'
+import { CreateCompanyDTO } from './dto/create-company.dto'
 import { EditCompanyDTO } from './dto/edit-company.dto'
 import { RemoveUsersDTO } from './dto/remove-users.dto'
 
@@ -42,13 +41,12 @@ export class CompanyController {
   @Post()
   @Public()
   @HttpCode(201)
-  async create(@Body() body: CreateAccountDTO) {
-    const { name, email, password, contact, responsible, users } = body
+  async create(@Body() body: CreateCompanyDTO) {
+    const { name, email, contact, responsible, users } = body
 
     return await this.createCompanyUseCase.execute({
       name,
       email,
-      password,
       contact,
       responsible,
       users,

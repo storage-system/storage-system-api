@@ -22,7 +22,6 @@ export async function makeCompany({
     {
       name: faker.company.name(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
       contact: faker.phone.number(),
       responsible: faker.person.fullName(),
       users: [],

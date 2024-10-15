@@ -22,7 +22,6 @@ export class PrismaCompanyMapper {
       {
         name: raw.name,
         email: raw.email,
-        password: raw.password,
         contact: raw.contact,
         responsible: raw.responsible,
         users: raw.users.map((user) => user.id),
@@ -39,7 +38,6 @@ export class PrismaCompanyMapper {
       id: company.id.toString(),
       name: company.name,
       email: company.email,
-      password: company.password,
       contact: company.contact,
       responsible: company.responsible,
     }

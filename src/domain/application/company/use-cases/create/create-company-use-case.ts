@@ -2,11 +2,9 @@ import NotificationException from '@/core/exception/notification-exception'
 import { AlreadyExistsError } from '@/core/errors/already-exists-error'
 import { Company } from '@/domain/enterprise/company/company'
 import { Notification } from '@/core/validation/notification'
-import { Either, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 
 import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
-import { HashGenerator } from '../../../cryptography/hash-generator'
 
 interface CreateCompanyUseCaseRequest {
   name: string
@@ -14,7 +12,6 @@ interface CreateCompanyUseCaseRequest {
   contact: string
   responsible: string
   users: string[] | undefined
-  password: string
 }
 
 type CreateCompanyUseCaseResponse = {
@@ -25,7 +22,6 @@ type CreateCompanyUseCaseResponse = {
 export class CreateCompanyUseCase {
   constructor(
     private companiesRepository: CompaniesRepository,
-    private hashGenerator: HashGenerator,
   ) {}
 
   async execute({
@@ -34,7 +30,6 @@ export class CreateCompanyUseCase {
     contact,
     responsible,
     users,
-    password,
   }: CreateCompanyUseCaseRequest): Promise<CreateCompanyUseCaseResponse> {
     const notification = Notification.create()
 
@@ -45,15 +40,12 @@ export class CreateCompanyUseCase {
       notification.appendAnError(new AlreadyExistsError('Company', email))
     }
 
-    const hashedPassword = await this.hashGenerator.hash(password)
-
     const company = Company.create({
       name,
       email,
       contact,
       responsible,
       users: users ?? [],
-      password: hashedPassword,
     })
 
     if (notification.hasErrors()) {

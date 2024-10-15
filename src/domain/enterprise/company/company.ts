@@ -7,7 +7,6 @@ export class CompanyID extends UniqueEntityID {}
 export interface CompanyProps {
   name: string
   email: string
-  password: string
   contact: string
   responsible: string
   users: string[]
@@ -23,10 +22,6 @@ export class Company extends Entity<CompanyProps> {
 
   get email() {
     return this.props.email
-  }
-
-  get password() {
-    return this.props.password
   }
 
   get contact() {
