@@ -31,7 +31,7 @@ describe('Update User', () => {
       repository,
     })
 
-    await repository.create(newUser)
+    await repository.save(newUser)
 
     const updateUser = {
       userId,
