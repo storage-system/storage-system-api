@@ -1,4 +1,4 @@
-import { Prisma, Category as PrismaCategory } from '@prisma/client'
+import { Category as PrismaCategory, Prisma } from '@prisma/client'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Category } from '@/domain/enterprise/category/category'
 import { FileID } from '@/domain/enterprise/file/file'

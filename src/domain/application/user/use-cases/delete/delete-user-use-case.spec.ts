@@ -31,7 +31,7 @@ describe('Delete User', () => {
       repository,
     })
 
-    await repository.create(newUser)
+    await repository.save(newUser)
 
     await useCase.execute({
       userId,

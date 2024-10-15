@@ -34,7 +34,7 @@ export async function makeUser({
   )
 
   if (repository) {
-    await repository.create(user)
+    await repository.save(user)
   }
 
   return user

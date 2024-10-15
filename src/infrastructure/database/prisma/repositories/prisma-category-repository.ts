@@ -1,5 +1,5 @@
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
-import { PaginationProps, Pagination } from '@/core/entities/pagination'
+import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Category } from '@/domain/enterprise/category/category'
 import { Injectable } from '@nestjs/common'
 
@@ -78,7 +78,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     return PrismaCategoryMapper.toDomain(category)
   }
 
-  async create(category: Category): Promise<void> {
+  async save(category: Category): Promise<void> {
     const data = PrismaCategoryMapper.toPersistence(category)
 
     await this.prisma.category.create({

@@ -24,7 +24,7 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
     return company
   }
 
-  async create(company: Company): Promise<void> {
+  async save(company: Company): Promise<void> {
     this.items.push(company)
   }
 

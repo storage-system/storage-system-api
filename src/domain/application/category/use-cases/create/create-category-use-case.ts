@@ -56,7 +56,7 @@ export class CreateCategoryUseCase {
       companyId: new UniqueEntityID(companyId),
     })
 
-    await this.categoriesRepository.create(category)
+    await this.categoriesRepository.save(category)
 
     return {
       categoryId: category.id.toString(),

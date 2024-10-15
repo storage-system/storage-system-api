@@ -2,7 +2,7 @@ import {
   Configuration,
   ReportFrequency,
 } from '@/domain/enterprise/configuration/configuration'
-import { Prisma, Configuration as PrismaConfiguration } from '@prisma/client'
+import { Configuration as PrismaConfiguration, Prisma } from '@prisma/client'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export class PrismaConfigurationMapper {

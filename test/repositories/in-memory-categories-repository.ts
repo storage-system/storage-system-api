@@ -36,7 +36,7 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     return item
   }
 
-  async create(category: Category) {
+  async save(category: Category) {
     this.items.push(category)
   }
 

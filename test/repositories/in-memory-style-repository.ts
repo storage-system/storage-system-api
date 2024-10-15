@@ -27,7 +27,7 @@ export class InMemoryStyleRepository implements StyleRepository {
     return style
   }
 
-  async create(style: Style): Promise<void> {
+  async save(style: Style): Promise<void> {
     this.items.push(style)
   }
 

@@ -51,7 +51,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     return PrismaCompanyMapper.toDomain(company)
   }
 
-  async create(company: Company): Promise<void> {
+  async save(company: Company): Promise<void> {
     const data = PrismaCompanyMapper.toPersistence(company)
 
     await this.prisma.company.create({

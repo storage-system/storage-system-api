@@ -1,5 +1,5 @@
 import { File, FileID } from '@/domain/enterprise/file/file'
-import { Prisma, File as PrismaFile } from '@prisma/client'
+import { File as PrismaFile, Prisma } from '@prisma/client'
 
 export class PrismaFileMapper {
   static toDomain(raw: PrismaFile): File {

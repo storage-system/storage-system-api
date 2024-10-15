@@ -1,5 +1,5 @@
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { PaginationProps, Pagination } from '@/core/entities/pagination'
+import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { User } from '@/domain/enterprise/user/user'
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -49,7 +49,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     return users
   }
 
-  async create(user: User): Promise<void> {
+  async save(user: User): Promise<void> {
     this.items.push(user)
   }
 

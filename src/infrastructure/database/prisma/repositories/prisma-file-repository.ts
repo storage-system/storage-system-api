@@ -9,7 +9,7 @@ import { PrismaService } from '../prisma.service'
 export class PrismaFileRepository implements FileRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(record: File): Promise<void> {
+  async save(record: File): Promise<void> {
     const data = PrismaFileMapper.toPersistence(record)
 
     await this.prisma.file.create({

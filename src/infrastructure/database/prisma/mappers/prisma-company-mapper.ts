@@ -1,6 +1,6 @@
 import {
-  Prisma,
   Company as PrismaCompany,
+  Prisma,
   User as PrismaUser,
 } from '@prisma/client'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'

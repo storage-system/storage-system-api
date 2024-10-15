@@ -54,7 +54,7 @@ export class PrismaProductsRepository implements ProductsRepository {
     return PrismaProductMapper.toDomain(product)
   }
 
-  async create(product: Product): Promise<void> {
+  async save(product: Product): Promise<void> {
     const data = PrismaProductMapper.toPersistence(product)
 
     await this.prisma.product.create({

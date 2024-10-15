@@ -31,7 +31,7 @@ export async function makeCompany({
   )
 
   if (repository) {
-    await repository.create(company)
+    await repository.save(company)
   }
 
   return company

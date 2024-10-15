@@ -4,7 +4,7 @@ import { File } from '@/domain/enterprise/file/file'
 export class InMemoryFileRepository implements FileRepository {
   public items: File[] = []
 
-  async create(file: File) {
+  async save(file: File) {
     this.items.push(file)
   }
 

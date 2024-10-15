@@ -86,8 +86,8 @@ describe('Edit Category', () => {
     const otherCompany = await makeCompany({
       repository: companiesRepository,
     })
-    await companiesRepository.create(company)
-    await companiesRepository.create(otherCompany)
+    await companiesRepository.save(company)
+    await companiesRepository.save(otherCompany)
 
     const newCategory = await makeCategory({
       override: {

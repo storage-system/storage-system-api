@@ -45,7 +45,7 @@ export async function makeConfiguration({
   )
 
   if (repository) {
-    await repository.create(configuration)
+    await repository.save(configuration)
   }
 
   return configuration

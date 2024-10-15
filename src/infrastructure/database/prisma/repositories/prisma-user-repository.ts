@@ -90,7 +90,7 @@ export class PrismaUsersRepository implements UsersRepository {
     return anUsers.map((anUser) => PrismaUserMapper.toDomain(anUser))
   }
 
-  async create(user: User): Promise<void> {
+  async save(user: User): Promise<void> {
     const data = PrismaUserMapper.toPersistence(user)
 
     await this.prisma.user.create({

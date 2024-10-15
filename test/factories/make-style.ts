@@ -34,7 +34,7 @@ export async function makeStyle({
   )
 
   if (repository) {
-    await repository.create(style)
+    await repository.save(style)
   }
 
   return style

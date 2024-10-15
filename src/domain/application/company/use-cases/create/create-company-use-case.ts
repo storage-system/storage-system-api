@@ -20,9 +20,7 @@ type CreateCompanyUseCaseResponse = {
 
 @Injectable()
 export class CreateCompanyUseCase {
-  constructor(
-    private companiesRepository: CompaniesRepository,
-  ) {}
+  constructor(private companiesRepository: CompaniesRepository) {}
 
   async execute({
     name,
@@ -52,7 +50,7 @@ export class CreateCompanyUseCase {
       throw new NotificationException('Erro ao criar empresa', notification)
     }
 
-    await this.companiesRepository.create(company)
+    await this.companiesRepository.save(company)
 
     return {
       companyId: company.id.toString(),

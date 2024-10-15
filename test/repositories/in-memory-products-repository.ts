@@ -1,5 +1,5 @@
 import { ProductsRepository } from '@/domain/enterprise/product/products-repository'
-import { PaginationProps, Pagination } from '@/core/entities/pagination'
+import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { Product } from '@/domain/enterprise/product/product'
 
 export class InMemoryProductsRepository implements ProductsRepository {
@@ -29,7 +29,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
     })
   }
 
-  async create(product: Product): Promise<void> {
+  async save(product: Product): Promise<void> {
     this.items.push(product)
   }
 

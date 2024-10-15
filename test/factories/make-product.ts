@@ -65,7 +65,7 @@ export async function makeProduct({
   )
 
   if (repository) {
-    await repository.create(product)
+    await repository.save(product)
   }
 
   return product

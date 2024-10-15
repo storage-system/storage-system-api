@@ -59,7 +59,7 @@ export class PrismaStyleRepository implements StyleRepository {
     return PrismaStyleMapper.toDomain(activeStyle)
   }
 
-  async create(record: Style): Promise<void> {
+  async save(record: Style): Promise<void> {
     const data = PrismaStyleMapper.toPersistence(record)
 
     await this.prisma.style.create({

@@ -29,7 +29,7 @@ export async function makeCategory({
   )
 
   if (repository) {
-    await repository.create(category)
+    await repository.save(category)
   }
 
   return category

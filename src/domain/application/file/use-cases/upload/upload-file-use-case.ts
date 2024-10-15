@@ -34,7 +34,7 @@ export class UploadFileUseCase {
       size: file.size,
     })
 
-    await this.fileRepository.create(newFile)
+    await this.fileRepository.save(newFile)
 
     return { fileId: newFile.id.toString() }
   }

@@ -22,7 +22,7 @@ export async function makeFile({
   })
 
   if (repository) {
-    await repository.create(file)
+    await repository.save(file)
   }
 
   return file

@@ -57,7 +57,7 @@ export class CreateConfigurationUseCase {
       companyId: new UniqueEntityID(anInput.companyId),
     })
 
-    await this.configurationRepository.create(configuration)
+    await this.configurationRepository.save(configuration)
 
     return {
       configurationId: configuration.id.toString(),

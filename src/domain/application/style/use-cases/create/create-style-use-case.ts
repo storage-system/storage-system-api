@@ -49,7 +49,7 @@ export class CreateStyleUseCase {
       companyId: new UniqueEntityID(anInput.companyId),
     })
 
-    await this.styleRepository.create(style)
+    await this.styleRepository.save(style)
 
     return {
       styleId: style.id.toString(),

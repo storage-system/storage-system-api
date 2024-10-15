@@ -18,7 +18,7 @@ export class InMemoryConfigurationRepository
     return configuration
   }
 
-  async create(configuration: Configuration): Promise<void> {
+  async save(configuration: Configuration): Promise<void> {
     this.items.push(configuration)
   }
 

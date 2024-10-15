@@ -57,7 +57,7 @@ export class CreateUserUseCase {
       throw new NotificationException('Erro ao criar usuário', notification)
     }
 
-    await this.usersRepository.create(user)
+    await this.usersRepository.save(user)
 
     return {
       userId: user.id.toString(),

@@ -2,7 +2,7 @@ import { InMemoryFileStorageGateway } from 'test/repositories/in-memory-file-sto
 import { InMemoryFileRepository } from 'test/repositories/in-memory-file-repository'
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 import { UploadFileUseCase } from './upload-file-use-case'
 

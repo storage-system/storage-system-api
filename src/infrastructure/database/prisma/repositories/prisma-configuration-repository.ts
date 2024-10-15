@@ -9,7 +9,7 @@ import { PrismaService } from '../prisma.service'
 export class PrismaConfigurationRepository implements ConfigurationRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(record: Configuration): Promise<void> {
+  async save(record: Configuration): Promise<void> {
     const data = PrismaConfigurationMapper.toPersistence(record)
 
     await this.prisma.configuration.create({

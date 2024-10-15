@@ -86,7 +86,7 @@ export class CreateProductUseCase {
       throw new NotificationException('Erro ao criar o produto', notification)
     }
 
-    await this.productsRepository.create(product)
+    await this.productsRepository.save(product)
 
     return {
       productId: product.id.toString(),
