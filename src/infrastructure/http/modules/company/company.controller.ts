@@ -10,10 +10,8 @@ import {
   Post,
 } from '@nestjs/common'
 import { GetCompanyUseCase } from '@/domain/application/company/use-cases/retrieve/get-company/get-company-use-case'
-import { RemoveUsersUseCase } from '@/domain/application/company/use-cases/remove-users/remove-users-use-case'
 import { CreateCompanyUseCase } from '@/domain/application/company/use-cases/create/create-company-use-case'
 import { DeleteCompanyUseCase } from '@/domain/application/company/use-cases/delete/delete-company-use-case'
-import { AssignUserUseCase } from '@/domain/application/company/use-cases/assign-user/assign-user-use-case'
 import { EditCompanyUseCase } from '@/domain/application/company/use-cases/update/edit-company-use-case'
 import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
 import { Roles } from '@/infrastructure/decorators/roles.decorator'
@@ -24,7 +22,6 @@ import { ApiTags } from '@nestjs/swagger'
 
 import { CreateCompanyDTO } from './dto/create-company.dto'
 import { EditCompanyDTO } from './dto/edit-company.dto'
-import { RemoveUsersDTO } from './dto/remove-users.dto'
 
 @ApiTags('Company')
 @Controller('/companies')
@@ -34,22 +31,19 @@ export class CompanyController {
     private editCompanyUseCase: EditCompanyUseCase,
     private getCompanyUseCase: GetCompanyUseCase,
     private deleteCompanyUseCase: DeleteCompanyUseCase,
-    private assignUserUseCase: AssignUserUseCase,
-    private removeUsersUseCase: RemoveUsersUseCase,
   ) {}
 
   @Post()
   @Public()
   @HttpCode(201)
   async create(@Body() body: CreateCompanyDTO) {
-    const { name, email, contact, responsible, users } = body
+    const { name, email, contact, responsibleId } = body
 
     return await this.createCompanyUseCase.execute({
       name,
       email,
       contact,
-      responsible,
-      users,
+      responsibleId,
     })
   }
 
@@ -63,26 +57,13 @@ export class CompanyController {
   @Patch('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async update(@Body() body: EditCompanyDTO, @Param('id') companyId: string) {
-    const { name, email, contact, responsible } = body
+    const { name, email, contact } = body
 
     await this.editCompanyUseCase.execute({
-      companyId,
       name,
       email,
       contact,
-      responsible,
-    })
-  }
-
-  @Patch('/:id/assign-user')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async assignUser(
-    @CurrentUser() user: UserPayload,
-    @Param('id') companyId: string,
-  ) {
-    await this.assignUserUseCase.execute({
       companyId,
-      userId: user.sub,
     })
   }
 
@@ -96,18 +77,6 @@ export class CompanyController {
     await this.deleteCompanyUseCase.execute({
       companyId,
       authorId: user.sub,
-    })
-  }
-
-  @Delete('/:id/remove-users')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async removeUsers(
-    @Param('id') companyId: string,
-    @Body() body: RemoveUsersDTO,
-  ) {
-    await this.removeUsersUseCase.execute({
-      companyId,
-      userIds: body.userIds,
     })
   }
 }
