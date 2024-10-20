@@ -31,13 +31,15 @@ export class GetCompanyUseCase {
       )
     }
 
-    const users =
-      company?.users && company?.users?.length > 0
-        ? await this.usersRepository.findByIds(
-            company.users.map((user) => user),
-          )
-        : []
+    const user = await this.usersRepository.findById(company.responsibleId)
 
-    return CompanyPresenter.fromAggregate(company, users)
+    if (!user) {
+      throw ResourceNotFoundException.with(
+        'Responsável',
+        new UniqueEntityID(companyId),
+      )
+    }
+
+    return CompanyPresenter.fromAggregate(company, user)
   }
 }

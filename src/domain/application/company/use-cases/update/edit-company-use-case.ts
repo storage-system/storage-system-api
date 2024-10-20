@@ -4,11 +4,12 @@ import { Injectable } from '@nestjs/common'
 
 import { CompaniesRepository } from '../../../../enterprise/company/companies-repository'
 
-interface EditCompanyUseCaseRequest {
-  name: string | undefined
-  email: string | undefined
-  contact: string | undefined
-  responsible: string | undefined
+export interface EditCompanyUseCaseRequest {
+  tradeName?: string
+  corporateName?: string
+  cnpj?: string
+  email?: string
+  contact?: string
   companyId: string
 }
 
@@ -17,10 +18,11 @@ export class EditCompanyUseCase {
   constructor(private companiesRepository: CompaniesRepository) {}
 
   async execute({
-    name,
+    tradeName,
+    corporateName,
+    cnpj,
     email,
     contact,
-    responsible,
     companyId,
   }: EditCompanyUseCaseRequest): Promise<void> {
     const company = await this.companiesRepository.findById(companyId)
@@ -33,9 +35,10 @@ export class EditCompanyUseCase {
     }
 
     company.update({
-      name,
+      corporateName,
+      tradeName,
+      cnpj,
       email,
-      responsible,
       contact,
     })
 

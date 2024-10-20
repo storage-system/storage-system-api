@@ -23,6 +23,8 @@ model User {
   password String
   roles    Role[] @default([MEMBER])
 
+  companies Company[] @relation("company_responsible")
+
   companyId String?  @map("company_id")
   company   Company? @relation(fields: [companyId], references: [id])
 
@@ -31,19 +33,41 @@ model User {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+
+  @@map("users")
+}
+
+model Address {
+  id           String  @id @default(uuid())
+  street       String
+  zipCode      String? @map(name: "zip_code") @db.VarChar(8)
+  neighborhood String?
+  city         String
+  state        String
+  country      String
+
+  addressNumber     String? @map(name: "address_number") @db.VarChar(10)
+  addressComplement String? @map(name: "address_complement") @db.VarChar(255)
+
+  companies Company[]
+
+  @@map("addresses")
 }
 
 model Company {
-  id          String  @id @default(uuid())
-  name        String
-  email       String  @unique
-  contact     String
-  responsible String
-  isActive    Boolean @default(true)
+  id            String  @id @default(uuid())
+  tradeName     String  @map("trade_name")
+  corporateName String  @map("corporate_name")
+  cnpj          String
+  email         String  @unique
+  contact       String
+  isActive      Boolean @default(true)
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  addressId String  @map("address_id")
+  address   Address @relation(fields: [addressId], references: [id])
+
+  responsibleId String @map("responsible_id")
+  responsible   User   @relation("company_responsible", fields: [responsibleId], references: [id])
 
   categories    Category[]
   users         User[]
@@ -51,13 +75,17 @@ model Company {
   configuration Configuration[]
   styles        Style[]
 
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
   @@map("companies")
 }
 
 model Category {
   id        String    @id @default(uuid())
   name      String
-  slug      String 
+  slug      String
   isActive  Boolean
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")

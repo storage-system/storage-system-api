@@ -7,7 +7,7 @@ const createUserBodySchema = z.object({
   email: z.string().email(),
   password: z.string(),
   phone: z.string(),
-  roles: z.array(z.nativeEnum(UserRoles)),
+  roles: z.array(z.nativeEnum(UserRoles)).optional(),
 })
 
 export class CreateUserDTO extends createZodDto(createUserBodySchema) {}

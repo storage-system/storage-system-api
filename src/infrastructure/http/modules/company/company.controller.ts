@@ -37,14 +37,7 @@ export class CompanyController {
   @Public()
   @HttpCode(201)
   async create(@Body() body: CreateCompanyDTO) {
-    const { name, email, contact, responsibleId } = body
-
-    return await this.createCompanyUseCase.execute({
-      name,
-      email,
-      contact,
-      responsibleId,
-    })
+    return await this.createCompanyUseCase.execute(body)
   }
 
   @Get('/:companyId')
@@ -56,13 +49,9 @@ export class CompanyController {
 
   @Patch('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async update(@Body() body: EditCompanyDTO, @Param('id') companyId: string) {
-    const { name, email, contact } = body
-
+  async update(@Param('id') companyId: string, @Body() body: EditCompanyDTO) {
     await this.editCompanyUseCase.execute({
-      name,
-      email,
-      contact,
+      ...body,
       companyId,
     })
   }

@@ -16,7 +16,26 @@ export interface UserProps {
   deletedAt?: Date
 }
 
+export class UserID extends UniqueEntityID {}
+
 export class User extends Entity<UserProps> {
+  static create(
+    props: Optional<UserProps, 'createdAt' | 'roles'>,
+    id?: UserID,
+  ) {
+    const user = new User(
+      {
+        roles: [UserRoles.MEMBER],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        ...props,
+      },
+      id,
+    )
+
+    return user
+  }
+
   get name() {
     return this.props.name
   }
@@ -55,19 +74,6 @@ export class User extends Entity<UserProps> {
 
   private touch() {
     this.props.updatedAt = new Date()
-  }
-
-  static create(props: Optional<UserProps, 'createdAt'>, id?: UniqueEntityID) {
-    const user = new User(
-      {
-        ...props,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      id,
-    )
-
-    return user
   }
 
   update(anUser: Partial<UserProps>) {

@@ -2,7 +2,6 @@ import { PrismaUserMapper } from '@/infrastructure/database/prisma/mappers/prism
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { User, UserProps } from '@/domain/enterprise/user/user'
-import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Injectable } from '@nestjs/common'
 import { faker } from '@faker-js/faker'
 
@@ -27,7 +26,6 @@ export async function makeUser({
         length: 8,
       }),
       phone: faker.phone.number(),
-      roles: [UserRoles.MEMBER],
       ...override,
     },
     new UniqueEntityID(override?.id),

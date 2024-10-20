@@ -35,7 +35,7 @@ export class UserController {
 
   @Post()
   @Public()
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() body: CreateUserDTO) {
     return await this.createUserUseCase.execute(body)
   }

@@ -4,7 +4,6 @@ import { AlreadyExistsError } from '@/core/errors/already-exists-error'
 import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Notification } from '@/core/validation/notification'
 import { User } from '@/domain/enterprise/user/user'
-import { Either, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 
 import { UsersRepository } from '../../../../enterprise/user/users-repository'
@@ -14,7 +13,7 @@ interface CreateUserUseCaseRequest {
   email: string
   password: string
   phone: string
-  roles: UserRoles[]
+  roles?: UserRoles[]
 }
 
 type CreateUserUseCaseResponse = {
@@ -49,8 +48,8 @@ export class CreateUserUseCase {
       name,
       email,
       phone,
-      roles,
       password: hashedPassword,
+      roles: roles ?? [],
     })
 
     if (notification.hasErrors()) {

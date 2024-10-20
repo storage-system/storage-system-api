@@ -20,11 +20,26 @@ export async function makeCompany({
 > = {}): Promise<Company> {
   const company = Company.create(
     {
-      name: faker.company.name(),
+      corporateName: faker.company.name(),
+      tradeName: faker.company.name(),
+      cnpj: faker.string.numeric({
+        length: 14,
+      }),
       email: faker.internet.email(),
       contact: faker.phone.number(),
-      responsible: faker.person.fullName(),
-      users: [],
+      responsibleId: faker.string.uuid(),
+      address: {
+        city: faker.location.city(),
+        country: faker.location.country(),
+        state: faker.location.state({
+          abbreviated: true,
+        }),
+        street: faker.location.street(),
+        complement: faker.lorem.words(),
+        neighborhood: faker.location.secondaryAddress(),
+        number: faker.location.buildingNumber(),
+        zipCode: faker.location.zipCode(),
+      },
       ...override,
     },
     new UniqueEntityID(override?.id),
@@ -43,7 +58,9 @@ export class CompanyFactory {
 
   async makePrismaCompany(data: Partial<CompanyProps> = {}): Promise<Company> {
     const company = await makeCompany({
-      override: data,
+      override: {
+        ...data,
+      },
     })
 
     await this.prisma.company.create({

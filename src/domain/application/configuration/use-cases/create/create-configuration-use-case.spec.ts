@@ -46,7 +46,7 @@ describe('Create Configuration Use Case', () => {
     })
     const company = await makeCompany({
       override: {
-        users: [user.id.toString()],
+        responsibleId: user.id.toString(),
       },
       repository: companiesRepository,
     })

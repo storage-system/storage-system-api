@@ -5,14 +5,16 @@ import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
 import { AppModule } from '@/infrastructure/app.module'
 import { UserFactory } from 'test/factories/make-user'
-import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+
+import { EditCompanyDTO } from '../dto/edit-company.dto'
 
 describe('Edit Company (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let authenticateFactory: AuthenticateFactory
+  let companyFactory: CompanyFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -23,16 +25,37 @@ describe('Edit Company (E2E)', () => {
 
     prisma = moduleRef.get(PrismaService)
     authenticateFactory = moduleRef.get(AuthenticateFactory)
+    companyFactory = moduleRef.get(CompanyFactory)
 
     await app.init()
   })
 
   test('[PATCH] /companies/:id', async () => {
-    const { accessToken, companyId } =
+    const { accessToken, userId } =
       await authenticateFactory.makePrismaAuthenticate()
 
-    const updateCategory = {
-      name: 'Floricultura Floratta',
+    const createdCompany = await companyFactory.makePrismaCompany({
+      tradeName: 'Pedro Veras Company',
+      corporateName: 'Pedro Veras LTDA',
+      email: 'ioj9@gmail.com',
+      contact: '62 9969987499',
+      cnpj: '81546172000167',
+      responsibleId: userId,
+      address: {
+        city: 'Anápolis',
+        country: 'Brazil',
+        state: 'GO',
+        street: 'Rua Pe. Anchieta',
+        neighborhood: 'São Lourenço',
+        number: '333',
+        zipCode: '75045090',
+      },
+    })
+
+    const companyId = createdCompany.id.toString()
+
+    const updateCategory: EditCompanyDTO = {
+      tradeName: 'Floricultura Floratta',
     }
 
     const response = await request(app.getHttpServer())
@@ -44,10 +67,10 @@ describe('Edit Company (E2E)', () => {
 
     const companyOnDatabase = await prisma.company.findFirst({
       where: {
-        name: updateCategory.name,
+        id: companyId,
       },
     })
 
-    expect(companyOnDatabase?.name).toBe(updateCategory.name)
+    expect(companyOnDatabase?.tradeName).toBe(updateCategory.tradeName)
   })
 })

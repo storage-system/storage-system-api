@@ -24,27 +24,13 @@ describe('List Users By Company Use Case', () => {
   })
 
   it('should be able to retrieve company details without users', async () => {
-    const company = await makeCompany({
-      repository: companiesRepository,
-    })
-
-    const result = await useCase.execute({
-      companyId: company.id.toString(),
-    })
-
-    expect(result.id).toBe(company.id.toString())
-    expect(result.name).toBe(company.name)
-    expect(result.users).toEqual([])
-  })
-
-  it('should be able to retrieve company details with users', async () => {
     const user = await makeUser({
       repository: usersRepository,
     })
 
     const company = await makeCompany({
       override: {
-        users: [user.id.toString()],
+        responsibleId: user.id.toString(),
       },
       repository: companiesRepository,
     })
@@ -54,10 +40,27 @@ describe('List Users By Company Use Case', () => {
     })
 
     expect(result.id).toBe(company.id.toString())
-    expect(result.name).toBe(company.name)
-    expect(result.users).toHaveLength(1)
-    expect(result.users[0].id).toBe(user.id.toString())
-    expect(result.users[0].name).toBe(user.name)
+    expect(result.tradeName).toBe(company.tradeName)
+  })
+
+  it('should be able to retrieve company details with users', async () => {
+    const user = await makeUser({
+      repository: usersRepository,
+    })
+
+    const company = await makeCompany({
+      override: {
+        responsibleId: user.id.toString(),
+      },
+      repository: companiesRepository,
+    })
+
+    const result = await useCase.execute({
+      companyId: company.id.toString(),
+    })
+
+    expect(result.id).toBe(company.id.toString())
+    expect(result.tradeName).toBe(company.tradeName)
   })
 
   it('should throw error if company not found', async () => {

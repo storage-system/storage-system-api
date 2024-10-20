@@ -1,35 +1,58 @@
-import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
 import { CompanyFactory } from './make-company'
 import { UserFactory } from './make-user'
 
-interface AuthenticateFactoryResponse {
+interface BaseAuthenticateResponse {
   accessToken: string
   userId: string
+}
+
+interface AuthenticateWithCompanyResponse extends BaseAuthenticateResponse {
   companyId: string
 }
 
 @Injectable()
 export class AuthenticateFactory {
   constructor(
-    private jwt: JwtService,
-    private userFactory: UserFactory,
-    private companyFactory: CompanyFactory,
+    protected jwt: JwtService,
+    protected userFactory: UserFactory,
   ) {}
 
-  async makePrismaAuthenticate(): Promise<AuthenticateFactoryResponse> {
-    const company = await this.companyFactory.makePrismaCompany()
-    const user = await this.userFactory.makePrismaUser({
-      companyId: company.id,
-    })
+  protected async createUserAndToken(): Promise<BaseAuthenticateResponse> {
+    const user = await this.userFactory.makePrismaUser()
+    const userId = user.id.toString()
+    const accessToken = this.jwt.sign({ sub: userId })
 
-    const accessToken = this.jwt.sign({ sub: user.id.toString() })
+    return { accessToken, userId }
+  }
+
+  async makePrismaAuthenticate(): Promise<BaseAuthenticateResponse> {
+    return this.createUserAndToken()
+  }
+}
+
+@Injectable()
+export class AuthenticateFactoryWithCompany extends AuthenticateFactory {
+  constructor(
+    jwt: JwtService,
+    userFactory: UserFactory,
+    private companyFactory: CompanyFactory,
+  ) {
+    super(jwt, userFactory)
+  }
+
+  async makePrismaAuthenticate(): Promise<AuthenticateWithCompanyResponse> {
+    const { accessToken, userId } = await this.createUserAndToken()
+
+    const company = await this.companyFactory.makePrismaCompany({
+      responsibleId: userId,
+    })
 
     return {
       accessToken,
-      userId: user.id.toString(),
+      userId,
       companyId: company.id.toString(),
     }
   }

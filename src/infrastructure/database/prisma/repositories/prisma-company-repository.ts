@@ -20,6 +20,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
             id: true,
           },
         },
+        address: true,
       },
     })
 
@@ -41,6 +42,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
             id: true,
           },
         },
+        address: true,
       },
     })
 
@@ -60,11 +62,11 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
   }
 
   async update(company: Company): Promise<void> {
-    const data = PrismaCompanyMapper.toPersistence(company)
+    const data = PrismaCompanyMapper.toPersistenceUpdate(company)
 
     await this.prisma.company.update({
       where: {
-        id: data.id,
+        id: company.id.toString(),
       },
       data,
     })
@@ -78,19 +80,6 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
       },
       data: {
         deletedAt: new Date(),
-      },
-    })
-  }
-
-  async removeUsers(companyId: string, userIds: string[]): Promise<void> {
-    await this.prisma.company.update({
-      where: {
-        id: companyId,
-      },
-      data: {
-        users: {
-          deleteMany: userIds.map((id) => ({ id })),
-        },
       },
     })
   }
