@@ -8,10 +8,13 @@ import { CompanyFactory } from 'test/factories/make-company'
 import { MainConfig } from '@/infrastructure/main.config'
 import { AppModule } from '@/infrastructure/app.module'
 import { UserFactory } from 'test/factories/make-user'
+import { faker } from '@faker-js/faker'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
-describe('Delete category (E2E)', () => {
+import { UpdateCategoryDTO } from '../dto/update-category.dto'
+
+describe('Update category (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let authenticateFactory: AuthenticateFactoryWithCompany
@@ -38,7 +41,7 @@ describe('Delete category (E2E)', () => {
     await app.init()
   })
 
-  test('[DELETE] /categories/:id', async () => {
+  test('[PATCH] /categories/:id', async () => {
     const { accessToken, companyId } =
       await authenticateFactory.makePrismaAuthenticate()
 
@@ -47,19 +50,24 @@ describe('Delete category (E2E)', () => {
     })
     const categoryId = category.id.toString()
 
-    const response = await request(app.getHttpServer())
-      .delete(`/categories/${categoryId}`)
-      .set('Authorization', `Bearer ${accessToken}`)
+    const updateCategory: UpdateCategoryDTO = {
+      companyId,
+      name: faker.commerce.productMaterial(),
+    }
 
-    expect(response.statusCode).toBe(HttpStatus.OK)
+    const response = await request(app.getHttpServer())
+      .patch(`/categories/${categoryId}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(updateCategory)
+
+    expect(response.statusCode).toBe(HttpStatus.NO_CONTENT)
 
     const categoryOnDatabase = await prisma.category.findFirst({
       where: {
         id: categoryId.toString(),
-        deletedAt: null,
       },
     })
 
-    expect(categoryOnDatabase).toBeNull()
+    expect(categoryOnDatabase?.name).toBe(updateCategory.name)
   })
 })

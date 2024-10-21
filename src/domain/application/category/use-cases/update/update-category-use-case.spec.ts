@@ -5,17 +5,20 @@ import { makeCategory } from 'test/factories/make-category'
 import { makeCompany } from 'test/factories/make-company'
 
 import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
-import { EditCategoryUseCase } from './edit-category-use-case'
+import { UpdateCategoryUseCase } from './update-category-use-case'
 
 let categoriesRepository: CategoriesRepository
 let companiesRepository: CompaniesRepository
-let useCase: EditCategoryUseCase
+let useCase: UpdateCategoryUseCase
 
 describe('Edit Category', () => {
   beforeEach(() => {
     categoriesRepository = new InMemoryCategoriesRepository()
     companiesRepository = new InMemoryCompaniesRepository()
-    useCase = new EditCategoryUseCase(categoriesRepository, companiesRepository)
+    useCase = new UpdateCategoryUseCase(
+      categoriesRepository,
+      companiesRepository,
+    )
   })
 
   it('dependencies should be defined', (): void => {

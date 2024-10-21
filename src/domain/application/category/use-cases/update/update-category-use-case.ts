@@ -25,7 +25,7 @@ type EditCategoryUseCaseResponse = Either<
 >
 
 @Injectable()
-export class EditCategoryUseCase {
+export class UpdateCategoryUseCase {
   constructor(
     private categoriesRepository: CategoriesRepository,
     private companiesRepository: CompaniesRepository,

@@ -1,29 +1,34 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
+import { CompanyID } from '@/domain/enterprise/company/company'
 import { CategoryFactory } from 'test/factories/make-category'
 import { CompanyFactory } from 'test/factories/make-company'
 import { MainConfig } from '@/infrastructure/main.config'
 import { AppModule } from '@/infrastructure/app.module'
+import { UserFactory } from 'test/factories/make-user'
 import { INestApplication } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
 describe('Fetch categories (E2E)', () => {
   let app: INestApplication
-  let companyFactory: CompanyFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let categoryFactory: CategoryFactory
-  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [CompanyFactory, CategoryFactory],
+      providers: [
+        UserFactory,
+        CompanyFactory,
+        AuthenticateFactoryWithCompany,
+        CategoryFactory,
+      ],
     }).compile()
     app = moduleRef.createNestApplication()
 
-    companyFactory = moduleRef.get(CompanyFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     categoryFactory = moduleRef.get(CategoryFactory)
-    jwt = moduleRef.get(JwtService)
 
     MainConfig(app)
 
@@ -31,19 +36,18 @@ describe('Fetch categories (E2E)', () => {
   })
 
   test('[GET] /categories', async () => {
-    const company = await companyFactory.makePrismaCompany()
-
-    const accessToken = jwt.sign({ sub: company.id.toString() })
+    const { accessToken, companyId } =
+      await authenticateFactory.makePrismaAuthenticate()
 
     await Promise.all([
       categoryFactory.makePrismaCategory({
         name: 'category-01',
-        companyId: company.id,
+        companyId: new CompanyID(companyId),
         isActive: true,
       }),
       categoryFactory.makePrismaCategory({
         name: 'category-02',
-        companyId: company.id,
+        companyId: new CompanyID(companyId),
         isActive: true,
       }),
     ])

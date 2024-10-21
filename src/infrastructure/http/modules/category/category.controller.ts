@@ -12,15 +12,13 @@ import {
 import { ListCategoriesUseCase } from '@/domain/application/category/use-cases/retrieve/list-categories-use-case'
 import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create/create-category-use-case'
 import { DeleteCategoryUseCase } from '@/domain/application/category/use-cases/delete/delete-category-use-case'
-import { EditCategoryUseCase } from '@/domain/application/category/use-cases/update/edit-category-use-case'
-import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
-import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
+import { UpdateCategoryUseCase } from '@/domain/application/category/use-cases/update/update-category-use-case'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 import { HttpCategoryListResponse } from '../../docs/category/http-category-list-response'
 import { ParsePositiveIntPipe } from '../../pipes/parse-positive-int.pipe'
 import { CreateCategoryDTO } from './dto/create-category.dto'
-import { EditCategoryDTO } from './dto/edit-category.dto'
+import { UpdateCategoryDTO } from './dto/update-category.dto'
 
 @ApiTags('Category')
 @Controller('/categories')
@@ -28,7 +26,7 @@ export class CategoryController {
   constructor(
     private createCategoryUseCase: CreateCategoryUseCase,
     private listCategoriesUseCase: ListCategoriesUseCase,
-    private editCategoryUseCase: EditCategoryUseCase,
+    private editCategoryUseCase: UpdateCategoryUseCase,
     private deleteCategoryUseCase: DeleteCategoryUseCase,
   ) {}
 
@@ -52,11 +50,10 @@ export class CategoryController {
   @Patch('/:id')
   @HttpCode(204)
   async update(
-    @Body() body: EditCategoryDTO,
-    @CurrentUser() { companyId }: UserPayload,
+    @Body() body: UpdateCategoryDTO,
     @Param('id') categoryId: string,
   ) {
-    const { name, isActive } = body
+    const { name, isActive, companyId } = body
 
     return await this.editCategoryUseCase.execute({
       name,
