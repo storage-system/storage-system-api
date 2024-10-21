@@ -24,7 +24,7 @@ CREATE TABLE "users" (
 CREATE TABLE "addresses" (
     "id" TEXT NOT NULL,
     "street" TEXT NOT NULL,
-    "zip_code" VARCHAR(8),
+    "zip_code" TEXT,
     "neighborhood" TEXT,
     "city" TEXT NOT NULL,
     "state" TEXT NOT NULL,
