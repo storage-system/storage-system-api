@@ -1,5 +1,5 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { CompanyFactory } from 'test/factories/make-company'
 import { ProductFactory } from 'test/factories/make-product'
@@ -12,7 +12,7 @@ import request from 'supertest'
 
 describe('List products (E2E)', () => {
   let app: INestApplication
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let productFactory: ProductFactory
 
   beforeAll(async () => {
@@ -21,13 +21,13 @@ describe('List products (E2E)', () => {
       providers: [
         CompanyFactory,
         UserFactory,
-        AuthenticateFactory,
+        AuthenticateFactoryWithCompany,
         ProductFactory,
       ],
     }).compile()
     app = moduleRef.createNestApplication()
 
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     productFactory = moduleRef.get(ProductFactory)
 
     MainConfig(app)

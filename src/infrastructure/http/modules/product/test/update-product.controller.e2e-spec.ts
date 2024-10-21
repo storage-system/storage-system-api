@@ -1,6 +1,6 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
@@ -17,7 +17,7 @@ import { UpdateProductDTO } from '../dto/update-product-dto'
 describe('Update product (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let productFactory: ProductFactory
 
   beforeAll(async () => {
@@ -26,13 +26,13 @@ describe('Update product (E2E)', () => {
       providers: [
         CompanyFactory,
         UserFactory,
-        AuthenticateFactory,
+        AuthenticateFactoryWithCompany,
         ProductFactory,
       ],
     }).compile()
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     productFactory = moduleRef.get(ProductFactory)
 
     MainConfig(app)

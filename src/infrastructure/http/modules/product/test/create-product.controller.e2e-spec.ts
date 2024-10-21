@@ -1,6 +1,6 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { StatusProduct } from '@/domain/enterprise/product/product'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { CategoryFactory } from 'test/factories/make-category'
@@ -18,7 +18,7 @@ import { CreateProductDTO } from '../dto/create-product-dto'
 describe('Create Product (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let categoryFactory: CategoryFactory
 
   beforeAll(async () => {
@@ -28,13 +28,13 @@ describe('Create Product (E2E)', () => {
         CompanyFactory,
         CategoryFactory,
         UserFactory,
-        AuthenticateFactory,
+        AuthenticateFactoryWithCompany,
       ],
     }).compile()
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     categoryFactory = moduleRef.get(CategoryFactory)
 
     MainConfig(app)
