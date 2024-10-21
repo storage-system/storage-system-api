@@ -2,13 +2,10 @@ import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-compani
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { makeCompany } from 'test/factories/make-company'
 import { makeUser } from 'test/factories/make-user'
-import { faker } from '@faker-js/faker'
 
-import {
-  CreateCompanyUseCase,
-  CreateCompanyUseCaseRequest,
-} from './create-company-use-case'
+import { CreateCompanyUseCase } from './create-company-use-case'
 
 let companyRespository: CompaniesRepository
 let userRepository: UsersRepository
@@ -35,26 +32,11 @@ describe('Create Company', () => {
       repository: userRepository,
     })
 
-    const companyMock: CreateCompanyUseCaseRequest = {
-      corporateName: faker.company.name(),
-      tradeName: faker.company.name(),
-      cnpj: faker.string.numeric({
-        length: 14,
-      }),
-      email: faker.internet.email(),
-      contact: faker.phone.number(),
-      responsibleId: user.id.toString(),
-      address: {
-        city: faker.location.city(),
-        country: faker.location.country(),
-        state: faker.location.state(),
-        street: faker.location.street(),
-        complement: faker.lorem.words(),
-        neighborhood: faker.location.secondaryAddress(),
-        number: faker.location.buildingNumber(),
-        zipCode: faker.location.zipCode(),
+    const companyMock = await makeCompany({
+      override: {
+        responsibleId: user.id.toString(),
       },
-    }
+    })
 
     const response = await useCase.execute(companyMock)
 

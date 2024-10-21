@@ -38,21 +38,17 @@ describe('Create Company (E2E)', () => {
 
     const companyMock: CreateCompanyDTO = {
       corporateName: faker.company.name(),
-      tradeName: faker.company.name(),
-      cnpj: faker.string.numeric({
-        length: 14,
-      }),
+      tradeName: `${faker.company.name()} LTDA`,
+      cnpj: faker.string.numeric({ length: 14 }),
       email: faker.internet.email(),
       contact: faker.phone.number(),
       responsibleId: userId,
       address: {
         city: faker.location.city(),
         country: faker.location.country(),
-        state: faker.location.state({
-          abbreviated: true,
-        }),
+        state: faker.location.state({ abbreviated: true }),
         street: faker.location.street(),
-        complement: faker.lorem.words(),
+        complement: undefined,
         neighborhood: faker.location.secondaryAddress(),
         number: faker.location.buildingNumber(),
         zipCode: faker.location.zipCode(),
