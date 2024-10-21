@@ -3,6 +3,8 @@ import { Entity } from '@/core/entities/entity'
 import { Replace } from '@/core/replace'
 import { addDays } from 'date-fns'
 
+import { CategoryID } from '../category/category'
+import { CompanyID } from '../company/company'
 import { Slug } from '../slug/slug'
 
 export enum StatusProduct {
@@ -16,6 +18,8 @@ export interface DimensionsProduct {
   width: string
   depth: string
 }
+
+export class ProductID extends UniqueEntityID {}
 
 export interface ProductProps {
   name: string
@@ -41,8 +45,8 @@ export interface ProductProps {
   status: StatusProduct
   productImage?: string
 
-  companyId: UniqueEntityID
-  categoryIds: UniqueEntityID[]
+  companyId: CompanyID
+  categoryIds: CategoryID[]
 
   createdAt: Date
   updatedAt?: Date | null
@@ -60,7 +64,7 @@ export type ProductConstructorProps = Replace<
 >
 
 export class Product extends Entity<ProductProps> {
-  static create(props: ProductConstructorProps, id?: UniqueEntityID) {
+  static create(props: ProductConstructorProps, id?: ProductID) {
     const manufactureDate = props.manufactureDate ?? new Date()
     const dueDate = addDays(manufactureDate, props.validityInDays)
 

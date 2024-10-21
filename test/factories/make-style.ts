@@ -1,6 +1,6 @@
 import { PrismaStyleMapper } from '@/infrastructure/database/prisma/mappers/prisma-style-mapper'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { Style, StyleProps } from '@/domain/enterprise/style/style'
+import { Style, StyleID, StyleProps } from '@/domain/enterprise/style/style'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Injectable } from '@nestjs/common'
 import { faker } from '@faker-js/faker'
@@ -30,7 +30,7 @@ export async function makeStyle({
       tertiaryColor: faker.color.rgb(),
       ...override,
     },
-    new UniqueEntityID(override?.id),
+    new StyleID(override?.id),
   )
 
   if (repository) {

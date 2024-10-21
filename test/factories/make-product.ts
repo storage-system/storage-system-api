@@ -1,9 +1,10 @@
-import { PrismaProductMapper } from '@/infrastructure/database/prisma/mappers/prisma-product-mapper'
 import {
   Product,
+  ProductID,
   ProductProps,
   StatusProduct,
 } from '@/domain/enterprise/product/product'
+import { PrismaProductMapper } from '@/infrastructure/database/prisma/mappers/prisma-product-mapper'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Injectable } from '@nestjs/common'
@@ -61,7 +62,7 @@ export async function makeProduct({
       manufactureDate: faker.date.past(),
       ...override,
     },
-    new UniqueEntityID(override?.id),
+    new ProductID(override?.id),
   )
 
   if (repository) {

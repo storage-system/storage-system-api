@@ -1,7 +1,10 @@
 import { PrismaCompanyMapper } from '@/infrastructure/database/prisma/mappers/prisma-company-mapper'
+import {
+  Company,
+  CompanyID,
+  CompanyProps,
+} from '@/domain/enterprise/company/company'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { Company, CompanyProps } from '@/domain/enterprise/company/company'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Injectable } from '@nestjs/common'
 import { faker } from '@faker-js/faker'
 
@@ -21,13 +24,13 @@ export async function makeCompany({
   const company = Company.create(
     {
       corporateName: faker.company.name(),
-      tradeName: faker.company.name(),
+      tradeName: `${faker.company.name()} LTDA`,
       cnpj: faker.string.numeric({
         length: 14,
       }),
       email: faker.internet.email(),
       contact: faker.phone.number(),
-      responsibleId: faker.string.uuid(),
+      responsibleId: override?.responsibleId ?? faker.string.uuid(),
       address: {
         city: faker.location.city(),
         country: faker.location.country(),
@@ -35,14 +38,14 @@ export async function makeCompany({
           abbreviated: true,
         }),
         street: faker.location.street(),
-        complement: faker.lorem.words(),
+        complement: faker.location.cardinalDirection(),
         neighborhood: faker.location.secondaryAddress(),
         number: faker.location.buildingNumber(),
         zipCode: faker.location.zipCode(),
       },
       ...override,
     },
-    new UniqueEntityID(override?.id),
+    new CompanyID(override?.id),
   )
 
   if (repository) {
@@ -65,6 +68,9 @@ export class CompanyFactory {
 
     await this.prisma.company.create({
       data: PrismaCompanyMapper.toPersistence(company),
+      select: {
+        responsibleId: true,
+      },
     })
 
     return company

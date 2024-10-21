@@ -2,6 +2,9 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
+import { CompanyID } from '../company/company'
+import { UserID } from '../user/user'
+
 export enum ReportFrequency {
   DIARY = 'diary',
   WEEKLY = 'weekly',
@@ -9,9 +12,11 @@ export enum ReportFrequency {
   YEAR = 'year',
 }
 
+export class ConfigurationID extends UniqueEntityID {}
+
 export interface ConfigurationProps {
-  userId: UniqueEntityID
-  companyId: UniqueEntityID
+  userId: UserID
+  companyId: CompanyID
   daysBeforeOldStock: number
   warningDays: number
   emailNotification: boolean
@@ -30,7 +35,7 @@ export class Configuration extends Entity<ConfigurationProps> {
       ConfigurationProps,
       'createdAt' | 'daysBeforeOldStock' | 'warningDays'
     >,
-    id?: UniqueEntityID,
+    id?: ConfigurationID,
   ) {
     const configuration = new Configuration(
       {

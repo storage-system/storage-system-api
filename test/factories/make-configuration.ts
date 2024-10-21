@@ -1,5 +1,6 @@
 import {
   Configuration,
+  ConfigurationID,
   ConfigurationProps,
   ReportFrequency,
 } from '@/domain/enterprise/configuration/configuration'
@@ -41,7 +42,7 @@ export async function makeConfiguration({
       reportFrequency: faker.helpers.enumValue(ReportFrequency),
       ...override,
     },
-    new UniqueEntityID(override?.id),
+    new ConfigurationID(override?.id),
   )
 
   if (repository) {

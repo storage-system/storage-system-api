@@ -1,7 +1,11 @@
 import { PrismaCategoryMapper } from '@/infrastructure/database/prisma/mappers/prisma-category-mapper'
-import { Category, CategoryProps } from '@/domain/enterprise/category/category'
+import {
+  Category,
+  CategoryID,
+  CategoryProps,
+} from '@/domain/enterprise/category/category'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { CompanyID } from '@/domain/enterprise/company/company'
 import { Injectable } from '@nestjs/common'
 import { faker } from '@faker-js/faker'
 
@@ -22,10 +26,10 @@ export async function makeCategory({
     {
       name: faker.commerce.department(),
       isActive: true,
-      companyId: new UniqueEntityID(),
+      companyId: new CompanyID(),
       ...override,
     },
-    new UniqueEntityID(override?.id),
+    new CategoryID(override?.id),
   )
 
   if (repository) {
