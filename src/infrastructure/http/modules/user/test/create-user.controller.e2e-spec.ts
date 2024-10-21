@@ -37,7 +37,7 @@ describe('Create user (E2E)', () => {
       .post('/users')
       .send(userMock)
 
-    expect(response.statusCode).toBe(HttpStatus.NO_CONTENT)
+    expect(response.statusCode).toBe(HttpStatus.CREATED)
 
     const userOnDatabase = await prisma.user.findFirst({
       where: {

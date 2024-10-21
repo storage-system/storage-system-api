@@ -2,7 +2,6 @@ import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { HttpStatus, INestApplication } from '@nestjs/common'
-import { CompanyFactory } from 'test/factories/make-company'
 import { MainConfig } from '@/infrastructure/main.config'
 import { AppModule } from '@/infrastructure/app.module'
 import { UserFactory } from 'test/factories/make-user'
@@ -17,7 +16,7 @@ describe('Delete user (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, CompanyFactory, AuthenticateFactory],
+      providers: [UserFactory, AuthenticateFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
