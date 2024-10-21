@@ -1,8 +1,8 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { ReportFrequency } from '@/domain/enterprise/configuration/configuration'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { ConfigurationFactory } from 'test/factories/make-configuration'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
@@ -16,7 +16,7 @@ import { UpdateConfigurationDTO } from '../dto/update-configuration.dto'
 describe('Update Configuration (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let configurationFactory: ConfigurationFactory
 
   beforeAll(async () => {
@@ -25,22 +25,23 @@ describe('Update Configuration (E2E)', () => {
       providers: [
         UserFactory,
         CompanyFactory,
-        AuthenticateFactory,
+        AuthenticateFactoryWithCompany,
         ConfigurationFactory,
       ],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     configurationFactory = moduleRef.get(ConfigurationFactory)
 
     await app.init()
   })
 
   test('[PATCH] /configurations/:id', async () => {
-    const { accessToken, companyId, userId } =
+    const { accessToken, userId, companyId } =
       await authenticateFactory.makePrismaAuthenticate()
+
     const configuration = await configurationFactory.makeConfigurationProduct({
       userId: new UniqueEntityID(userId),
       companyId: new UniqueEntityID(companyId),

@@ -1,19 +1,18 @@
-import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { ConfigurationFactory } from 'test/factories/make-configuration'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { CompanyID } from '@/domain/enterprise/company/company'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
 import { AppModule } from '@/infrastructure/app.module'
 import { UserFactory } from 'test/factories/make-user'
+import { UserID } from '@/domain/enterprise/user/user'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
 describe('Get Configuration By Id (E2E)', () => {
   let app: INestApplication
-  let prisma: PrismaService
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let configurationFactory: ConfigurationFactory
 
   beforeAll(async () => {
@@ -22,25 +21,25 @@ describe('Get Configuration By Id (E2E)', () => {
       providers: [
         UserFactory,
         CompanyFactory,
-        AuthenticateFactory,
+        AuthenticateFactoryWithCompany,
         ConfigurationFactory,
       ],
     }).compile()
 
     app = moduleRef.createNestApplication()
-    prisma = moduleRef.get(PrismaService)
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     configurationFactory = moduleRef.get(ConfigurationFactory)
 
     await app.init()
   })
 
   test('[GET] /configurations/:id', async () => {
-    const { accessToken, companyId, userId } =
+    const { accessToken, userId, companyId } =
       await authenticateFactory.makePrismaAuthenticate()
+
     const configuration = await configurationFactory.makeConfigurationProduct({
-      userId: new UniqueEntityID(userId),
-      companyId: new UniqueEntityID(companyId),
+      userId: new UserID(userId),
+      companyId: new CompanyID(companyId),
     })
     const configurationId = configuration.id.toString()
 

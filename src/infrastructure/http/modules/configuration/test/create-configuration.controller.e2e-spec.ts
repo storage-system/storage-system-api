@@ -1,8 +1,7 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { ReportFrequency } from '@/domain/enterprise/configuration/configuration'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
-import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
 import { AppModule } from '@/infrastructure/app.module'
@@ -16,23 +15,23 @@ import { CreateConfigurationDTO } from '../dto/create-configuration.dto'
 describe('Create Configuration (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, CompanyFactory, AuthenticateFactory],
+      providers: [UserFactory, CompanyFactory, AuthenticateFactoryWithCompany],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
 
     await app.init()
   })
 
   test('[POST] /configurations', async () => {
-    const { accessToken, companyId, userId } =
+    const { accessToken, userId, companyId } =
       await authenticateFactory.makePrismaAuthenticate()
 
     const configurationMock: CreateConfigurationDTO = {
