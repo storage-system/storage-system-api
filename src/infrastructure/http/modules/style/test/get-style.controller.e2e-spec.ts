@@ -1,5 +1,5 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
@@ -12,7 +12,7 @@ import request from 'supertest'
 
 describe('Get Style By Id (E2E)', () => {
   let app: INestApplication
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let styleFactory: StyleFactory
 
   beforeAll(async () => {
@@ -21,13 +21,13 @@ describe('Get Style By Id (E2E)', () => {
       providers: [
         CompanyFactory,
         UserFactory,
-        AuthenticateFactory,
+        AuthenticateFactoryWithCompany,
         StyleFactory,
       ],
     }).compile()
     app = moduleRef.createNestApplication()
 
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     styleFactory = moduleRef.get(StyleFactory)
 
     MainConfig(app)

@@ -1,6 +1,6 @@
+import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
-import { AuthenticateFactory } from 'test/factories/make-authenticate'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
@@ -15,7 +15,7 @@ import { UpdateStyleDTO } from '../dto/update-style.dto'
 describe('Update Style (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let authenticateFactory: AuthenticateFactory
+  let authenticateFactory: AuthenticateFactoryWithCompany
   let styleFactory: StyleFactory
 
   beforeAll(async () => {
@@ -24,21 +24,21 @@ describe('Update Style (E2E)', () => {
       providers: [
         UserFactory,
         CompanyFactory,
-        AuthenticateFactory,
+        AuthenticateFactoryWithCompany,
         StyleFactory,
       ],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
-    authenticateFactory = moduleRef.get(AuthenticateFactory)
+    authenticateFactory = moduleRef.get(AuthenticateFactoryWithCompany)
     styleFactory = moduleRef.get(StyleFactory)
 
     await app.init()
   })
 
   test('[PATCH] /styles/:id', async () => {
-    const { accessToken, companyId, userId } =
+    const { accessToken, companyId } =
       await authenticateFactory.makePrismaAuthenticate()
     const style = await styleFactory.makePrismaStyle({
       companyId: new UniqueEntityID(companyId),
