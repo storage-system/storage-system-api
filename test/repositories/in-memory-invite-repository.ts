@@ -26,10 +26,6 @@ export class InMemoryInviteRepository implements InviteRepository {
     throw new Error('Method not implemented.')
   }
 
-  async accept(anId: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
   async refuse(anId: string): Promise<void> {
     throw new Error('Method not implemented.')
   }

@@ -8,8 +8,6 @@ export interface AccessCodeProps {
   code: string
   expiresAt: Date
   createdAt: Date
-  updatedAt?: Date | null
-  deletedAt?: Date | null
 }
 
 export type AccessCodeConstructorProps = Replace<
@@ -55,13 +53,5 @@ export class AccessCode extends ValueObject<AccessCodeProps> {
 
   get createdAt() {
     return this.value.createdAt
-  }
-
-  get updatedAt() {
-    return this.value.updatedAt
-  }
-
-  get deletedAt() {
-    return this.value.deletedAt
   }
 }

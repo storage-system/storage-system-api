@@ -24,7 +24,5 @@ describe('Access Code Unit Tests', () => {
     expect(item.expiresAt).toBeDefined()
     expect(item.isExpired).toBeFalsy()
     expect(item.createdAt).toBeInstanceOf(Date)
-    expect(item.updatedAt).toBeUndefined()
-    expect(item.deletedAt).toBeUndefined()
   })
 })

@@ -1,3 +1,4 @@
+import { ValidationHandler } from '@/core/validation/validation-handler'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
@@ -42,8 +43,16 @@ export class Invite extends Entity<InviteProps> {
     return invite
   }
 
-  private isExpired() {
-    return new Date() > this.expiresIn
+  validate(aHandler: ValidationHandler) {
+    const now = new Date()
+
+    if (this.expiresIn < now) {
+      aHandler.appendAnError(new Error('O convite está expirado.'))
+    }
+
+    if (this.accessCode.expiresAt < now) {
+      aHandler.appendAnError(new Error('Código de acesso expirado.'))
+    }
   }
 
   get email() {
