@@ -22,8 +22,12 @@ export class InMemoryInviteRepository implements InviteRepository {
     })
   }
 
-  async getPendings(): Promise<Invite[]> {
-    throw new Error('Method not implemented.')
+  async getPendings(companyId: string): Promise<Invite[]> {
+    const pendingInvites = this.items.filter(
+      (item) => item.companyId.toString() === companyId && !item.isExpired(),
+    )
+
+    return pendingInvites
   }
 
   async refuse(anId: string): Promise<void> {

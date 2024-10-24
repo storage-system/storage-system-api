@@ -1,12 +1,9 @@
 import {
-  DimensionsProduct,
   Product,
   ProductProps,
   StatusProduct,
 } from '@/domain/enterprise/product/product'
 import { Category, CategoryProps } from '@/domain/enterprise/category/category'
-import { Company, CompanyProps } from '@/domain/enterprise/company/company'
-import { User, UserProps } from '@/domain/enterprise/user/user'
 
 export class ListProductsOutput {
   id: string

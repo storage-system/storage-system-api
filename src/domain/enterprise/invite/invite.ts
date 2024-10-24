@@ -43,6 +43,11 @@ export class Invite extends Entity<InviteProps> {
     return invite
   }
 
+  public isExpired(): boolean {
+    const now = new Date()
+    return this.expiresIn < now && this.accessCode.expiresAt < now
+  }
+
   validate(aHandler: ValidationHandler) {
     const now = new Date()
 

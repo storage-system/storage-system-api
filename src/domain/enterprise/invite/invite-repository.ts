@@ -12,7 +12,7 @@ export abstract class InviteRepository extends Repository<Invite> {
     perPage: number
   }): Promise<Pagination<Invite>>
 
-  abstract getPendings(): Promise<Invite[]>
+  abstract getPendings(companyId: string): Promise<Invite[]>
   abstract refuse(anId: string): Promise<void>
   abstract revoke(anId: string): Promise<void>
 }
