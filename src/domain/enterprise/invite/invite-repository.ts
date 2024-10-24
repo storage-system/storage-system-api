@@ -14,5 +14,4 @@ export abstract class InviteRepository extends Repository<Invite> {
 
   abstract getPendings(companyId: string): Promise<Invite[]>
   abstract refuse(anId: string): Promise<void>
-  abstract revoke(anId: string): Promise<void>
 }

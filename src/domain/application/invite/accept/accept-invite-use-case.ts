@@ -3,7 +3,8 @@ import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import NotificationException from '@/core/exception/notification-exception'
 import { Notification } from '@/core/validation/notification'
-import { User, UserID } from '@/domain/enterprise/user/user'
+import { InviteID } from '@/domain/enterprise/invite/invite'
+import { User } from '@/domain/enterprise/user/user'
 import { Injectable } from '@nestjs/common'
 
 import { HashGenerator } from '../../cryptography/hash-generator'
@@ -40,7 +41,7 @@ export class AcceptInviteUseCase {
     const invite = await this.inviteRepository.findById(inviteId)
 
     if (!invite) {
-      throw ResourceNotFoundException.with('Convite', new UserID(inviteId))
+      throw ResourceNotFoundException.with('Convite', new InviteID(inviteId))
     }
 
     invite.validate(notification)

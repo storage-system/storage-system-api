@@ -48,6 +48,10 @@ export class Invite extends Entity<InviteProps> {
     return this.expiresIn < now && this.accessCode.expiresAt < now
   }
 
+  public revoke() {
+    this.props.deletedAt = new Date()
+  }
+
   validate(aHandler: ValidationHandler) {
     const now = new Date()
 

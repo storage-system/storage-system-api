@@ -34,10 +34,6 @@ export class InMemoryInviteRepository implements InviteRepository {
     throw new Error('Method not implemented.')
   }
 
-  async revoke(anId: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
   async save(record: Invite): Promise<void> {
     this.items.push(record)
   }
