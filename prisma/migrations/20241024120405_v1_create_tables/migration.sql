@@ -54,6 +54,32 @@ CREATE TABLE "companies" (
 );
 
 -- CreateTable
+CREATE TABLE "access_code" (
+    "id" VARCHAR(36) NOT NULL,
+    "code" VARCHAR(12) NOT NULL,
+    "expires_at" TIMESTAMP(6) NOT NULL,
+    "created_at" TIMESTAMP(6) NOT NULL,
+
+    CONSTRAINT "access_code_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "invites" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "roles" "Role"[] DEFAULT ARRAY['MEMBER']::"Role"[],
+    "expiresIn" TIMESTAMP(3) NOT NULL,
+    "accessCodeId" VARCHAR(36) NOT NULL,
+    "author_id" TEXT,
+    "companyId_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+    "deleted_at" TIMESTAMP(3),
+
+    CONSTRAINT "invites_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "categories" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -161,6 +187,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "companies_email_key" ON "companies"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "access_code_code_key" ON "access_code"("code");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "configurations_user_id_key" ON "configurations"("user_id");
 
 -- CreateIndex
@@ -177,6 +206,15 @@ ALTER TABLE "companies" ADD CONSTRAINT "companies_address_id_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "companies" ADD CONSTRAINT "companies_responsible_id_fkey" FOREIGN KEY ("responsible_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "invites" ADD CONSTRAINT "invites_accessCodeId_fkey" FOREIGN KEY ("accessCodeId") REFERENCES "access_code"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "invites" ADD CONSTRAINT "invites_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "invites" ADD CONSTRAINT "invites_companyId_id_fkey" FOREIGN KEY ("companyId_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "categories" ADD CONSTRAINT "categories_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

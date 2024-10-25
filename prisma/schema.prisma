@@ -24,6 +24,7 @@ model User {
   roles    Role[] @default([MEMBER])
 
   companies Company[] @relation("company_responsible")
+  invites   Invite[]
 
   companyId String?  @map("company_id")
   company   Company? @relation(fields: [companyId], references: [id])
@@ -74,12 +75,47 @@ model Company {
   products      Product[]
   configuration Configuration[]
   styles        Style[]
+  invites       Invite[]
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
   @@map("companies")
+}
+
+model AccessCode {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  code      String   @unique @db.VarChar(12)
+  expiresAt DateTime @map("expires_at") @db.Timestamp(6)
+
+  invites Invite[]
+
+  createdAt DateTime @map("created_at") @db.Timestamp(6)
+
+  @@map("access_code")
+}
+
+model Invite {
+  id        String   @id @default(uuid())
+  email     String
+  roles     Role[]   @default([MEMBER])
+  expiresIn DateTime
+
+  accessCodeId String     @db.VarChar(36)
+  accessCode   AccessCode @relation(fields: [accessCodeId], references: [id])
+
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String @map("author_id")
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String  @map("companyId_id")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("invites")
 }
 
 model Category {

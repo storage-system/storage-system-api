@@ -1,26 +1,8 @@
 import { InviteRepository } from '@/domain/enterprise/invite/invite-repository'
 import { Invite } from '@/domain/enterprise/invite/invite'
-import { Pagination } from '@/core/entities/pagination'
 
 export class InMemoryInviteRepository implements InviteRepository {
   public items: Invite[] = []
-
-  async findAll({
-    page,
-    perPage,
-  }: {
-    page: number
-    perPage: number
-  }): Promise<Pagination<Invite>> {
-    const items = this.items.slice((page - 1) * perPage, page * perPage)
-
-    return new Pagination({
-      total: this.items.length,
-      items,
-      perPage,
-      page,
-    })
-  }
 
   async getPendings(companyId: string): Promise<Invite[]> {
     const pendingInvites = this.items.filter(
