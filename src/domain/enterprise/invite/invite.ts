@@ -25,13 +25,17 @@ export interface InviteProps {
 
 export class Invite extends Entity<InviteProps> {
   static create(
-    props: Optional<InviteProps, 'createdAt' | 'accessCode' | 'expiresIn'>,
+    props: Optional<
+      InviteProps,
+      'createdAt' | 'accessCode' | 'expiresIn' | 'roles'
+    >,
     id?: InviteID,
   ) {
     const FIFTY_EIGHT_HOURS = 48 * 60 * 60
 
     const invite = new Invite(
       {
+        roles: [UserRoles.MEMBER],
         expiresIn: new Date(new Date().getTime() + FIFTY_EIGHT_HOURS * 1000),
         accessCode: AccessCode.create(),
         createdAt: new Date(),

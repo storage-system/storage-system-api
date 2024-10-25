@@ -10,7 +10,7 @@ import { Injectable } from '@nestjs/common'
 
 export interface CreateInviteUseCaseRequest {
   email: string
-  roles: string[]
+  roles?: string[]
   authorId: string
 }
 
@@ -47,7 +47,7 @@ export class CreateInviteUseCase {
     const invite = Invite.create({
       authorId: new UserID(authorId),
       companyId: author.companyId,
-      roles: roles.map((role) => role as UserRoles),
+      roles: roles?.map((role) => role as UserRoles),
       email,
     })
 
