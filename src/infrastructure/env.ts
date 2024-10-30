@@ -1,14 +1,17 @@
 import { z } from 'zod'
 
 export const envSchema = z.object({
+  PORT: z.coerce.number().optional().default(3333),
+
   JWT_PRIVATE_KEY: z.string(),
   JWT_PUBLIC_KEY: z.string(),
+
   DATABASE_URL: z.string().url(),
   DB_USER: z.string(),
   DB_PASS: z.string(),
   DB_NAME: z.string(),
   DB_HOST: z.string(),
-  PORT: z.coerce.number().optional().default(3333),
+
   MINIO_USER: z.string(),
   MINIO_PASSWORD: z.string(),
   MINIO_ENDPOINT: z.string(),
@@ -17,6 +20,12 @@ export const envSchema = z.object({
   MINIO_SECRET_KEY: z.string(),
   MINIO_USE_SSL: z.coerce.boolean(),
   MINIO_BUCKET_NAME: z.string(),
+
+  RMQ_MESSAGING_PORT: z.coerce.number(),
+  RMQ_MESSAGING_HOST: z.string(),
+  RMQ_MESSAGING_USER: z.string(),
+  RMQ_MESSAGING_PASSWORD: z.string(),
+  EMAIL_MESSAGING_QUEUE: z.string(),
 })
 
 export type Env = z.infer<typeof envSchema>

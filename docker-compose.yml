@@ -23,6 +23,15 @@ services:
     volumes:
       - 'minio_data:/data'
 
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_MESSAGING_USER}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_MESSAGING_PASSWORD}
+
 volumes:
   storage_system_pg:
     external: false
