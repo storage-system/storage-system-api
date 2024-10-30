@@ -26,7 +26,7 @@ export class InviteController {
     private acceptInviteUseCase: AcceptInviteUseCase,
     private getPendingInvitesUseCase: GetPendingInvitesUseCase,
     private revokeInviteUseCase: RevokeInviteUseCase,
-  ) {}
+  ) { }
 
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
@@ -40,7 +40,7 @@ export class InviteController {
     return await this.acceptInviteUseCase.execute(body)
   }
 
-  @Get('/pendings/:companyId')
+  @Get('/pendings/company/:companyId')
   @ApiOkResponse({ isArray: true, type: HttpInviteGetResponse })
   async getConfiguration(@Param('companyId') companyId: string) {
     return await this.getPendingInvitesUseCase.execute({

@@ -61,7 +61,7 @@ export class PrismaCompanyMapper {
       users: {
         connect: {
           id: company.responsibleId,
-        }
+        },
       },
       address: {
         create: {
