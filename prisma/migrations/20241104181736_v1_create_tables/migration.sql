@@ -70,7 +70,7 @@ CREATE TABLE "invites" (
     "roles" "Role"[] DEFAULT ARRAY['MEMBER']::"Role"[],
     "expiresIn" TIMESTAMP(3) NOT NULL,
     "accessCodeId" VARCHAR(36) NOT NULL,
-    "author_id" TEXT,
+    "author_id" TEXT NOT NULL,
     "companyId_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
@@ -170,6 +170,7 @@ CREATE TABLE "files" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6),
     "deleted_at" TIMESTAMP(6),
+    "product_id" TEXT,
 
     CONSTRAINT "files_pkey" PRIMARY KEY ("id")
 );
@@ -211,7 +212,7 @@ ALTER TABLE "companies" ADD CONSTRAINT "companies_responsible_id_fkey" FOREIGN K
 ALTER TABLE "invites" ADD CONSTRAINT "invites_accessCodeId_fkey" FOREIGN KEY ("accessCodeId") REFERENCES "access_code"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "invites" ADD CONSTRAINT "invites_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "invites" ADD CONSTRAINT "invites_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "invites" ADD CONSTRAINT "invites_companyId_id_fkey" FOREIGN KEY ("companyId_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -236,6 +237,9 @@ ALTER TABLE "styles" ADD CONSTRAINT "styles_company_id_fkey" FOREIGN KEY ("compa
 
 -- AddForeignKey
 ALTER TABLE "products" ADD CONSTRAINT "products_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "files" ADD CONSTRAINT "files_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CategoryToProduct" ADD CONSTRAINT "_CategoryToProduct_A_fkey" FOREIGN KEY ("A") REFERENCES "categories"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -4,12 +4,22 @@ import { Prisma, Product as PrismaProduct } from '@prisma/client'
 import { Slug } from '@/domain/enterprise/slug/slug'
 
 export class PrismaProductMapper {
-  static toDomain(raw: PrismaProduct): Product {
+  static toDomain(
+    raw: PrismaProduct & {
+      files?: {
+        id: string
+      }[]
+    },
+  ): Product {
     return Product.create(
       {
         name: raw.name,
         slug: Slug.create(raw.slug),
         description: raw.description,
+        fileIds:
+          raw.files && raw.files?.length > 0
+            ? raw.files?.map((file) => file.id)
+            : undefined,
         originalPrice: raw.originalPrice,
         finalPrice: raw.finalPrice,
         discountPercentage: raw.discountPercentage,
@@ -59,6 +69,14 @@ export class PrismaProductMapper {
       batch: product.batch,
       status: product.status,
       companyId: product.companyId.toString(),
+      files:
+        product.fileIds && product.fileIds.length > 0
+          ? {
+              connect: product.fileIds.map((fileId) => ({
+                id: fileId,
+              })),
+            }
+          : undefined,
       categories: product.categoryIds
         ? {
             connect: product.categoryIds.map((categoryId) => ({

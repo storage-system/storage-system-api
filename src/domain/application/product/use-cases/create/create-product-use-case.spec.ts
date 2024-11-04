@@ -6,7 +6,6 @@ import { CompaniesRepository } from '@/domain/enterprise/company/companies-repos
 import { StatusProduct } from '@/domain/enterprise/product/product'
 import { makeCategory } from 'test/factories/make-category'
 import { makeCompany } from 'test/factories/make-company'
-import { makeUser } from 'test/factories/make-user'
 import { faker } from '@faker-js/faker'
 
 import {
@@ -53,11 +52,12 @@ describe('Create Product Use Case', () => {
     const productMock: CreateProductUseCaseRequest = {
       name: faker.company.name(),
       description: faker.commerce.productDescription(),
+      fileIds: [],
       companyId: company.id.toString(),
       categoryIds: [category.id.toString()],
-      dimensions_depth: '5cm',
-      dimensions_height: '10cm',
-      dimensions_width: '20cm',
+      depth: '5cm',
+      height: '10cm',
+      width: '20cm',
       originalPrice: faker.number.int({
         max: 200,
         min: 100,
@@ -105,9 +105,10 @@ describe('Create Product Use Case', () => {
     const productMock: CreateProductUseCaseRequest = {
       name: faker.company.name(),
       description: faker.commerce.productDescription(),
-      dimensions_depth: '5cm',
-      dimensions_height: '10cm',
-      dimensions_width: '20cm',
+      fileIds: [],
+      depth: '5cm',
+      height: '10cm',
+      width: '20cm',
       companyId: companyNonExists,
       categoryIds: [category.id.toString()],
 

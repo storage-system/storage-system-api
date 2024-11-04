@@ -26,6 +26,7 @@ export interface UpdateProductUseCaseRequest {
   status?: StatusProduct
   productImage?: string
   categoryIds?: string[]
+  fileIds?: string[]
 }
 
 @Injectable()

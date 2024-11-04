@@ -25,6 +25,7 @@ export interface ProductProps {
   name: string
   slug: Slug
   description: string
+  fileIds: string[]
 
   originalPrice: number
   finalPrice: number
@@ -56,6 +57,7 @@ export interface ProductProps {
 export type ProductConstructorProps = Replace<
   ProductProps,
   {
+    fileIds?: string[]
     slug?: Slug
     manufactureDate?: Date
     dueDate?: Date
@@ -70,6 +72,7 @@ export class Product extends Entity<ProductProps> {
 
     const product = new Product(
       {
+        fileIds: [],
         slug: props.slug ?? Slug.createFromText(props.name),
         manufactureDate,
         dueDate,
@@ -111,6 +114,7 @@ export class Product extends Entity<ProductProps> {
     this.props.productImage = aProduct.productImage ?? this.productImage
 
     this.props.categoryIds = aProduct.categoryIds ?? this.categoryIds
+    this.props.fileIds = aProduct.fileIds ?? this.fileIds
 
     this.touch()
   }
@@ -131,6 +135,10 @@ export class Product extends Entity<ProductProps> {
 
   get description() {
     return this.props.description
+  }
+
+  get fileIds() {
+    return this.props.fileIds
   }
 
   get originalPrice() {

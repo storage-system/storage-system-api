@@ -59,6 +59,7 @@ describe('Create Product (E2E)', () => {
         max: 200,
         min: 100,
       }),
+      fileIds: [],
       manufactureDate: faker.date.past(),
       discountPercentage: faker.number.int({
         max: 90,
@@ -76,9 +77,9 @@ describe('Create Product (E2E)', () => {
         min: 1,
         max: 100,
       }),
-      dimensions_depth: faker.string.numeric(2),
-      dimensions_height: faker.string.numeric(2),
-      dimensions_width: faker.string.numeric(2),
+      depth: faker.string.numeric(2),
+      height: faker.string.numeric(2),
+      width: faker.string.numeric(2),
       weight: faker.number.int({
         max: 10,
       }),

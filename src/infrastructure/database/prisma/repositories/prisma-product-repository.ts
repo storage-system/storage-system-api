@@ -45,6 +45,16 @@ export class PrismaProductsRepository implements ProductsRepository {
       where: {
         id: anId,
       },
+      include: {
+        files: {
+          where: {
+            deletedAt: null,
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
     })
 
     if (!product) {

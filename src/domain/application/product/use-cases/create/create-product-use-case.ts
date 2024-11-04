@@ -22,15 +22,16 @@ export interface CreateProductUseCaseRequest {
   validityInDays: number
   unitOfMeasure: string
   weight: number
-  dimensions_height: string
-  dimensions_width: string
-  dimensions_depth: string
+  height: string
+  width: string
+  depth: string
   manufacturer?: string
   batch?: string
   status: StatusProduct
   productImage?: string
   companyId: string
   categoryIds: string[]
+  fileIds: string[] | undefined
 }
 
 export interface CreateProductUseCaseResponse {
@@ -72,14 +73,15 @@ export class CreateProductUseCase {
 
     const product = Product.create({
       ...anInput,
+      fileIds: anInput.fileIds,
       categoryIds: categories,
       manufactureDate: anInput.manufactureDate,
-      dimensions: {
-        depth: anInput.dimensions_depth,
-        height: anInput.dimensions_height,
-        width: anInput.dimensions_width,
-      },
       companyId: new UniqueEntityID(anInput.companyId),
+      dimensions: {
+        depth: anInput.depth,
+        height: anInput.height,
+        width: anInput.width,
+      },
     })
 
     if (notification.hasErrors()) {
