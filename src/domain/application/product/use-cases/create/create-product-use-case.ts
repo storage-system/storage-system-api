@@ -73,7 +73,7 @@ export class CreateProductUseCase {
 
     const product = Product.create({
       ...anInput,
-      fileIds: anInput.fileIds,
+      fileIds: anInput.fileIds ?? [],
       categoryIds: categories,
       manufactureDate: anInput.manufactureDate,
       companyId: new UniqueEntityID(anInput.companyId),

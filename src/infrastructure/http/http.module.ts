@@ -27,10 +27,10 @@ import { RolesGuard } from '../guards/roles.guard'
     InviteModule,
   ],
   providers: [
-    {
+    /* {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    },
+    }, */
   ],
 })
 export class HttpModule {}

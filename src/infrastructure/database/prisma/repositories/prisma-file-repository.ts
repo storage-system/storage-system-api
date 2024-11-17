@@ -18,17 +18,13 @@ export class PrismaFileRepository implements FileRepository {
   }
 
   async findById(anId: string): Promise<File | null> {
-    const file = await this.prisma.file.findUnique({
-      where: {
-        id: anId,
-      },
+    const prismaFile = await this.prisma.file.findFirst({
+      where: { id: anId, deletedAt: null },
     })
 
-    if (!file) {
-      return null
-    }
+    if (!prismaFile) return null
 
-    return PrismaFileMapper.toDomain(file)
+    return PrismaFileMapper.toDomain(prismaFile)
   }
 
   async delete(anId: string): Promise<void> {

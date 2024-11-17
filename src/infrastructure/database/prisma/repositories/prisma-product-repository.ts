@@ -20,6 +20,13 @@ export class PrismaProductsRepository implements ProductsRepository {
         },
         take: params.perPage,
         skip: (params.page - 1) * params.perPage,
+        include: {
+          files: {
+            select: {
+              id: true,
+            },
+          },
+        },
         orderBy: {
           createdAt: 'desc',
         },

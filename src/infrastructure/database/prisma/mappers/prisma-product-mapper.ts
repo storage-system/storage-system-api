@@ -6,7 +6,7 @@ import { Slug } from '@/domain/enterprise/slug/slug'
 export class PrismaProductMapper {
   static toDomain(
     raw: PrismaProduct & {
-      files?: {
+      files: {
         id: string
       }[]
     },
@@ -16,10 +16,7 @@ export class PrismaProductMapper {
         name: raw.name,
         slug: Slug.create(raw.slug),
         description: raw.description,
-        fileIds:
-          raw.files && raw.files?.length > 0
-            ? raw.files?.map((file) => file.id)
-            : undefined,
+        fileIds: raw.files.map((item) => item.id),
         originalPrice: raw.originalPrice,
         finalPrice: raw.finalPrice,
         discountPercentage: raw.discountPercentage,

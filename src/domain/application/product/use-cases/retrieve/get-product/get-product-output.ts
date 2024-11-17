@@ -6,6 +6,13 @@ import {
 } from '@/domain/enterprise/product/product'
 import { Category, CategoryProps } from '@/domain/enterprise/category/category'
 
+export interface AttachmentProps {
+  id: string
+  filename: string
+  type: string
+  url: string
+}
+
 export class GetProductOutput {
   id: string
   name: string
@@ -36,6 +43,13 @@ export class GetProductOutput {
     isActive: boolean
   }[]
 
+  attachments?: {
+    id: string
+    filename: string
+    type: string
+    url: string
+  }[]
+
   createdAt: Date
   updatedAt?: Date | null
   deletedAt?: Date | null
@@ -46,6 +60,11 @@ export class GetProductOutput {
       {
         id: string
       } & CategoryProps
+    >[],
+    anAttachmentProps?: Required<
+      {
+        id: string
+      } & AttachmentProps
     >[],
   ) {
     this.id = aProductProps.id.toString()
@@ -80,17 +99,31 @@ export class GetProductOutput {
           }))
         : []
 
+    this.attachments =
+      anAttachmentProps && anAttachmentProps.length > 0
+        ? anAttachmentProps.map((file) => ({
+            id: file.id,
+            filename: file.filename,
+            type: file.type,
+            url: file.url,
+          }))
+        : []
+
     this.createdAt = aProductProps.createdAt
     this.updatedAt = aProductProps.updatedAt
     this.deletedAt = aProductProps.deletedAt
   }
 
-  static fromAggregate(product: Product, categoriesProps: Category[]) {
+  static fromAggregate(
+    product: Product,
+    categoriesProps: Category[],
+    attachments?: AttachmentProps[],
+  ) {
     const categories =
       categoriesProps.length > 0
         ? categoriesProps.map((category) => category.toJSON())
         : []
 
-    return new GetProductOutput(product.toJSON(), categories)
+    return new GetProductOutput(product.toJSON(), categories, attachments)
   }
 }

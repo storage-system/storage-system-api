@@ -26,6 +26,7 @@ export async function makeProduct({
   const product = Product.create(
     {
       name: faker.company.name(),
+      fileIds: [],
       description: faker.commerce.productDescription(),
       companyId: new UniqueEntityID(override?.companyId?.toString()),
       categoryIds: override?.categoryIds!,

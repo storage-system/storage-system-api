@@ -1,11 +1,13 @@
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
+import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import { FileRepository } from '@/domain/enterprise/file/file-repository'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Category } from '@/domain/enterprise/category/category'
 import { Injectable } from '@nestjs/common'
 
 import { ProductsRepository } from '../../../../../enterprise/product/products-repository'
-import { GetProductOutput } from './get-product-output'
+import { AttachmentProps, GetProductOutput } from './get-product-output'
 
 interface GetProductUseCaseRequest {
   productId: string
@@ -18,6 +20,8 @@ export class GetProductUseCase {
   constructor(
     private productsRepository: ProductsRepository,
     private categoriesRepository: CategoriesRepository,
+    private fileRepository: FileRepository,
+    private fileStorageGateway: FileStorageGateway,
   ) {}
 
   async execute({
@@ -36,7 +40,13 @@ export class GetProductUseCase {
       product.categoryIds.map((categoryId) => categoryId.toString()),
     )
 
-    return GetProductOutput.fromAggregate(product, categories)
+    if (!product.fileIds.length) {
+      return GetProductOutput.fromAggregate(product, categories)
+    }
+
+    const attachments = await this.getAttachments(product.fileIds)
+
+    return GetProductOutput.fromAggregate(product, categories, attachments)
   }
 
   private async getCategories(categoryIds: string[]): Promise<Category[]> {
@@ -56,5 +66,30 @@ export class GetProductUseCase {
       )
     }
     return category
+  }
+
+  private async getAttachments(fileIds: string[]) {
+    const files = await Promise.all(
+      fileIds.map((id) => this.fileRepository.findById(id)),
+    )
+
+    const nonDeleteFiles = files.filter((file) => file && !file.deletedAt)
+
+    const urls = await Promise.all(
+      nonDeleteFiles.map(
+        (image) => image && this.fileStorageGateway.getFileUrl(image.path),
+      ),
+    )
+
+    const attachments = nonDeleteFiles
+      .map((file, index) => ({
+        id: file?.id.toString(),
+        filename: file?.filename,
+        type: file?.type,
+        url: urls[index] || '',
+      }))
+      .filter((attachment): attachment is AttachmentProps => !!attachment)
+
+    return attachments
   }
 }

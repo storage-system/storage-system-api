@@ -19,6 +19,7 @@ describe('Product Entity', () => {
 
     initialProps = {
       name: productName,
+      fileIds: [],
       slug: Slug.createFromText(productName),
       description: faker.commerce.productDescription(),
       originalPrice: 100,

@@ -57,7 +57,6 @@ export interface ProductProps {
 export type ProductConstructorProps = Replace<
   ProductProps,
   {
-    fileIds?: string[]
     slug?: Slug
     manufactureDate?: Date
     dueDate?: Date
@@ -72,7 +71,6 @@ export class Product extends Entity<ProductProps> {
 
     const product = new Product(
       {
-        fileIds: [],
         slug: props.slug ?? Slug.createFromText(props.name),
         manufactureDate,
         dueDate,
