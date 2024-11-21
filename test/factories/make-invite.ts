@@ -1,17 +1,17 @@
+import { PrismaInviteMapper } from '@/infrastructure/database/prisma/mappers/prisma-invite-mapper'
 import {
   Invite,
   InviteID,
   InviteProps,
 } from '@/domain/enterprise/invite/invite'
+import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { CompanyID } from '@/domain/enterprise/company/company'
 import { UserID } from '@/domain/enterprise/user/user'
+import { Injectable } from '@nestjs/common'
 import { faker } from '@faker-js/faker'
 
 import { FactoryProp } from '.'
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { PrismaInviteMapper } from '@/infrastructure/database/prisma/mappers/prisma-invite-mapper'
 
 export async function makeInvite({
   repository,
@@ -44,7 +44,7 @@ export async function makeInvite({
 
 @Injectable()
 export class InviteFactory {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async makePrismaInvite(data: Partial<InviteProps> = {}): Promise<Invite> {
     const invite = await makeInvite({ override: data })

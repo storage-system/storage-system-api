@@ -26,7 +26,7 @@ export class InviteController {
     private acceptInviteUseCase: AcceptInviteUseCase,
     private getPendingInvitesUseCase: GetPendingInvitesUseCase,
     private revokeInviteUseCase: RevokeInviteUseCase,
-  ) { }
+  ) {}
 
   @Post('/')
   @HttpCode(HttpStatus.CREATED)

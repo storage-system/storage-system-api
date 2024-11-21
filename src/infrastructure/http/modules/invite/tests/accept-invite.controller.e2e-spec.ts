@@ -1,19 +1,19 @@
 import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
+import { CompanyID } from '@/domain/enterprise/company/company'
+import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { CompanyFactory } from 'test/factories/make-company'
+import { InviteFactory } from 'test/factories/make-invite'
 import { AppModule } from '@/infrastructure/app.module'
 import { UserFactory } from 'test/factories/make-user'
+import { UserID } from '@/domain/enterprise/user/user'
 import { faker } from '@faker-js/faker'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
-import { InviteFactory } from 'test/factories/make-invite'
 import { AcceptInviteDTO } from '../dto/accept-invite.dto'
-import { UserID } from '@/domain/enterprise/user/user'
-import { CompanyID } from '@/domain/enterprise/company/company'
-import { UserRoles } from '@/domain/enterprise/user/user-types'
 
 describe('Accept Invite (E2E)', () => {
   let app: INestApplication
@@ -28,7 +28,7 @@ describe('Accept Invite (E2E)', () => {
         UserFactory,
         CompanyFactory,
         InviteFactory,
-        AuthenticateFactoryWithCompany
+        AuthenticateFactoryWithCompany,
       ],
     }).compile()
 
@@ -45,7 +45,7 @@ describe('Accept Invite (E2E)', () => {
       await authenticateFactory.makePrismaAuthenticate()
     const { id: inviteId } = await inviteFactory.makePrismaInvite({
       authorId: new UserID(userId),
-      companyId: new CompanyID(companyId)
+      companyId: new CompanyID(companyId),
     })
 
     const acceptInviteMock: AcceptInviteDTO = {
@@ -53,8 +53,8 @@ describe('Accept Invite (E2E)', () => {
       userAccount: {
         name: faker.person.fullName(),
         phone: faker.phone.number(),
-        password: faker.string.alphanumeric({ length: 8 })
-      }
+        password: faker.string.alphanumeric({ length: 8 }),
+      },
     }
 
     const response = await request(app.getHttpServer())
@@ -73,7 +73,7 @@ describe('Accept Invite (E2E)', () => {
           id: response.body.userId,
         },
       }),
-    ]);
+    ])
 
     expect(response.statusCode).toBe(HttpStatus.OK)
     expect(inviteOnDatabase).toBeNull()
