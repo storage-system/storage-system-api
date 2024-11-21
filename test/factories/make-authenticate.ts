@@ -23,7 +23,12 @@ export class AuthenticateFactory {
   protected async createUserAndToken(): Promise<BaseAuthenticateResponse> {
     const user = await this.userFactory.makePrismaUser()
     const userId = user.id.toString()
-    const accessToken = this.jwt.sign({ sub: userId })
+    const accessToken = this.jwt.sign(
+      { sub: userId },
+      {
+        expiresIn: '24h',
+      },
+    )
 
     return { accessToken, userId }
   }
