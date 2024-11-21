@@ -8,8 +8,8 @@ import { MetricsService } from './metrics.service'
 export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}
 
-  @Get('/:userId')
-  productMetrics(@Param('userId') userId: string) {
-    return this.metricsService.findMetrics(userId)
+  @Get('/company/:companyId')
+  productMetrics(@Param('companyId') companyId: string) {
+    return this.metricsService.findMetrics(companyId)
   }
 }

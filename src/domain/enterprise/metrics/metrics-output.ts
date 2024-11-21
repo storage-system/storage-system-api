@@ -1,8 +1,3 @@
-export interface MetricsOutput {
-  oldStockMetrics: OldStockMetrics
-  productMetrics: ProductMetrics
-}
-
 export interface OldStockMetrics {
   totalProductOldStock: number
   totalOldStockValue: number
@@ -15,4 +10,9 @@ export interface ProductMetrics {
   totalStockQuantity: number
   totalStockValue: number
   productsInWarningDays: number
+}
+
+export interface MetricsOutput {
+  oldStockMetrics: OldStockMetrics
+  productMetrics: ProductMetrics
 }

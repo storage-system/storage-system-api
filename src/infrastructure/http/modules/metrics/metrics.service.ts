@@ -15,13 +15,11 @@ import { PrismaService } from '../../../database/prisma/prisma.service'
 export class MetricsService {
   constructor(private prisma: PrismaService) {}
 
-  async findMetrics(userId: string): Promise<MetricsOutput> {
-    const user = await this.getUser(userId)
+  async findMetrics(companyId: string): Promise<MetricsOutput> {
+    const company = await this.getCompany(companyId)
 
-    const companyId = user.companyId!
-
-    const oldStockMetrics = await this.findOldStockMetrics(companyId)
-    const productMetrics = await this.findProductMetrics(companyId)
+    const oldStockMetrics = await this.findOldStockMetrics(company.id)
+    const productMetrics = await this.findProductMetrics(company.id)
 
     return {
       oldStockMetrics,
@@ -29,10 +27,10 @@ export class MetricsService {
     }
   }
 
-  private async getUser(userId: string) {
-    const user = await this.prisma.user.findUnique({
+  private async getCompany(id: string) {
+    const company = await this.prisma.company.findUnique({
       where: {
-        id: userId,
+        id,
       },
       include: {
         configuration: {
@@ -56,11 +54,11 @@ export class MetricsService {
       },
     })
 
-    if (!user) {
-      throw ResourceNotFoundException.with('Usuário', new UniqueEntityID())
+    if (!company) {
+      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID())
     }
 
-    return user
+    return company
   }
 
   private async findOldStockMetrics(

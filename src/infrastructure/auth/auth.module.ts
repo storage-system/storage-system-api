@@ -29,10 +29,10 @@ import { JwtStrategy } from './jwt.strategy'
   providers: [
     JwtStrategy,
     EnvService,
-    {
+    /* {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    },
+    }, */
   ],
 })
 export class AuthModule {}
