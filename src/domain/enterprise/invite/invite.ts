@@ -66,6 +66,10 @@ export class Invite extends Entity<InviteProps> {
     if (this.accessCode.expiresAt < now) {
       aHandler.appendAnError(new Error('Código de acesso expirado.'))
     }
+
+    if (this.deletedAt) {
+      aHandler.appendAnError(new Error('O convite foi deletado.'))
+    }
   }
 
   get email() {
