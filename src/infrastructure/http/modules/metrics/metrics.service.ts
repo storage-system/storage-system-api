@@ -80,6 +80,7 @@ export class MetricsService {
       expiringIn30Days,
       expiringIn60Days,
       expiringIn90Days,
+      totalStockQuantity,
     ] = await this.prisma.$transaction([
       this.prisma.product.count({
         where: {
@@ -96,7 +97,7 @@ export class MetricsService {
         WHERE deleted_at IS NULL
         AND company_id = ${companyId}
         AND due_date < NOW();
-    `,
+      `,
       this.prisma.product.count({
         where: {
           deletedAt: null,
@@ -127,11 +128,22 @@ export class MetricsService {
           },
         },
       }),
+      this.prisma.product.count({
+        where: {
+          deletedAt: null,
+          companyId,
+        },
+      }),
     ])
 
     const totalOldStockValueResult = Number(
       (totalOldStockValue as any)[0].totaloldstockvalue,
     )
+
+    const percentageOldStock =
+      totalStockQuantity > 0
+        ? (totalProductOldStock / totalStockQuantity) * 100
+        : 0
 
     return {
       totalProductOldStock,
@@ -139,6 +151,7 @@ export class MetricsService {
       expiringIn30Days,
       expiringIn60Days,
       expiringIn90Days,
+      percentageOldStock,
     }
   }
 

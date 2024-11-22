@@ -4,6 +4,7 @@ export interface OldStockMetrics {
   expiringIn30Days: number
   expiringIn60Days: number
   expiringIn90Days: number
+  percentageOldStock: number
 }
 
 export interface ProductMetrics {
