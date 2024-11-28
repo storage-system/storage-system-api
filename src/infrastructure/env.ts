@@ -21,7 +21,7 @@ export const envSchema = z.object({
   MINIO_USE_SSL: z.coerce.boolean(),
   MINIO_BUCKET_NAME: z.string(),
 
-  SMTP_HOST: z.coerce.number(),
+  SMTP_HOST: z.coerce.string(),
   SMTP_PORT: z.string(),
   SMTP_USER: z.string(),
   SMTP_PASSWORD: z.string(),

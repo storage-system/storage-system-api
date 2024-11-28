@@ -4,6 +4,13 @@
   "sourceRoot": "src",
   "entryFile": "infrastructure/main",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "assets": [
+      {
+        "include": "./infrastructure/services/email/templates/*.html",
+        "outDir": "dist/src",
+        "watchAssets": true
+      }
+    ]
   }
 }
