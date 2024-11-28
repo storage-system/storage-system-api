@@ -69,7 +69,7 @@ export class CreateInviteUseCase {
 
     await this.emailService.send({
       to: email,
-      subject: 'Allahu Akbar',
+      subject: 'Solicitação de Acesso - Storage',
       template: emailTemplatesEnum.INVITE_MEMBER,
       properties: {
         author: author.name,
