@@ -5,8 +5,9 @@ export interface EmailMessage {
   cc?: string[]
   subject: string
   template: string
-  properties: Record<string, unknown>
-  attachments?: { filename: string; content: Buffer[] }[]
+  properties: Record<string, string | number | boolean>
 }
 
-export abstract class EmailService extends EventService {}
+export abstract class EmailService extends EventService {
+  abstract send(message: EmailMessage): Promise<void>
+}

@@ -1,7 +1,9 @@
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
+import { emailTemplatesEnum } from '@/infrastructure/services/email/templates/email-templates'
 import { InMemoryInviteRepository } from 'test/repositories/in-memory-invite-repository'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { InMemoryEmailService } from 'test/repositories/in-memory-email-service'
 import { InviteRepository } from '@/domain/enterprise/invite/invite-repository'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { UserRoles } from '@/domain/enterprise/user/user-types'
@@ -15,25 +17,33 @@ import {
   CreateInviteUseCaseRequest,
 } from './create-invite-use-case'
 
-let companyRepository: CompaniesRepository
 let userRepository: UsersRepository
+let companyRepository: CompaniesRepository
 let inviteRepository: InviteRepository
+let emailService: InMemoryEmailService
 
 let useCase: CreateInviteUseCase
 
 describe('Create Invite Use Case', () => {
   beforeEach(() => {
-    companyRepository = new InMemoryCompaniesRepository()
     userRepository = new InMemoryUsersRepository()
+    companyRepository = new InMemoryCompaniesRepository()
     inviteRepository = new InMemoryInviteRepository()
+    emailService = new InMemoryEmailService()
 
-    useCase = new CreateInviteUseCase(userRepository, inviteRepository)
+    useCase = new CreateInviteUseCase(
+      userRepository,
+      companyRepository,
+      inviteRepository,
+      emailService,
+    )
   })
 
   it('dependencies should be defined', (): void => {
     expect(useCase).toBeDefined()
     expect(userRepository).toBeDefined()
     expect(inviteRepository).toBeDefined()
+    expect(emailService).toBeDefined()
   })
 
   it('should be able to create a new invite', async () => {
@@ -63,6 +73,12 @@ describe('Create Invite Use Case', () => {
     expect(inviteOnDatabase?.authorId).toEqual(user.id.toString())
     expect(inviteOnDatabase?.companyId).toEqual(company.id)
     expect(inviteOnDatabase?.accessCode.code).toBeDefined()
+
+    const emailsOnService = emailService.getSentEmails()
+
+    expect(emailsOnService[0].properties.author).toBe(user.name)
+    expect(emailsOnService[0].properties.email).toBe(inviteMock.email)
+    expect(emailsOnService[0].template).toBe(emailTemplatesEnum.INVITE_MEMBER)
   })
 
   it('should not be able to create a invite that user does not exist', async () => {
