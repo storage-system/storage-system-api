@@ -21,11 +21,11 @@ export const envSchema = z.object({
   MINIO_USE_SSL: z.coerce.boolean(),
   MINIO_BUCKET_NAME: z.string(),
 
-  RMQ_MESSAGING_PORT: z.coerce.number(),
-  RMQ_MESSAGING_HOST: z.string(),
-  RMQ_MESSAGING_USER: z.string(),
-  RMQ_MESSAGING_PASSWORD: z.string(),
-  EMAIL_MESSAGING_QUEUE: z.string(),
+  SMTP_HOST: z.coerce.number(),
+  SMTP_PORT: z.string(),
+  SMTP_USER: z.string(),
+  SMTP_PASSWORD: z.string(),
+  FROM_EMAIL: z.string(),
 })
 
 export type Env = z.infer<typeof envSchema>
