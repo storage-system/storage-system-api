@@ -12,6 +12,9 @@ export async function companySeed(prisma: PrismaClient) {
       email: company.email,
       isActive: company.isActive,
       responsible: { connect: { id: company.responsibleId } },
+      users: {
+        connect: [{ id: company.responsibleId }],
+      },
       address: {
         connectOrCreate: {
           where: { id: company.address.id },

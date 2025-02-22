@@ -2,7 +2,6 @@ import { createZodDto } from 'nestjs-zod'
 import { z } from 'nestjs-zod/z'
 
 const createStyleBodySchema = z.object({
-  companyId: z.string().uuid(),
   name: z.string(),
   isActive: z.boolean().optional().default(false),
   backgroundColor: z.string(),

@@ -1,15 +1,17 @@
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import NotificationException from '@/core/exception/notification-exception'
 import { ValidationHandler } from '@/core/validation/validation-handler'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Notification } from '@/core/validation/notification'
 import { Style } from '@/domain/enterprise/style/style'
+import { User } from '@/domain/enterprise/user/user'
 import { Injectable } from '@nestjs/common'
 import Error from '@/core/validation/error'
 
 export interface CreateStyleUseCaseRequest {
-  companyId: string
+  currentUser: User
   name: string
   isActive: boolean
   backgroundColor: string
@@ -35,7 +37,16 @@ export class CreateStyleUseCase {
   ): Promise<CreateStyleUseCaseResponse> {
     const notification = Notification.create()
 
-    await this.validateCompany(anInput.companyId, notification)
+    if (!anInput.currentUser.companyId) {
+      throw ResourceNotFoundException.withAnError(
+        new Error('Usuário não possui uma empresa associada.'),
+      )
+    }
+
+    await this.validateCompany(
+      anInput.currentUser.companyId.toString(),
+      notification,
+    )
 
     if (notification.hasErrors()) {
       throw new NotificationException(
@@ -46,7 +57,7 @@ export class CreateStyleUseCase {
 
     const style = Style.create({
       ...anInput,
-      companyId: new UniqueEntityID(anInput.companyId),
+      companyId: anInput.currentUser.companyId,
     })
 
     await this.styleRepository.save(style)

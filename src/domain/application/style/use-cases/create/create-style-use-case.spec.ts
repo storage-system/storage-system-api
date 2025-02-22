@@ -1,8 +1,12 @@
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { InMemoryStyleRepository } from 'test/repositories/in-memory-style-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { StyleRepository } from '@/domain/enterprise/style/style-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { makeUser, UserFactory } from 'test/factories/make-user'
 import { makeCompany } from 'test/factories/make-company'
+import { User } from '@/domain/enterprise/user/user'
 import { faker } from '@faker-js/faker'
 
 import {
@@ -12,15 +16,21 @@ import {
 
 let companiesRepository: CompaniesRepository
 let styleRepository: StyleRepository
+let usersRepository: UsersRepository
 
 let useCase: CreateStyleUseCase
 
+let currentUser: User
+
 describe('Create Style Use Case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     companiesRepository = new InMemoryCompaniesRepository()
     styleRepository = new InMemoryStyleRepository()
+    usersRepository = new InMemoryUsersRepository()
 
     useCase = new CreateStyleUseCase(companiesRepository, styleRepository)
+
+    currentUser = await makeUser({ repository: usersRepository })
   })
 
   it('dependencies should be defined', (): void => {
@@ -34,10 +44,9 @@ describe('Create Style Use Case', () => {
     const company = await makeCompany({
       repository: companiesRepository,
     })
-    const companyId = company.id.toString()
     const styleMock: CreateStyleUseCaseRequest = {
+      currentUser,
       name: 'Style 1',
-      companyId,
       isActive: false,
       backgroundColor: faker.color.rgb(),
       primaryColor: faker.color.rgb(),
@@ -60,11 +69,9 @@ describe('Create Style Use Case', () => {
   })
 
   it('should not be able to create a style that company does not exist', async () => {
-    const companyNonExists = 'company-id'
-
     const styleMock: CreateStyleUseCaseRequest = {
+      currentUser,
       name: 'Style 1',
-      companyId: companyNonExists,
       isActive: false,
       backgroundColor: faker.color.rgb(),
       primaryColor: faker.color.rgb(),

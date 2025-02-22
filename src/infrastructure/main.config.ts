@@ -4,6 +4,7 @@ import { ZodValidationPipe } from 'nestjs-zod'
 import { ResourceNotFoundExceptionFilter } from './exceptions/resource-not-found-exception.filter'
 import { WrongCredentialsExceptionFilter } from './exceptions/wrong-credentials-exception.filter'
 import { NotificationExceptionFilter } from './exceptions/notification-exception.filter'
+import { DomainExceptionFilter } from './exceptions/domain-exception.filter'
 
 export function MainConfig(app: INestApplication) {
   app.enableCors()
@@ -12,5 +13,6 @@ export function MainConfig(app: INestApplication) {
     new NotificationExceptionFilter(),
     new ResourceNotFoundExceptionFilter(),
     new WrongCredentialsExceptionFilter(),
+    new DomainExceptionFilter(),
   )
 }

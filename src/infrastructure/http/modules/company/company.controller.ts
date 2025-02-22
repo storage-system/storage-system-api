@@ -20,6 +20,7 @@ import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { Public } from '@/infrastructure/auth/public'
 import { ApiTags } from '@nestjs/swagger'
 
+import { CurrentUserPipe } from '../../pipes/current-user-pipe'
 import { CreateCompanyDTO } from './dto/create-company.dto'
 import { EditCompanyDTO } from './dto/edit-company.dto'
 
@@ -61,7 +62,7 @@ export class CompanyController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
     @Param('id') companyId: string,
-    @CurrentUser() user: UserPayload,
+    @CurrentUser(CurrentUserPipe) user: UserPayload,
   ) {
     await this.deleteCompanyUseCase.execute({
       companyId,

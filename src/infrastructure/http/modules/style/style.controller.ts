@@ -19,10 +19,12 @@ import { DeleteStyleUseCase } from '@/domain/application/style/use-cases/delete/
 import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
 import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
+import { User } from '@/domain/enterprise/user/user'
 
 import { HttpStyleListResponse } from '../../docs/style/http-style-list-response'
 import { HttpStyleGetResponse } from '../../docs/style/http-style-get-response'
 import { QueryParamsDTO } from '../query-params/query-params.dto'
+import { CurrentUserPipe } from '../../pipes/current-user-pipe'
 import { CreateStyleDTO } from './dto/create-style.dto'
 import { UpdateStyleDTO } from './dto/update-style.dto'
 
@@ -40,8 +42,14 @@ export class StyleController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() body: CreateStyleDTO) {
-    return await this.createStyleUseCase.execute(body)
+  async create(
+    @Body() body: CreateStyleDTO,
+    @CurrentUser(CurrentUserPipe) user: User,
+  ) {
+    return await this.createStyleUseCase.execute({
+      ...body,
+      currentUser: user,
+    })
   }
 
   @Get()
