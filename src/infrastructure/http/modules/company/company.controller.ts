@@ -41,10 +41,10 @@ export class CompanyController {
     return await this.createCompanyUseCase.execute(body)
   }
 
-  @Get('/:companyId')
-  async list(@Param('companyId') companyId: string) {
+  @Get('/')
+  async list(@CurrentUser(CurrentUserPipe) user: UserPayload) {
     return await this.getCompanyUseCase.execute({
-      companyId,
+      companyId: user.companyId!,
     })
   }
 
