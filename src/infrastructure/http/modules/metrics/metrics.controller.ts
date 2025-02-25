@@ -1,7 +1,10 @@
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { UserPayload } from '@/infrastructure/auth/jwt.strategy'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
-import { Controller, Get, Param } from '@nestjs/common'
+import { Controller, Get } from '@nestjs/common'
 
 import { HttpGetMetricsResponse } from '../../docs/metrics/http-get-metrics-response'
+import { CurrentUserPipe } from '../../pipes/current-user-pipe'
 import { MetricsService } from './metrics.service'
 
 @ApiTags('Metrics')
@@ -9,9 +12,9 @@ import { MetricsService } from './metrics.service'
 export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}
 
-  @Get('/company/:companyId')
+  @Get()
   @ApiOkResponse({ type: HttpGetMetricsResponse })
-  productMetrics(@Param('companyId') companyId: string) {
-    return this.metricsService.findMetrics(companyId)
+  productMetrics(@CurrentUser(CurrentUserPipe) user: UserPayload) {
+    return this.metricsService.findMetrics(user.companyId!)
   }
 }
