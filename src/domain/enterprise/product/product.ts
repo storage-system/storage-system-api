@@ -1,8 +1,11 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Notification } from '@/core/validation/notification'
 import { Entity } from '@/core/entities/entity'
+import Error from '@/core/validation/error'
 import { Replace } from '@/core/replace'
 import { addDays } from 'date-fns'
 
+import { StockOperation } from './stock-operation'
 import { CategoryID } from '../category/category'
 import { CompanyID } from '../company/company'
 import { Slug } from '../slug/slug'
@@ -117,6 +120,27 @@ export class Product extends Entity<ProductProps> {
     this.props.fileIds = aProduct.fileIds ?? this.fileIds
 
     this.touch()
+  }
+
+  adjustStock(
+    quantity: number,
+    operation: StockOperation,
+    notification: Notification,
+  ) {
+    if (quantity <= 0) {
+      notification.appendAnError(
+        new Error('A quantidade deve ser maior que zero.'),
+      )
+    }
+
+    if (operation === StockOperation.DECREASE) {
+      if (this.quantityInStock - quantity < 0) {
+        notification.appendAnError(new Error('Estoque insuficiente.'))
+      }
+      this.props.quantityInStock -= quantity
+    } else {
+      this.props.quantityInStock += quantity
+    }
   }
 
   isLowStock(): boolean {

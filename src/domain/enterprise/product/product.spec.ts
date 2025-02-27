@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Notification } from '@/core/validation/notification'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { addDays } from 'date-fns'
@@ -9,6 +10,7 @@ import {
   ProductProps,
   StatusProduct,
 } from './product'
+import { StockOperation } from './stock-operation'
 import { Slug } from '../slug/slug'
 
 describe('Product Entity', () => {
@@ -25,10 +27,8 @@ describe('Product Entity', () => {
       originalPrice: 100,
       finalPrice: 0,
       discountPercentage: 10,
-      quantityInStock: faker.number.int({
-        max: 1000,
-      }),
-      minimumStock: faker.number.int(),
+      quantityInStock: 50,
+      minimumStock: 5,
       manufactureDate: new Date('2023-01-01'),
       validityInDays: 2,
       unitOfMeasure: 'kg',
@@ -116,5 +116,49 @@ describe('Product Entity', () => {
     expect(product.createdAt).toBeInstanceOf(Date)
     expect(product.updatedAt).toBeNull()
     expect(product.deletedAt).toBeNull()
+  })
+
+  it('should increase stock when operation is INCREASE', () => {
+    const product = Product.create(initialProps)
+    const initialStock = product.quantityInStock
+
+    product.adjustStock(10, StockOperation.INCREASE, Notification.create())
+
+    expect(product.quantityInStock).toBe(initialStock + 10)
+  })
+
+  it('should decrease stock when operation is DECREASE and stock is sufficient', () => {
+    const product = Product.create(initialProps)
+    const initialStock = product.quantityInStock
+
+    product.adjustStock(20, StockOperation.DECREASE, Notification.create())
+
+    expect(product.quantityInStock).toBe(initialStock - 20)
+  })
+
+  it('should throw an error when trying to decrease stock below zero', () => {
+    const product = Product.create(initialProps)
+    const notification = Notification.create()
+
+    product.adjustStock(60, StockOperation.DECREASE, notification)
+
+    expect(notification.getErrors()).toContainEqual(
+      expect.objectContaining({
+        message: 'Estoque insuficiente.',
+      }),
+    )
+  })
+
+  it('should add an error to notification when passing a negative quantity', () => {
+    const product = Product.create(initialProps)
+    const notification = Notification.create()
+
+    product.adjustStock(-5, StockOperation.INCREASE, notification)
+
+    expect(notification.getErrors()).toContainEqual(
+      expect.objectContaining({
+        message: 'A quantidade deve ser maior que zero.',
+      }),
+    )
   })
 })
