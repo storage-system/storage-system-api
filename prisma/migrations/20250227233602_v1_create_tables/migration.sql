@@ -145,6 +145,7 @@ CREATE TABLE "products" (
     "manufacture_date" TIMESTAMP(3) NOT NULL,
     "due_date" TIMESTAMP(3) NOT NULL,
     "validity_in_days" INTEGER NOT NULL,
+    "minimum_stock" INTEGER NOT NULL,
     "unit_of_measure" TEXT NOT NULL,
     "weight" INTEGER NOT NULL,
     "dimensions_height" TEXT NOT NULL,

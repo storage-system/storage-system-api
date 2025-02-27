@@ -207,6 +207,7 @@ model Product {
   manufactureDate DateTime @map("manufacture_date")
   dueDate         DateTime @map("due_date")
   validityInDays  Int      @map("validity_in_days")
+  minimumStock    Int      @map("minimum_stock")
 
   unitOfMeasure String @map("unit_of_measure")
   weight        Int
