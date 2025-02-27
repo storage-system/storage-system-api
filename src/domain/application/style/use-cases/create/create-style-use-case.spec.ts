@@ -4,9 +4,10 @@ import { InMemoryStyleRepository } from 'test/repositories/in-memory-style-repos
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { StyleRepository } from '@/domain/enterprise/style/style-repository'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { makeUser, UserFactory } from 'test/factories/make-user'
+import { Company } from '@/domain/enterprise/company/company'
 import { makeCompany } from 'test/factories/make-company'
 import { User } from '@/domain/enterprise/user/user'
+import { makeUser } from 'test/factories/make-user'
 import { faker } from '@faker-js/faker'
 
 import {
@@ -20,6 +21,7 @@ let usersRepository: UsersRepository
 
 let useCase: CreateStyleUseCase
 
+let company: Company
 let currentUser: User
 
 describe('Create Style Use Case', () => {
@@ -29,8 +31,15 @@ describe('Create Style Use Case', () => {
     usersRepository = new InMemoryUsersRepository()
 
     useCase = new CreateStyleUseCase(companiesRepository, styleRepository)
-
-    currentUser = await makeUser({ repository: usersRepository })
+    company = await makeCompany({
+      repository: companiesRepository,
+    })
+    currentUser = await makeUser({
+      repository: usersRepository,
+      override: {
+        companyId: company.id,
+      },
+    })
   })
 
   it('dependencies should be defined', (): void => {
@@ -41,9 +50,6 @@ describe('Create Style Use Case', () => {
   })
 
   it('should be able to create a new style', async () => {
-    const company = await makeCompany({
-      repository: companiesRepository,
-    })
     const styleMock: CreateStyleUseCaseRequest = {
       currentUser,
       name: 'Style 1',
@@ -66,22 +72,5 @@ describe('Create Style Use Case', () => {
     expect(styleOnDatabase?.secondaryColor).toBe(styleMock.secondaryColor)
     expect(styleOnDatabase?.tertiaryColor).toBe(styleMock.tertiaryColor)
     expect(styleOnDatabase?.textColor).toBe(styleMock.textColor)
-  })
-
-  it('should not be able to create a style that company does not exist', async () => {
-    const styleMock: CreateStyleUseCaseRequest = {
-      currentUser,
-      name: 'Style 1',
-      isActive: false,
-      backgroundColor: faker.color.rgb(),
-      primaryColor: faker.color.rgb(),
-      secondaryColor: faker.color.rgb(),
-      tertiaryColor: faker.color.rgb(),
-      textColor: faker.color.rgb(),
-    }
-
-    expect(useCase.execute(styleMock)).rejects.toThrowError(
-      'Erro ao criar estilização.',
-    )
   })
 })

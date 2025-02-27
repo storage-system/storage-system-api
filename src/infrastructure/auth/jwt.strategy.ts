@@ -8,7 +8,7 @@ import { EnvService } from '../env/env.service'
 
 const tokenPayloadSchema = z.object({
   sub: z.string().uuid(),
-  companyId: z.string().uuid().optional(),
+  companyId: z.string().uuid(),
   name: z.string().optional(),
   email: z.string().email().optional(),
   phone: z.string().optional(),

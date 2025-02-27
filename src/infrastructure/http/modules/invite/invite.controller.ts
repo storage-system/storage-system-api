@@ -9,12 +9,17 @@ import {
   Patch,
   Post,
 } from '@nestjs/common'
+import {
+  CurrentUser,
+  UserPayload,
+} from '@/infrastructure/decorators/current-user.decorator'
 import { AcceptInviteUseCase } from '@/domain/application/invite/accept/accept-invite-use-case'
 import { CreateInviteUseCase } from '@/domain/application/invite/create/create-invite-use-case'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 import { RevokeInviteUseCase } from './../../../../domain/application/invite/revoke/revoke-invite-use-case'
 import { HttpInviteGetResponse } from '../../docs/category/http-invite-get-response'
+import { CurrentUserPipe } from '../../pipes/current-user-pipe'
 import { CreateInviteDTO } from './dto/create-invite.dto'
 import { AcceptInviteDTO } from './dto/accept-invite.dto'
 
@@ -40,9 +45,11 @@ export class InviteController {
     return await this.acceptInviteUseCase.execute(body)
   }
 
-  @Get('/pendings/company/:companyId')
+  @Get('/pendings')
   @ApiOkResponse({ isArray: true, type: HttpInviteGetResponse })
-  async getConfiguration(@Param('companyId') companyId: string) {
+  async getConfiguration(
+    @CurrentUser(CurrentUserPipe) { companyId }: UserPayload,
+  ) {
     return await this.getPendingInvitesUseCase.execute({
       companyId,
     })

@@ -20,6 +20,7 @@ import { Public } from '@/infrastructure/auth/public'
 import { ApiTags } from '@nestjs/swagger'
 
 import { QueryParamsDTO } from '../query-params/query-params.dto'
+import { CurrentUserPipe } from '../../pipes/current-user-pipe'
 import { CreateUserDTO } from './dto/create-user.dto'
 import { UpdateUserDTO } from './dto/update-user.dto'
 
@@ -41,7 +42,10 @@ export class UserController {
   }
 
   @Get()
-  async list(@CurrentUser() user: UserPayload, @Query() query: QueryParamsDTO) {
+  async list(
+    @CurrentUser(CurrentUserPipe) user: UserPayload,
+    @Query() query: QueryParamsDTO,
+  ) {
     return await this.listUserUseCase.execute({
       ...query,
       companyId: user.companyId,

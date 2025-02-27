@@ -15,6 +15,6 @@ export class MetricsController {
   @Get()
   @ApiOkResponse({ type: HttpGetMetricsResponse })
   productMetrics(@CurrentUser(CurrentUserPipe) user: UserPayload) {
-    return this.metricsService.findMetrics(user.companyId!)
+    return this.metricsService.findMetrics(user.companyId)
   }
 }

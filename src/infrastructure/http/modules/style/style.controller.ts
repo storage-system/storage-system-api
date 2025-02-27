@@ -79,7 +79,7 @@ export class StyleController {
   ) {
     return await this.chooseActiveStyleUseCase.execute({
       styleId,
-      companyId: companyId ?? '',
+      companyId,
     })
   }
 

@@ -37,7 +37,7 @@ describe('Pending Invites (E2E)', () => {
     await app.init()
   })
 
-  test('[GET] /pendings/company/:companyId', async () => {
+  test('[GET] /pendings', async () => {
     const { accessToken, userId, companyId } =
       await authenticateFactory.makePrismaAuthenticate()
 
@@ -47,7 +47,7 @@ describe('Pending Invites (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .get(`/invites/pendings/company/${companyId}`)
+      .get(`/invites/pendings`)
       .set('Authorization', `Bearer ${accessToken}`)
 
     expect(response.statusCode).toBe(HttpStatus.OK)

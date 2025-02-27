@@ -34,7 +34,6 @@ describe('Create Style (E2E)', () => {
       await authenticateFactory.makePrismaAuthenticate()
 
     const styleMock: CreateStyleDTO = {
-      companyId,
       name: faker.word.adjective(),
       isActive: true,
       backgroundColor: faker.color.rgb(),
