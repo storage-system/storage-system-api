@@ -73,6 +73,9 @@ describe('Create Product (E2E)', () => {
         max: 100,
         min: 0,
       }),
+      minimumStock: faker.number.int({
+        max: 20,
+      }),
       validityInDays: faker.number.int({
         min: 1,
         max: 100,
