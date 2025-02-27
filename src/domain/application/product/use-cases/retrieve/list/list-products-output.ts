@@ -10,6 +10,7 @@ export class ListProductsOutput {
   name: string
 
   quantityInStock: number
+  minimumStock: number
   manufactureDate: Date
   dueDate: Date
   validityInDays: number
@@ -41,6 +42,7 @@ export class ListProductsOutput {
     this.name = aProductProps.name
 
     this.quantityInStock = aProductProps.quantityInStock
+    this.minimumStock = aProductProps.minimumStock
     this.manufactureDate = aProductProps.manufactureDate
     this.dueDate = aProductProps.dueDate
     this.validityInDays = aProductProps.validityInDays

@@ -23,6 +23,7 @@ export class GetProductOutput {
   discountPercentage: number
 
   quantityInStock: number
+  minimumStock: number
   manufactureDate: Date
   dueDate: Date
   validityInDays: number
@@ -76,6 +77,7 @@ export class GetProductOutput {
     this.discountPercentage = aProductProps.discountPercentage
 
     this.quantityInStock = aProductProps.quantityInStock
+    this.minimumStock = aProductProps.minimumStock
     this.manufactureDate = aProductProps.manufactureDate
     this.dueDate = aProductProps.dueDate
     this.validityInDays = aProductProps.validityInDays

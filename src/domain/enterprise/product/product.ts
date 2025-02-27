@@ -35,6 +35,7 @@ export interface ProductProps {
   manufactureDate: Date
   dueDate: Date
   validityInDays: number
+  minimumStock: number
 
   unitOfMeasure: string
   weight: number
@@ -100,6 +101,7 @@ export class Product extends Entity<ProductProps> {
     this.props.manufactureDate =
       aProduct.manufactureDate ?? this.manufactureDate
     this.props.validityInDays = aProduct.validityInDays ?? this.validityInDays
+    this.props.minimumStock = aProduct.minimumStock ?? this.minimumStock
 
     this.props.unitOfMeasure = aProduct.unitOfMeasure ?? this.unitOfMeasure
     this.props.weight = aProduct.weight ?? this.weight
@@ -115,6 +117,10 @@ export class Product extends Entity<ProductProps> {
     this.props.fileIds = aProduct.fileIds ?? this.fileIds
 
     this.touch()
+  }
+
+  isLowStock(): boolean {
+    return this.quantityInStock <= this.minimumStock
   }
 
   get name() {
@@ -213,6 +219,10 @@ export class Product extends Entity<ProductProps> {
 
   get deletedAt() {
     return this.props.deletedAt
+  }
+
+  get minimumStock() {
+    return this.props.minimumStock
   }
 
   private touch() {

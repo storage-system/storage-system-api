@@ -28,6 +28,7 @@ describe('Product Entity', () => {
       quantityInStock: faker.number.int({
         max: 1000,
       }),
+      minimumStock: faker.number.int(),
       manufactureDate: new Date('2023-01-01'),
       validityInDays: 2,
       unitOfMeasure: 'kg',

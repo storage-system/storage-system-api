@@ -16,6 +16,7 @@ export interface UpdateProductUseCaseRequest {
   finalPrice?: number
   discountPercentage?: number
   quantityInStock?: number
+  minimumStock?: number
   manufactureDate?: Date
   validityInDays?: number
   unitOfMeasure?: string

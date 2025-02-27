@@ -1,6 +1,9 @@
+import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
+import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { makeCategory } from 'test/factories/make-category'
 import { makeProduct } from 'test/factories/make-product'
@@ -22,7 +25,9 @@ let useCase: UpdateProductUseCase
 describe('Update Product Use Case', () => {
   beforeEach(async () => {
     productsRepository = new InMemoryProductsRepository()
-
+    usersRepository = new InMemoryUsersRepository()
+    companiesRepository = new InMemoryCompaniesRepository()
+    categoriesRepository = new InMemoryCategoriesRepository()
     useCase = new UpdateProductUseCase(productsRepository)
   })
 
