@@ -1,3 +1,4 @@
+import { UpdateProductStockUseCase } from '@/domain/application/product/use-cases/update-product-stock/update-product-stock-use-case'
 import { GetProductUseCase } from '@/domain/application/product/use-cases/retrieve/get-product/get-product-use-case'
 import { ListProductsUseCase } from '@/domain/application/product/use-cases/retrieve/list/list-products-use-case'
 import { CreateProductUseCase } from '@/domain/application/product/use-cases/create/create-product-use-case'
@@ -16,6 +17,7 @@ import { ProductController } from './product.controller'
     ListProductsUseCase,
     GetProductUseCase,
     UpdateProductUseCase,
+    UpdateProductStockUseCase,
     DeleteProductUseCase,
   ],
 })

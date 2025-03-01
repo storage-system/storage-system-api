@@ -1,3 +1,4 @@
+import { UpdateProductStockUseCase } from '@/domain/application/product/use-cases/update-product-stock/update-product-stock-use-case'
 import {
   Body,
   Controller,
@@ -19,6 +20,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 import { HttpProductListResponse } from '../../docs/product/http-product-list-response'
 import { HttpProductGetResponse } from '../../docs/product/htt-product-get-response'
+import { UpdateProductStockDTO } from './dto/update-product-stock.dto'
 import { QueryParamsDTO } from '../query-params/query-params.dto'
 import { CreateProductDTO } from './dto/create-product-dto'
 import { UpdateProductDTO } from './dto/update-product-dto'
@@ -31,6 +33,7 @@ export class ProductController {
     private listProductsUseCase: ListProductsUseCase,
     private getProductUseCase: GetProductUseCase,
     private updateProductUseCase: UpdateProductUseCase,
+    private updateProductStockUseCase: UpdateProductStockUseCase,
     private deleteProductUseCase: DeleteProductUseCase,
   ) {}
 
@@ -64,6 +67,18 @@ export class ProductController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async update(@Body() body: UpdateProductDTO, @Param('id') productId: string) {
     return await this.updateProductUseCase.execute({
+      productId,
+      ...body,
+    })
+  }
+
+  @Patch('/:id/update-stock')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async updateStock(
+    @Body() body: UpdateProductStockDTO,
+    @Param('id') productId: string,
+  ) {
+    return await this.updateProductStockUseCase.execute({
       productId,
       ...body,
     })
