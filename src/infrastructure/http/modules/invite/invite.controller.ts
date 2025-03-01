@@ -47,11 +47,9 @@ export class InviteController {
 
   @Get('/pendings')
   @ApiOkResponse({ isArray: true, type: HttpInviteGetResponse })
-  async getConfiguration(
-    @CurrentUser(CurrentUserPipe) { companyId }: UserPayload,
-  ) {
+  async getPendings(@CurrentUser(CurrentUserPipe) { companyId }: UserPayload) {
     return await this.getPendingInvitesUseCase.execute({
-      companyId,
+      companyId: companyId ?? '',
     })
   }
 
