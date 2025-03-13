@@ -1,4 +1,5 @@
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger'
+import { apiReference } from '@scalar/nestjs-api-reference'
 import { INestApplication } from '@nestjs/common'
 import { patchNestJsSwagger } from 'nestjs-zod'
 import { Request, Response } from 'express'
@@ -31,8 +32,17 @@ export function DocumentConfig(app: INestApplication): void {
     return res.send(document)
   })
 
-  SwaggerModule.setup('docs', app, document, {
-    customCss: `
-      .swagger-ui .topbar { background-color: #202122; }`,
-  })
+  app.use(
+    '/docs',
+
+    apiReference({
+      theme: 'elysiajs',
+      spec: {
+        content: document,
+      },
+      metaData: {
+        title: 'Customer Portal - Rest API',
+      },
+    }),
+  )
 }
