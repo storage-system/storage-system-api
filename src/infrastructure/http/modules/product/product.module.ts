@@ -4,6 +4,7 @@ import { ListProductsUseCase } from '@/domain/application/product/use-cases/retr
 import { CreateProductUseCase } from '@/domain/application/product/use-cases/create/create-product-use-case'
 import { DeleteProductUseCase } from '@/domain/application/product/use-cases/delete/delete-product-use-case'
 import { UpdateProductUseCase } from '@/domain/application/product/use-cases/update/update-product-use-case'
+import { SpreadsheetService } from '@/infrastructure/services/spreadsheet/spreadsheet.service'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { Module } from '@nestjs/common'
 
@@ -19,6 +20,7 @@ import { ProductController } from './product.controller'
     UpdateProductUseCase,
     UpdateProductStockUseCase,
     DeleteProductUseCase,
+    SpreadsheetService,
   ],
 })
 export class ProductModule {}

@@ -51,6 +51,7 @@
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",
     "unplugin-swc": "^1.4.5",
+    "xlsx": "^0.18.5",
     "zod": "^3.22.5",
     "zod-validation-error": "^3.1.0"
   },
