@@ -10,6 +10,7 @@ import { Injectable } from '@nestjs/common'
 import Error from '@/core/validation/error'
 
 import { ProductsRepository } from '../../../../enterprise/product/products-repository'
+import { User } from '@/domain/enterprise/user/user'
 
 export interface CreateProductUseCaseRequest {
   name: string
@@ -30,9 +31,9 @@ export interface CreateProductUseCaseRequest {
   batch?: string
   status: StatusProduct
   productImage?: string
-  companyId: string
   categoryIds: string[]
   fileIds: string[] | undefined
+  author: User
 }
 
 export interface CreateProductUseCaseResponse {
@@ -51,13 +52,13 @@ export class CreateProductUseCase {
     anInput: CreateProductUseCaseRequest,
   ): Promise<CreateProductUseCaseResponse> {
     const notification = Notification.create()
-
-    const company = await this.companiesRepository.findById(anInput.companyId)
+    
+    const company = anInput.author.companyId ? await this.companiesRepository.findById(anInput.author.companyId?.toString()) : null
 
     if (!company) {
       throw ResourceNotFoundException.with(
         'Empresa',
-        new UniqueEntityID(anInput.companyId),
+        new UniqueEntityID(anInput.author.companyId?.toString()),
       )
     }
 
@@ -77,7 +78,7 @@ export class CreateProductUseCase {
       fileIds: anInput.fileIds ?? [],
       categoryIds: categories,
       manufactureDate: anInput.manufactureDate,
-      companyId: new UniqueEntityID(anInput.companyId),
+      companyId: new UniqueEntityID(company.id.toString()),
       dimensions: {
         depth: anInput.depth,
         height: anInput.height,

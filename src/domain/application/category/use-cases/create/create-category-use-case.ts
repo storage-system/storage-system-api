@@ -9,11 +9,12 @@ import { Slug } from '@/domain/enterprise/slug/slug'
 import { Injectable } from '@nestjs/common'
 
 import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
+import { User } from '@/domain/enterprise/user/user'
 
 interface CreateCategoryUseCaseRequest {
   name: string
   fileId?: string
-  companyId: string
+  author: User
   isActive: boolean
 }
 
@@ -26,7 +27,9 @@ export class CreateCategoryUseCase {
 
   async execute(anInput: CreateCategoryUseCaseRequest) {
     const notification = Notification.create()
-    const { companyId, isActive, name, fileId } = anInput
+    const { author, isActive, name, fileId } = anInput
+
+    const companyId = author.companyId?.toString()
 
     const company =
       companyId && (await this.companiesRepository.findById(companyId))

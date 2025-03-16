@@ -19,6 +19,8 @@ import { HttpCategoryListResponse } from '../../docs/category/http-category-list
 import { ParsePositiveIntPipe } from '../../pipes/parse-positive-int.pipe'
 import { CreateCategoryDTO } from './dto/create-category.dto'
 import { UpdateCategoryDTO } from './dto/update-category.dto'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { User } from '@/domain/enterprise/user/user'
 
 @ApiTags('Category')
 @Controller('/categories')
@@ -31,8 +33,9 @@ export class CategoryController {
   ) {}
 
   @Post()
-  async create(@Body() body: CreateCategoryDTO) {
-    return await this.createCategoryUseCase.execute(body)
+  async create(@Body() body: CreateCategoryDTO, @CurrentUser() author : User) {
+
+    return await this.createCategoryUseCase.execute({...body , author})
   }
 
   @Get()

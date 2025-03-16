@@ -1,3 +1,4 @@
+import { users } from './../../../../../../prisma/user/users';
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
@@ -13,24 +14,45 @@ import {
   CreateProductUseCaseRequest,
 } from './create-product-use-case'
 import { ProductsRepository } from '../../../../enterprise/product/products-repository'
+import { User } from '@/domain/enterprise/user/user';
+import { UsersRepository } from '@/domain/enterprise/user/users-repository';
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository';
+import { Company, CompanyID } from '@/domain/enterprise/company/company';
+import { makeUser } from 'test/factories/make-user';
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository
 let categoriesRepository: CategoriesRepository
+let usersRepository: UsersRepository
+
+let author: User
+let company: Company
 
 let useCase: CreateProductUseCase
 
 describe('Create Product Use Case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     productsRepository = new InMemoryProductsRepository()
     companiesRepository = new InMemoryCompaniesRepository()
     categoriesRepository = new InMemoryCategoriesRepository()
+    usersRepository = new InMemoryUsersRepository()
 
     useCase = new CreateProductUseCase(
       productsRepository,
       companiesRepository,
       categoriesRepository,
     )
+
+    company = await makeCompany({
+      repository: companiesRepository,
+    })
+
+    author = await makeUser({
+      repository: usersRepository,
+      override: {
+        companyId: company.id
+      },
+    })
   })
 
   it('dependencies should be defined', (): void => {
@@ -42,9 +64,7 @@ describe('Create Product Use Case', () => {
   })
 
   it('should be able to create a new product', async () => {
-    const company = await makeCompany({
-      repository: companiesRepository,
-    })
+
     const category = await makeCategory({
       repository: categoriesRepository,
     })
@@ -53,7 +73,7 @@ describe('Create Product Use Case', () => {
       name: faker.company.name(),
       description: faker.commerce.productDescription(),
       fileIds: [],
-      companyId: company.id.toString(),
+      author,
       categoryIds: [category.id.toString()],
       depth: '5cm',
       height: '10cm',
@@ -103,6 +123,13 @@ describe('Create Product Use Case', () => {
 
     const companyNonExists = 'company-id'
 
+    const author = await makeUser({
+      repository: usersRepository,
+      override: {
+        companyId: new CompanyID(companyNonExists),
+      },
+    })
+
     const productMock: CreateProductUseCaseRequest = {
       name: faker.company.name(),
       description: faker.commerce.productDescription(),
@@ -110,7 +137,7 @@ describe('Create Product Use Case', () => {
       depth: '5cm',
       height: '10cm',
       width: '20cm',
-      companyId: companyNonExists,
+      author,
       categoryIds: [category.id.toString()],
 
       originalPrice: faker.number.int({
@@ -141,7 +168,7 @@ describe('Create Product Use Case', () => {
     }
 
     expect(useCase.execute(productMock)).rejects.toThrowError(
-      `Empresa com ID ${productMock.companyId} não foi encontrado`,
+      `Empresa com ID ${productMock.author.companyId?.toString()} não foi encontrado`,
     )
   })
 })

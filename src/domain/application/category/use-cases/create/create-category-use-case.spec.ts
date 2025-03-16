@@ -6,16 +6,23 @@ import { makeCompany } from 'test/factories/make-company'
 
 import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { CreateCategoryUseCase } from './create-category-use-case'
+import { User } from '@/domain/enterprise/user/user'
+import { makeUser } from 'test/factories/make-user'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 
 let categoriesRepository: CategoriesRepository
 let companiesRepository: CompaniesRepository
+let usersRepository: UsersRepository
 let useCase: CreateCategoryUseCase
 
 describe('Create Category', () => {
   let company: Company
+  let author: User
 
   beforeEach(async () => {
     categoriesRepository = new InMemoryCategoriesRepository()
+    usersRepository = new InMemoryUsersRepository()
     companiesRepository = new InMemoryCompaniesRepository()
     useCase = new CreateCategoryUseCase(
       categoriesRepository,
@@ -24,6 +31,13 @@ describe('Create Category', () => {
 
     company = await makeCompany({
       repository: companiesRepository,
+    })
+
+    author = await makeUser({
+      repository: usersRepository,
+      override: {
+        companyId: company.id,
+      }
     })
   })
 
@@ -35,8 +49,8 @@ describe('Create Category', () => {
   it('should be able to create a category', async () => {
     const result = await useCase.execute({
       name: 'category-01',
-      companyId: company.id.toString(),
       isActive: true,
+      author
     })
 
     const categoryOnDatabase = await categoriesRepository.findById(
@@ -52,6 +66,7 @@ describe('Create Category', () => {
       name: 'category-01',
       companyId: company.id.toString(),
       isActive: true,
+      author,
     }
 
     await useCase.execute(categoryMock)

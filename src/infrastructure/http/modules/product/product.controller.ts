@@ -30,6 +30,8 @@ import { UpdateProductStockDTO } from './dto/update-product-stock.dto'
 import { QueryParamsDTO } from '../query-params/query-params.dto'
 import { CreateProductDTO } from './dto/create-product-dto'
 import { UpdateProductDTO } from './dto/update-product-dto'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { User } from '@/domain/enterprise/user/user'
 
 @ApiTags('Product')
 @Controller('/products')
@@ -46,8 +48,8 @@ export class ProductController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() body: CreateProductDTO) {
-    return await this.createProductUseCase.execute(body)
+  async create(@Body() body: CreateProductDTO, @CurrentUser() author: User) {
+    return await this.createProductUseCase.execute({...body, author})
   }
 
   /* @Post('import')

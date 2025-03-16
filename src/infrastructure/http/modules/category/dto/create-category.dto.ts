@@ -4,7 +4,6 @@ import { z } from 'nestjs-zod/z'
 export const createCategoryBodySchema = z.object({
   name: z.string(),
   isActive: z.boolean(),
-  companyId: z.string().uuid(),
   fileId: z.string().uuid().optional(),
 })
 

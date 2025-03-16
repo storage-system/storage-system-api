@@ -21,7 +21,6 @@ export const createProductBodySchema = z.object({
   manufacturer: z.string().optional(),
   batch: z.string().optional(),
   status: z.nativeEnum(StatusProduct),
-  companyId: z.string().uuid(),
   categoryIds: z.array(z.string()),
 })
 
