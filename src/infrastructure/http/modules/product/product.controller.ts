@@ -10,8 +10,6 @@ import {
   Post,
   Query,
   Res,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common'
 import { UpdateProductStockUseCase } from '@/domain/application/product/use-cases/update-product-stock/update-product-stock-use-case'
 import { GetProductUseCase } from '@/domain/application/product/use-cases/retrieve/get-product/get-product-use-case'
@@ -20,8 +18,9 @@ import { CreateProductUseCase } from '@/domain/application/product/use-cases/cre
 import { DeleteProductUseCase } from '@/domain/application/product/use-cases/delete/delete-product-use-case'
 import { UpdateProductUseCase } from '@/domain/application/product/use-cases/update/update-product-use-case'
 import { SpreadsheetService } from '@/infrastructure/services/spreadsheet/spreadsheet.service'
-import { FileInterceptor } from '@nestjs/platform-express'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { User } from '@/domain/enterprise/user/user'
 import { Response } from 'express'
 
 import { HttpProductListResponse } from '../../docs/product/http-product-list-response'
@@ -30,8 +29,6 @@ import { UpdateProductStockDTO } from './dto/update-product-stock.dto'
 import { QueryParamsDTO } from '../query-params/query-params.dto'
 import { CreateProductDTO } from './dto/create-product-dto'
 import { UpdateProductDTO } from './dto/update-product-dto'
-import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
-import { User } from '@/domain/enterprise/user/user'
 
 @ApiTags('Product')
 @Controller('/products')
@@ -44,22 +41,13 @@ export class ProductController {
     private updateProductStockUseCase: UpdateProductStockUseCase,
     private deleteProductUseCase: DeleteProductUseCase,
     private spreadsheetService: SpreadsheetService,
-  ) {}
+  ) { }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() body: CreateProductDTO, @CurrentUser() author: User) {
-    return await this.createProductUseCase.execute({...body, author})
+    return await this.createProductUseCase.execute({ ...body, author })
   }
-
-  /* @Post('import')
-  @UseInterceptors(FileInterceptor('file'))
-  async importProducts(
-    @UploadedFile() file: Express.Multer.File,
-    @Body('companyId') companyId: string,
-  ) {
-    return this.productService.importProductsFromExcel(file, companyId)
-  } */
 
   @Get('/template')
   async downloadTemplate(@Res() res: Response) {

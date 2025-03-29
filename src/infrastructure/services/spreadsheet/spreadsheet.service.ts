@@ -1,14 +1,9 @@
-import { CreateProductDTO } from '@/infrastructure/http/modules/product/dto/create-product-dto'
-import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { StatusProduct } from '@/domain/enterprise/product/product'
 import { Injectable } from '@nestjs/common'
 import { Response } from 'express'
 import * as XLSX from 'xlsx'
 
 @Injectable()
 export class SpreadsheetService {
-  constructor(private prisma: PrismaService) {}
-
   async generateExcelProductTemplate(res: Response) {
     const headers = [
       [
