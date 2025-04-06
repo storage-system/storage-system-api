@@ -16,6 +16,7 @@ export class SpreadsheetService {
         'Quantidade mínima de estoque',
         'Data de Fabricação',
         'Data de Validade',
+        'Validade em dias',
         'Unidade',
         'Peso',
         'Altura',
