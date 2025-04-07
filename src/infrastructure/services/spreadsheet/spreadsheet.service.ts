@@ -24,7 +24,6 @@ export class SpreadsheetService {
         'Profundidade',
         'Fabricante',
         'Lote',
-        'Status',
         'Categoria',
       ],
     ]
