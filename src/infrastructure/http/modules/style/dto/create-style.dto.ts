@@ -1,7 +1,7 @@
 import { createZodDto } from 'nestjs-zod'
 import { z } from 'nestjs-zod/z'
 
-const createStyleBodySchema = z.object({
+export const createStyleBodySchema = z.object({
   name: z.string(),
   isActive: z.boolean().optional().default(false),
   backgroundColor: z.string(),

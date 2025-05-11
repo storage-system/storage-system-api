@@ -10,6 +10,7 @@ import { Module } from '@nestjs/common'
 
 import { PrismaConfigurationRepository } from './prisma/repositories/prisma-configuration-repository'
 import { PrismaCategoriesRepository } from './prisma/repositories/prisma-category-repository'
+import { PrismaEcommerceRepository } from './prisma/repositories/prisma-ecommerce-repository'
 import { PrismaCompaniesRepository } from './prisma/repositories/prisma-company-repository'
 import { PrismaProductsRepository } from './prisma/repositories/prisma-product-repository'
 import { PrismaInviteRepository } from './prisma/repositories/prisma-invite-repository'
@@ -53,6 +54,7 @@ import { PrismaService } from './prisma/prisma.service'
       provide: InviteRepository,
       useClass: PrismaInviteRepository,
     },
+    PrismaEcommerceRepository,
   ],
   exports: [
     PrismaService,
@@ -64,6 +66,7 @@ import { PrismaService } from './prisma/prisma.service'
     StyleRepository,
     FileRepository,
     InviteRepository,
+    PrismaEcommerceRepository,
   ],
 })
 export class DatabaseModule {}

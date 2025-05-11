@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 
 import { ConfigurationModule } from './modules/configuration/configuration.module'
 import { AuthenticateModule } from './modules/authenticate/authenticate.module'
+import { EcommerceModule } from './modules/ecommerce/ecommerce.module'
 import { CategoryModule } from './modules/category/category.module'
 import { CompanyModule } from './modules/company/company.module'
 import { ProductModule } from './modules/product/product.module'
@@ -25,6 +26,7 @@ import { RolesGuard } from '../guards/roles.guard'
     FileModule,
     MetricsModule,
     InviteModule,
+    EcommerceModule,
   ],
   providers: [
     /* {

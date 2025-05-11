@@ -70,18 +70,36 @@ model Company {
   responsibleId String @map("responsible_id")
   responsible   User   @relation("company_responsible", fields: [responsibleId], references: [id])
 
+  ecommerce Ecommerce?
+
   categories    Category[]
   users         User[]
   products      Product[]
   configuration Configuration[]
-  styles        Style[]
   invites       Invite[]
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+  Style     Style[]
 
   @@map("companies")
+}
+
+model Ecommerce {
+  id        String    @id @default(uuid())
+  name      String
+  slug      String    @unique
+  isActive  Boolean   @default(false) @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  styles    Style[]
+
+  companyId String  @unique @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@map("ecommerces")
 }
 
 model AccessCode {
@@ -180,9 +198,11 @@ model Style {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime?  @updatedAt @map("updated_at")
+  deletedAt   DateTime?  @map("deleted_at")
+  Ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
+  ecommerceId String?
 
   @@map("styles")
 }

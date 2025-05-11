@@ -19,6 +19,7 @@ import { DeleteProductUseCase } from '@/domain/application/product/use-cases/del
 import { UpdateProductUseCase } from '@/domain/application/product/use-cases/update/update-product-use-case'
 import { SpreadsheetService } from '@/infrastructure/services/spreadsheet/spreadsheet.service'
 import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { RolesGuard } from '@/infrastructure/guards/roles.guard'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { User } from '@/domain/enterprise/user/user'
 import { Response } from 'express'
