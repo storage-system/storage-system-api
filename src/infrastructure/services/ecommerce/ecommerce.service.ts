@@ -14,10 +14,10 @@ export class EcommerceService {
     private readonly companyRepository: CompaniesRepository,
   ) {}
 
-  async publishEcommerce(companyId: string, data: PublishEcommerceDTO) {
-    await this.retrieveCompany(companyId)
+  async publishEcommerce(data: PublishEcommerceDTO, companyId?: string) {
+    const company = await this.retrieveCompany(companyId)
 
-    const slug = Slug.create(data.name)
+    const slug = Slug.createFromText(data.name)
 
     await this.verifyEcommerceExists(slug)
 
@@ -28,10 +28,11 @@ export class EcommerceService {
       primaryColor: '#6c63ff',
       secondaryColor: '#f1f5f9',
       tertiaryColor: '#ffffff',
+      isActive: true,
     }
 
     const ecommerce = await this.ecommerceRepository.publishEcommerce({
-      companyId,
+      companyId: company.id.toString(),
       name: data.name,
       slug: slug.value,
       style: data.style
@@ -46,10 +47,16 @@ export class EcommerceService {
         : defaultStyle,
     })
 
-    return ecommerce
+    return {
+      id: ecommerce.id,
+    }
   }
 
-  private async retrieveCompany(companyId: string): Promise<Company> {
+  private async retrieveCompany(companyId?: string): Promise<Company> {
+    if (!companyId) {
+      throw new NotFoundException(`Company`, 'test')
+    }
+
     const company = await this.companyRepository.findById(companyId)
 
     if (!company) {
@@ -71,11 +78,29 @@ export class EcommerceService {
     throw new AlreadyExistsError(`Ecommerce`, slug.value)
   }
 
-  async retriveEcommerceBySlug(slug: string) {
+  async retrieveEcommerceBySlug(slug: string) {
     const ecommerce = await this.ecommerceRepository.findEcommerceBySlug(slug)
 
     if (!ecommerce) {
-      throw new NotFoundException(`Ecommerce`, 'test')
+      throw new NotFoundException('Ecommerce not found', slug)
+    }
+
+    return ecommerce
+  }
+
+  async retrieveEcommerceByCompanyId(companyId?: string) {
+    if (!companyId) {
+      throw new NotFoundException('Company not found')
+    }
+
+    const ecommerce =
+      await this.ecommerceRepository.findEcommerceByCompanyId(companyId)
+
+    if (!ecommerce) {
+      throw new NotFoundException(
+        "This company doesn't have an ecommerce",
+        companyId,
+      )
     }
 
     return ecommerce

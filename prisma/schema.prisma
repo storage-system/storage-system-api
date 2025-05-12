@@ -94,7 +94,8 @@ model Ecommerce {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
-  styles    Style[]
+
+  styles Style[]
 
   companyId String  @unique @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])

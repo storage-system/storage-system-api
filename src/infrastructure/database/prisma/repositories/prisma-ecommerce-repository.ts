@@ -80,4 +80,24 @@ export class PrismaEcommerceRepository {
 
     return data
   }
+
+  async findEcommerceByCompanyId(companyId: string) {
+    const data = await this.prisma.ecommerce.findFirst({
+      where: { companyId },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        createdAt: true,
+        isActive: true,
+        styles: true,
+      },
+    })
+
+    if (!data) {
+      return null
+    }
+
+    return data
+  }
 }
