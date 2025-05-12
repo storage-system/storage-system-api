@@ -10,7 +10,7 @@ import {
   ProductProps,
   StatusProduct,
 } from './product'
-import { StockOperation } from './stock-operation'
+import { StockOperation } from '../stock-movement/stock-operation'
 import { Slug } from '../slug/slug'
 
 describe('Product Entity', () => {

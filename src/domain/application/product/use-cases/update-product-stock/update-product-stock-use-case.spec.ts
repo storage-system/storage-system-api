@@ -4,12 +4,13 @@ import { InMemoryProductsRepository } from 'test/repositories/in-memory-products
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
-import { StockOperation } from '@/domain/enterprise/product/stock-operation'
+import { StockOperation } from '@/domain/enterprise/stock-movement/stock-operation'
 import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { makeCategory } from 'test/factories/make-category'
 import { makeProduct } from 'test/factories/make-product'
 import { makeCompany } from 'test/factories/make-company'
 import { makeUser } from 'test/factories/make-user'
+import { faker } from '@faker-js/faker'
 
 import {
   UpdateProductStockUseCase,
@@ -65,6 +66,7 @@ describe('Update Product Use Case', () => {
       productId,
       operation: StockOperation.INCREASE,
       quantity: 20,
+      authorId: faker.person.fullName(),
     }
 
     await useCase.execute(updateProductStockProps)
@@ -84,6 +86,7 @@ describe('Update Product Use Case', () => {
       productId: fakeProductId,
       operation: StockOperation.INCREASE,
       quantity: 10,
+      authorId: faker.person.fullName(),
     })
 
     expect(response).rejects.toThrow(

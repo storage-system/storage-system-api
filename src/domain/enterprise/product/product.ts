@@ -5,7 +5,7 @@ import Error from '@/core/validation/error'
 import { Replace } from '@/core/replace'
 import { addDays } from 'date-fns'
 
-import { StockOperation } from './stock-operation'
+import { StockOperation } from '../stock-movement/stock-operation'
 import { CategoryID } from '../category/category'
 import { CompanyID } from '../company/company'
 import { Slug } from '../slug/slug'
@@ -22,7 +22,7 @@ export interface DimensionsProduct {
   depth: string
 }
 
-export class ProductID extends UniqueEntityID {}
+export class ProductID extends UniqueEntityID { }
 
 export interface ProductProps {
   name: string

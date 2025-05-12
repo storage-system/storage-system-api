@@ -1,6 +1,6 @@
 import { AuthenticateFactoryWithCompany } from 'test/factories/make-authenticate'
 import { PrismaService } from '@/infrastructure/database/prisma/prisma.service'
-import { StockOperation } from '@/domain/enterprise/product/stock-operation'
+import { StockOperation } from '@/domain/enterprise/stock-movement/stock-operation'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { HttpStatus, INestApplication } from '@nestjs/common'
