@@ -20,7 +20,7 @@ export class UpdateProductStockUseCase {
   constructor(
     private productsRepository: ProductsRepository,
     private stockMovementsRepository: StockMovementsRepository,
-  ) { }
+  ) {}
 
   async execute(props: UpdateProductStockUseCaseRequest) {
     const notification = Notification.create()
@@ -46,6 +46,6 @@ export class UpdateProductStockUseCase {
       performedBy: props.performedBy ?? 'Sistema',
     })
 
-    await this.stockMovementsRepository.create(stockMovement)
+    await this.stockMovementsRepository.save(stockMovement)
   }
 }

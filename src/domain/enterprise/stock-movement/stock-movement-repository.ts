@@ -1,5 +1,7 @@
+import { Repository } from '@/core/repository'
+
 import { StockMovement } from './stock-movement'
 
-export interface StockMovementsRepository {
-  create(movement: StockMovement): Promise<void>
+export abstract class StockMovementsRepository extends Repository<StockMovement> {
+  abstract getByCompany(companyId: string): Promise<any>
 }

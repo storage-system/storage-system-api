@@ -1,3 +1,4 @@
+import { StockMovementsRepository } from '@/domain/enterprise/stock-movement/stock-movement-repository'
 import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
@@ -8,6 +9,7 @@ import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
 import { Module } from '@nestjs/common'
 
+import { PrismaStockMovementsRepository } from './prisma/repositories/prisma-stock-movement-repository'
 import { PrismaConfigurationRepository } from './prisma/repositories/prisma-configuration-repository'
 import { PrismaCategoriesRepository } from './prisma/repositories/prisma-category-repository'
 import { PrismaCompaniesRepository } from './prisma/repositories/prisma-company-repository'
@@ -53,6 +55,10 @@ import { PrismaService } from './prisma/prisma.service'
       provide: InviteRepository,
       useClass: PrismaInviteRepository,
     },
+    {
+      provide: StockMovementsRepository,
+      useClass: PrismaStockMovementsRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -64,6 +70,7 @@ import { PrismaService } from './prisma/prisma.service'
     StyleRepository,
     FileRepository,
     InviteRepository,
+    StockMovementsRepository,
   ],
 })
 export class DatabaseModule {}
