@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
+import { categoriesSeed } from './category/category-seed'
+import { productsSeed } from './product/product-seed'
 import { companySeed } from './company/company-seed'
 import { usersSeed } from './user/user-seed'
 
@@ -9,6 +11,8 @@ async function main() {
   if (process.env.NODE_ENV === 'development') {
     await usersSeed(prisma)
     await companySeed(prisma)
+    await categoriesSeed(prisma)
+    await productsSeed(prisma)
   }
 }
 main()
