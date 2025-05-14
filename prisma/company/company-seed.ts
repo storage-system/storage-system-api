@@ -5,6 +5,7 @@ import { companies } from './companies'
 export async function companySeed(prisma: PrismaClient) {
   for (const company of companies) {
     const create: Prisma.CompanyCreateInput = {
+      id: company.id,
       cnpj: company.cnpj,
       contact: company.contact,
       corporateName: company.corporateName,
@@ -34,6 +35,7 @@ export async function companySeed(prisma: PrismaClient) {
     }
 
     const update: Prisma.CompanyUpdateInput = {
+      id: company.id,
       contact: company.contact,
       corporateName: company.corporateName,
       tradeName: company.tradeName,

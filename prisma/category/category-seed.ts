@@ -7,10 +7,11 @@ export async function categoriesSeed(prisma: PrismaClient) {
     const createOrUpdate: Prisma.CategoryCreateInput = {
       id: category.id,
       name: category.name,
+
       isActive: category.isActive,
       company: {
         connect: {
-          id: '2985d31b-26b8-4eee-b64d-f26a916004d7',
+          id: 'cfdbc8b8-fdb4-47b1-b9fc-b6b549e78541',
         },
       },
       slug: category.name,
