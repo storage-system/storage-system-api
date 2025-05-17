@@ -7,7 +7,7 @@ export const companies = [
     email: 'contact@techsolutions.com',
     contact: '+55 11 99999-9999',
     isActive: true,
-    responsibleId: '5285c5e2-43b6-424a-baea-a0a1f3662061',
+    responsibleId: '2ca9918b-bafc-4e31-925a-6228600dfb2d',
     address: {
       id: '54e39b05-6481-4121-85b2-a9d8f097ea41',
       street: 'Avenida Paulista',
@@ -39,6 +39,6 @@ export const companies = [
       addressNumber: '200',
       addressComplement: null,
     },
-    responsibleId: '2ca9918b-bafc-4e31-925a-6228600dfb2d',
+    responsibleId: '5285c5e2-43b6-424a-baea-a0a1f3662061',
   },
 ]
