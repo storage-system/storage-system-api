@@ -3,6 +3,7 @@ import { StyleRepository } from '@/domain/enterprise/style/style-repository'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import NotificationException from '@/core/exception/notification-exception'
 import { ValidationHandler } from '@/core/validation/validation-handler'
+import { CompanyID } from '@/domain/enterprise/company/company'
 import { Notification } from '@/core/validation/notification'
 import { Style } from '@/domain/enterprise/style/style'
 import { User } from '@/domain/enterprise/user/user'
@@ -56,7 +57,7 @@ export class CreateStyleUseCase {
 
     const style = Style.create({
       ...anInput,
-      companyId: anInput.currentUser.companyId,
+      ecommerceId: new CompanyID(),
     })
 
     await this.styleRepository.save(style)

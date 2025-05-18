@@ -2,6 +2,8 @@ import { EcommerceRepository } from '@/domain/enterprise/ecommerce/ecommerce-rep
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import NotAuthorizedException from '@/core/exception/not-authorized-exception'
+import NotificationException from '@/core/exception/notification-exception'
+import { AlreadyExistsError } from '@/core/errors/already-exists-error'
 import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Company } from '@/domain/enterprise/company/company'
@@ -9,12 +11,14 @@ import { Notification } from '@/core/validation/notification'
 import { Style } from '@/domain/enterprise/style/style'
 import { User } from '@/domain/enterprise/user/user'
 import { Slug } from '@/domain/enterprise/slug/slug'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
+import { log } from 'console'
 
 export interface PublishEcommerceUseCaseRequest {
   name: string
   companyId: string
   author: User
+  
   style?: {
     name: string
     isActive: boolean
@@ -29,6 +33,7 @@ export interface PublishEcommerceUseCaseRequest {
 @Injectable()
 export class PublishEcommerceUseCase {
   notification: Notification
+  logger: Logger = new Logger(PublishEcommerceUseCase.name)
 
   constructor(
     private readonly ecommerceRepository: EcommerceRepository,
@@ -37,6 +42,7 @@ export class PublishEcommerceUseCase {
 
   async execute(props: PublishEcommerceUseCaseRequest) {
     const company = await this.findCompanyById(props.companyId)
+    await this.verifyIfCompanyAlreadyHasEcommerce(company)
     this.verifyIfRequestAuthorIsCompanyOwner(props.author, company)
     const slug = await this.createEcommerceSlug(props.name)
 
@@ -47,7 +53,7 @@ export class PublishEcommerceUseCase {
       companyId: company.id,
     })
 
-    return { id: ecommerce.id, slug: ecommerce.slug }
+    return { id: ecommerce.id.toString(), slug: ecommerce.slug.value }
   }
 
   private async findCompanyById(companyId: string) {
@@ -62,6 +68,7 @@ export class PublishEcommerceUseCase {
   }
 
   private verifyIfRequestAuthorIsCompanyOwner(author: User, company: Company) {
+    this.logger.debug('=>', author, company)
     if (author.id.toString() !== company.responsibleId) {
       throw new NotAuthorizedException(
         'You are not authorized to perform this action',
@@ -70,13 +77,26 @@ export class PublishEcommerceUseCase {
     }
   }
 
+  private async verifyIfCompanyAlreadyHasEcommerce(company: Company) {
+    const ecommerce = await this.ecommerceRepository.findByCompanyId(
+      company.id.toString(),
+    )
+
+    if (ecommerce) {
+      throw new NotificationException(
+        `Company ${company.id.toString()} already has an ecommerce`,
+        this.notification,
+      )
+    }
+  }
+
   private async createEcommerceSlug(name: string) {
-    let slug = Slug.create(name)
+    let slug = Slug.createFromText(name)
     let ecommerce = await this.ecommerceRepository.findBySlug(slug)
 
     if (ecommerce) {
       const uuid = crypto.randomUUID().split('-')[0]
-      slug = Slug.create(`${name}-${uuid}`)
+      slug = Slug.createFromText(`${name}-${uuid}`)
       ecommerce = await this.ecommerceRepository.findBySlug(slug)
 
       if (ecommerce) {

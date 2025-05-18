@@ -16,7 +16,7 @@ export class PrismaStyleMapper {
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         deletedAt: raw.deletedAt,
-        companyId: new UniqueEntityID(raw.companyId),
+        ecommerceId: new UniqueEntityID(raw.ecommerceId),
       },
       new UniqueEntityID(raw.id),
     )
@@ -32,7 +32,7 @@ export class PrismaStyleMapper {
       primaryColor: style.primaryColor,
       secondaryColor: style.secondaryColor,
       tertiaryColor: style.tertiaryColor,
-      companyId: style.companyId.toString(),
+      ecommerceId: style.ecommerceId.toString(),
       createdAt: style.createdAt,
       updatedAt: style.updatedAt ?? undefined,
       deletedAt: style.deletedAt ?? undefined,

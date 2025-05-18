@@ -14,13 +14,13 @@ export class PrismaStyleRepository implements StyleRepository {
   async findAll({
     page,
     perPage,
-    companyId,
+    ecommerceId,
   }: ListStylesCommand): Promise<Pagination<Style>> {
     const [users, count] = await this.prisma.$transaction([
       this.prisma.style.findMany({
         where: {
           deletedAt: null,
-          companyId,
+          ecommerceId,
         },
         take: perPage,
         skip: (page - 1) * perPage,
@@ -31,7 +31,7 @@ export class PrismaStyleRepository implements StyleRepository {
       this.prisma.style.count({
         where: {
           deletedAt: null,
-          companyId,
+          ecommerceId,
         },
       }),
     ])
@@ -44,10 +44,10 @@ export class PrismaStyleRepository implements StyleRepository {
     })
   }
 
-  async findActiveStyleByCompanyId(companyId: string): Promise<Style | null> {
+  async findActiveStyleByCompanyId(ecommerceId: string): Promise<Style | null> {
     const activeStyle = await this.prisma.style.findFirst({
       where: {
-        companyId,
+        ecommerceId,
         isActive: true,
       },
     })

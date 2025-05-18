@@ -6,5 +6,7 @@ import { Style } from './style'
 
 export abstract class StyleRepository extends Repository<Style> {
   abstract findAll(params: ListStylesCommand): Promise<Pagination<Style>>
-  abstract findActiveStyleByCompanyId(companyId: string): Promise<Style | null>
+  abstract findActiveStyleByCompanyId(
+    ecommerceId: string,
+  ): Promise<Style | null>
 }

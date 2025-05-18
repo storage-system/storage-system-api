@@ -2,7 +2,7 @@ import { Style, StyleProps } from '@/domain/enterprise/style/style'
 
 export class GetStyleOutput {
   id: string
-  companyId: string
+  ecommerceId: string
   name: string
   isActive: boolean
   backgroundColor: string
@@ -17,7 +17,7 @@ export class GetStyleOutput {
 
   constructor(aStyleProps: StyleProps & { id: string }) {
     this.id = aStyleProps.id.toString()
-    this.companyId = aStyleProps.companyId.toString()
+    this.ecommerceId = aStyleProps.ecommerceId.toString()
     this.name = aStyleProps.name
     this.isActive = aStyleProps.isActive
     this.backgroundColor = aStyleProps.backgroundColor

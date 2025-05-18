@@ -1,6 +1,7 @@
 import { StockMovementsRepository } from '@/domain/enterprise/stock-movement/stock-movement-repository'
 import { ConfigurationRepository } from '@/domain/enterprise/configuration/configuration-repository'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
+import { EcommerceRepository } from '@/domain/enterprise/ecommerce/ecommerce-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { ProductsRepository } from '@/domain/enterprise/product/products-repository'
 import { InviteRepository } from '@/domain/enterprise/invite/invite-repository'
@@ -12,6 +13,7 @@ import { Module } from '@nestjs/common'
 import { PrismaStockMovementsRepository } from './prisma/repositories/prisma-stock-movement-repository'
 import { PrismaConfigurationRepository } from './prisma/repositories/prisma-configuration-repository'
 import { PrismaCategoriesRepository } from './prisma/repositories/prisma-category-repository'
+import { PrismaEcommerceRepository } from './prisma/repositories/prisma-ecommerce-repository'
 import { PrismaCompaniesRepository } from './prisma/repositories/prisma-company-repository'
 import { PrismaProductsRepository } from './prisma/repositories/prisma-product-repository'
 import { PrismaInviteRepository } from './prisma/repositories/prisma-invite-repository'
@@ -59,6 +61,10 @@ import { PrismaService } from './prisma/prisma.service'
       provide: StockMovementsRepository,
       useClass: PrismaStockMovementsRepository,
     },
+    {
+      provide: EcommerceRepository,
+      useClass: PrismaEcommerceRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -71,6 +77,7 @@ import { PrismaService } from './prisma/prisma.service'
     FileRepository,
     InviteRepository,
     StockMovementsRepository,
+    EcommerceRepository,
   ],
 })
 export class DatabaseModule {}

@@ -3,26 +3,30 @@ import { SearchQuery } from '@/core/entities/search-query'
 export interface ListStylesCommandProps {
   page: number
   perPage: number
-  companyId: string
+  ecommerceId: string
 }
 
 export class ListStylesCommand extends SearchQuery {
-  companyId?: string
+  ecommerceId?: string
 
   protected constructor({
     page = 1,
     perPage = 10,
-    companyId,
+    ecommerceId,
   }: Partial<ListStylesCommandProps>) {
     super(page, perPage)
-    this.companyId = companyId
+    this.ecommerceId = ecommerceId
   }
 
-  static create({ page, perPage, companyId }: Partial<ListStylesCommandProps>) {
+  static create({
+    page,
+    perPage,
+    ecommerceId,
+  }: Partial<ListStylesCommandProps>) {
     return new ListStylesCommand({
       page,
       perPage,
-      companyId,
+      ecommerceId,
     })
   }
 }

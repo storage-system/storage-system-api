@@ -2,9 +2,10 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
-import { Product } from '../product/product'
+import { Product, ProductID } from '../product/product'
 import { Style } from '../style/style'
 import { Slug } from '../slug/slug'
+import { File } from '../file/file'
 
 // model Ecommerce {
 //     id        String    @id @default(uuid())
@@ -31,18 +32,23 @@ interface EcommerceProps {
   isActive: boolean
   companyId: UniqueEntityID
   styles: Style[]
-  products: Product[]
+  productIds: ProductID[]
   createdAt: Date
   updatedAt?: Date
   deletedAt?: Date
 }
 
+export class EcommerceID extends UniqueEntityID {}
+
 export class Ecommerce extends Entity<EcommerceProps> {
   static create(
-    props: Optional<EcommerceProps, 'createdAt' | 'products'>,
-    id?: UniqueEntityID,
+    props: Optional<EcommerceProps, 'createdAt' | 'productIds'>,
+    id?: EcommerceID,
   ) {
-    return new Ecommerce({ createdAt: new Date(), products: [], ...props }, id)
+    return new Ecommerce(
+      { createdAt: new Date(), productIds: [], ...props },
+      id,
+    )
   }
 
   update(props: Partial<EcommerceProps>) {
@@ -68,8 +74,8 @@ export class Ecommerce extends Entity<EcommerceProps> {
     return this.props.styles
   }
 
-  get products() {
-    return this.props.products
+  get productIds() {
+    return this.props.productIds
   }
 
   get companyId() {

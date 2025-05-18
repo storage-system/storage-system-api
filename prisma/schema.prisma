@@ -86,20 +86,22 @@ model Company {
 }
 
 model Ecommerce {
-  id        String    @id @default(uuid())
-  name      String
-  slug      String    @unique
-  isActive  Boolean   @default(false) @map("is_active")
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  id             String    @id @default(uuid())
+  name           String
+  slug           String    @unique
+  isActive       Boolean   @default(false) @map("is_active")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+  previewImageId String?   @map("preview_image_id")
+  companyId      String    @unique @map("company_id")
 
   styles Style[]
 
   products Product[]
 
-  companyId String  @unique @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id])
+  previewImage File?   @relation(fields: [previewImageId], references: [id])
+  company      Company @relation(fields: [companyId], references: [id])
 
   @@map("ecommerces")
 }
@@ -197,11 +199,11 @@ model Style {
   secondaryColor  String  @map("secondary_color")
   tertiaryColor   String  @map("tertiary_color")
 
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime?  @updatedAt @map("updated_at")
-  deletedAt   DateTime?  @map("deleted_at")
-  ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
-  ecommerceId String?    @map("ecommerce_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  ecommerce   Ecommerce @relation(fields: [ecommerceId], references: [id])
+  ecommerceId String    @map("ecommerce_id")
 
   @@map("styles")
 }
@@ -268,8 +270,9 @@ model File {
   updatedAt DateTime? @map(name: "updated_at") @db.Timestamp(6)
   deletedAt DateTime? @map(name: "deleted_at") @db.Timestamp(6)
 
-  productId String?  @map("product_id")
-  product   Product? @relation(fields: [productId], references: [id])
+  productId String?     @map("product_id")
+  product   Product?    @relation(fields: [productId], references: [id])
+  ecommerce Ecommerce[]
 
   @@map("files")
 }

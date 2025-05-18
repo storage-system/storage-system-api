@@ -57,9 +57,10 @@ export class StyleController {
   @ApiQuery({ name: 'perPage', required: false, type: Number })
   @ApiOkResponse({ type: HttpStyleListResponse })
   async list(@Query() query: QueryParamsDTO, @CurrentUser() user: UserPayload) {
+    // TODO: FIX TO GET ECOMMERCE ID
     return await this.listStylesUseCase.execute({
       ...query,
-      companyId: user.companyId,
+      ecommerceId: user.companyId,
     })
   }
 
