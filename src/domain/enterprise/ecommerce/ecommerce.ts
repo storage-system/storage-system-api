@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
 import { Product } from '../product/product'
@@ -31,15 +32,17 @@ interface EcommerceProps {
   companyId: UniqueEntityID
   styles: Style[]
   products: Product[]
-
   createdAt: Date
   updatedAt?: Date
   deletedAt?: Date
 }
 
 export class Ecommerce extends Entity<EcommerceProps> {
-  static create(props: EcommerceProps, id?: UniqueEntityID) {
-    return new Ecommerce(props, id)
+  static create(
+    props: Optional<EcommerceProps, 'createdAt' | 'products'>,
+    id?: UniqueEntityID,
+  ) {
+    return new Ecommerce({ createdAt: new Date(), products: [], ...props }, id)
   }
 
   update(props: Partial<EcommerceProps>) {

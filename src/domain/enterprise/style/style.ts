@@ -3,7 +3,7 @@ import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
 export interface StyleProps {
-  companyId: UniqueEntityID
+  ecommerceId: UniqueEntityID
   name: string
   isActive: boolean
   backgroundColor: string
@@ -61,8 +61,8 @@ export class Style extends Entity<StyleProps> {
     return this.props.isActive
   }
 
-  get companyId() {
-    return this.props.companyId.toString()
+  get ecommerceId() {
+    return this.props.ecommerceId.toString()
   }
 
   get backgroundColor() {
