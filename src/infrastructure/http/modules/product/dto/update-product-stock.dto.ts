@@ -10,4 +10,4 @@ export const updateProductStockDTOBodySchema = z.object({
 
 export class UpdateProductStockDTO extends createZodDto(
   updateProductStockDTOBodySchema,
-) { }
+) {}

@@ -6,10 +6,10 @@ import { Category } from '@/domain/enterprise/category/category'
 import { Notification } from '@/core/validation/notification'
 import { FileID } from '@/domain/enterprise/file/file'
 import { Slug } from '@/domain/enterprise/slug/slug'
+import { User } from '@/domain/enterprise/user/user'
 import { Injectable } from '@nestjs/common'
 
 import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
-import { User } from '@/domain/enterprise/user/user'
 
 interface CreateCategoryUseCaseRequest {
   name: string

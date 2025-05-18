@@ -22,7 +22,7 @@ export interface DimensionsProduct {
   depth: string
 }
 
-export class ProductID extends UniqueEntityID { }
+export class ProductID extends UniqueEntityID {}
 
 export interface ProductProps {
   name: string

@@ -41,7 +41,7 @@ export class ProductController {
     private updateProductStockUseCase: UpdateProductStockUseCase,
     private deleteProductUseCase: DeleteProductUseCase,
     private spreadsheetService: SpreadsheetService,
-  ) { }
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

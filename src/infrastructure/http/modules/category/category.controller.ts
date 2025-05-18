@@ -13,14 +13,14 @@ import { ListCategoriesUseCase } from '@/domain/application/category/use-cases/r
 import { CreateCategoryUseCase } from '@/domain/application/category/use-cases/create/create-category-use-case'
 import { DeleteCategoryUseCase } from '@/domain/application/category/use-cases/delete/delete-category-use-case'
 import { UpdateCategoryUseCase } from '@/domain/application/category/use-cases/update/update-category-use-case'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { User } from '@/domain/enterprise/user/user'
 
 import { HttpCategoryListResponse } from '../../docs/category/http-category-list-response'
 import { ParsePositiveIntPipe } from '../../pipes/parse-positive-int.pipe'
 import { CreateCategoryDTO } from './dto/create-category.dto'
 import { UpdateCategoryDTO } from './dto/update-category.dto'
-import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
-import { User } from '@/domain/enterprise/user/user'
 
 @ApiTags('Category')
 @Controller('/categories')
@@ -33,9 +33,8 @@ export class CategoryController {
   ) {}
 
   @Post()
-  async create(@Body() body: CreateCategoryDTO, @CurrentUser() author : User) {
-
-    return await this.createCategoryUseCase.execute({...body , author})
+  async create(@Body() body: CreateCategoryDTO, @CurrentUser() author: User) {
+    return await this.createCategoryUseCase.execute({ ...body, author })
   }
 
   @Get()

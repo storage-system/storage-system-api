@@ -1,15 +1,15 @@
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
 import { Company } from '@/domain/enterprise/company/company'
 import { makeCompany } from 'test/factories/make-company'
+import { User } from '@/domain/enterprise/user/user'
+import { makeUser } from 'test/factories/make-user'
 
 import { CategoriesRepository } from '../../../../enterprise/category/categories-repository'
 import { CreateCategoryUseCase } from './create-category-use-case'
-import { User } from '@/domain/enterprise/user/user'
-import { makeUser } from 'test/factories/make-user'
-import { UsersRepository } from '@/domain/enterprise/user/users-repository'
-import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 
 let categoriesRepository: CategoriesRepository
 let companiesRepository: CompaniesRepository
@@ -37,7 +37,7 @@ describe('Create Category', () => {
       repository: usersRepository,
       override: {
         companyId: company.id,
-      }
+      },
     })
   })
 
@@ -50,7 +50,7 @@ describe('Create Category', () => {
     const result = await useCase.execute({
       name: 'category-01',
       isActive: true,
-      author
+      author,
     })
 
     const categoryOnDatabase = await categoriesRepository.findById(

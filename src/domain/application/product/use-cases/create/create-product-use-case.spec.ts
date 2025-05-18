@@ -1,12 +1,16 @@
-import { users } from './../../../../../../prisma/user/users';
 import { InMemoryCategoriesRepository } from 'test/repositories/in-memory-categories-repository'
 import { InMemoryCompaniesRepository } from 'test/repositories/in-memory-companies-repository'
 import { InMemoryProductsRepository } from 'test/repositories/in-memory-products-repository'
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
+import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
+import { UsersRepository } from '@/domain/enterprise/user/users-repository'
+import { Company, CompanyID } from '@/domain/enterprise/company/company'
 import { StatusProduct } from '@/domain/enterprise/product/product'
 import { makeCategory } from 'test/factories/make-category'
 import { makeCompany } from 'test/factories/make-company'
+import { User } from '@/domain/enterprise/user/user'
+import { makeUser } from 'test/factories/make-user'
 import { faker } from '@faker-js/faker'
 
 import {
@@ -14,11 +18,7 @@ import {
   CreateProductUseCaseRequest,
 } from './create-product-use-case'
 import { ProductsRepository } from '../../../../enterprise/product/products-repository'
-import { User } from '@/domain/enterprise/user/user';
-import { UsersRepository } from '@/domain/enterprise/user/users-repository';
-import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository';
-import { Company, CompanyID } from '@/domain/enterprise/company/company';
-import { makeUser } from 'test/factories/make-user';
+import { users } from './../../../../../../prisma/user/users'
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository
@@ -50,7 +50,7 @@ describe('Create Product Use Case', () => {
     author = await makeUser({
       repository: usersRepository,
       override: {
-        companyId: company.id
+        companyId: company.id,
       },
     })
   })
@@ -64,7 +64,6 @@ describe('Create Product Use Case', () => {
   })
 
   it('should be able to create a new product', async () => {
-
     const category = await makeCategory({
       repository: categoriesRepository,
     })

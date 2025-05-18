@@ -6,11 +6,11 @@ import NotificationException from '@/core/exception/notification-exception'
 import { ValidationHandler } from '@/core/validation/validation-handler'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Notification } from '@/core/validation/notification'
+import { User } from '@/domain/enterprise/user/user'
 import { Injectable } from '@nestjs/common'
 import Error from '@/core/validation/error'
 
 import { ProductsRepository } from '../../../../enterprise/product/products-repository'
-import { User } from '@/domain/enterprise/user/user'
 
 export interface CreateProductUseCaseRequest {
   name: string
@@ -52,8 +52,12 @@ export class CreateProductUseCase {
     anInput: CreateProductUseCaseRequest,
   ): Promise<CreateProductUseCaseResponse> {
     const notification = Notification.create()
-    
-    const company = anInput.author.companyId ? await this.companiesRepository.findById(anInput.author.companyId?.toString()) : null
+
+    const company = anInput.author.companyId
+      ? await this.companiesRepository.findById(
+          anInput.author.companyId?.toString(),
+        )
+      : null
 
     if (!company) {
       throw ResourceNotFoundException.with(
