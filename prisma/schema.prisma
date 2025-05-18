@@ -74,15 +74,34 @@ model Company {
   users         User[]
   products      Product[]
   configuration Configuration[]
-  styles        Style[]
   invites       Invite[]
 
   createdAt     DateTime        @default(now()) @map("created_at")
   updatedAt     DateTime?       @updatedAt @map("updated_at")
   deletedAt     DateTime?       @map("deleted_at")
   StockMovement StockMovement[]
+  ecommerce     Ecommerce?
 
   @@map("companies")
+}
+
+model Ecommerce {
+  id        String    @id @default(uuid())
+  name      String
+  slug      String    @unique
+  isActive  Boolean   @default(false) @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  styles Style[]
+
+  products Product[]
+
+  companyId String  @unique @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@map("ecommerces")
 }
 
 model AccessCode {
@@ -178,12 +197,11 @@ model Style {
   secondaryColor  String  @map("secondary_color")
   tertiaryColor   String  @map("tertiary_color")
 
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id])
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime?  @updatedAt @map("updated_at")
+  deletedAt   DateTime?  @map("deleted_at")
+  ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
+  ecommerceId String?    @map("ecommerce_id")
 
   @@map("styles")
 }
@@ -229,9 +247,11 @@ model Product {
   files         File[]
   stockMovement StockMovement[]
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime?  @updatedAt @map("updated_at")
+  deletedAt   DateTime?  @map("deleted_at")
+  Ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
+  ecommerceId String?
 
   @@map("products")
 }
