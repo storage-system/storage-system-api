@@ -1,4 +1,4 @@
-import { ListEcommerceProductsCommand } from '@/domain/application/ecommerce/use-case/retrieve/list/list-ecommerce-products-command'
+import { ListEcommerceProductsCommand } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-ecommerce-products-command'
 import { ListProductsCommand } from '@/domain/application/product/use-cases/retrieve/list/list-products-command'
 import { ProductsRepository } from '@/domain/enterprise/product/products-repository'
 import { Product } from '@/domain/enterprise/product/product'

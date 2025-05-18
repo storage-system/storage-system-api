@@ -11,9 +11,16 @@ const createStyleBodySchema = z.object({
   tertiaryColor: z.string(),
 })
 
+const heroSchema = z.object({
+  text: z.string(),
+  fileId: z.string().uuid(),
+})
+
 const publishEcommerceSchema = z.object({
   name: z.string().min(1).max(255),
+  ecommercePreview: z.string().uuid(),
   style: createStyleBodySchema.optional(),
+  hero: z.array(heroSchema).default([]),
 })
 
 export class PublishEcommerceDTO extends createZodDto(publishEcommerceSchema) {}

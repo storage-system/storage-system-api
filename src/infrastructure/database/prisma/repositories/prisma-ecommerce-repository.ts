@@ -19,6 +19,7 @@ export class PrismaEcommerceRepository implements EcommerceRepository {
       include: {
         styles: true,
         products: { select: { id: true } },
+        hero: true,
       },
     })
 
@@ -41,6 +42,7 @@ export class PrismaEcommerceRepository implements EcommerceRepository {
       include: {
         styles: true,
         products: { select: { id: true } },
+        hero: true,
       },
     })
 
@@ -61,6 +63,7 @@ export class PrismaEcommerceRepository implements EcommerceRepository {
       include: {
         styles: true,
         products: { select: { id: true } },
+        hero: true,
       },
     })
 

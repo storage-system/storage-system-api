@@ -2,10 +2,13 @@ import {
   Prisma,
   Ecommerce as PrismaEcommerce,
   Style as PrismaStyle,
+  Hero as PrismaHero,
 } from '@prisma/client'
 import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ProductID } from '@/domain/enterprise/product/product'
+import { Hero } from '@/domain/enterprise/ecommerce/hero'
+import { FileID } from '@/domain/enterprise/file/file'
 import { Slug } from '@/domain/enterprise/slug/slug'
 
 import { PrismaStyleMapper } from './prisma-style-mapper'
@@ -13,6 +16,7 @@ import { PrismaStyleMapper } from './prisma-style-mapper'
 type PrismaEcommerceWithRelations = PrismaEcommerce & {
   products: string[]
   styles: PrismaStyle[]
+  hero: PrismaHero[]
 }
 
 export class PrismaEcommerceMapper {
@@ -23,6 +27,12 @@ export class PrismaEcommerceMapper {
         companyId: new UniqueEntityID(raw.companyId),
         isActive: raw.isActive,
         slug: Slug.create(raw.slug),
+        ecommercePreview: raw.previewImageId
+          ? new FileID(raw.previewImageId)
+          : undefined,
+        hero: raw.hero.map((hero) =>
+          Hero.create({ text: hero.text, fileId: new FileID(hero.fileId) }),
+        ),
         styles: raw.styles.map((style) => PrismaStyleMapper.toDomain(style)),
         productIds: raw.products.map((product) => new ProductID(product)),
         createdAt: raw.createdAt,
@@ -39,10 +49,19 @@ export class PrismaEcommerceMapper {
       name: raw.name,
       slug: raw.slug.value,
       isActive: raw.isActive,
+      previewImage: raw.ecommercePreview
+        ? { connect: { id: raw.ecommercePreview.toString() } }
+        : undefined,
       company: {
         connect: {
           id: raw.companyId.toString(),
         },
+      },
+      hero: {
+        create: raw.hero.map((hero) => ({
+          fileId: hero.fileId.toString(),
+          text: hero.text,
+        })),
       },
       styles: {
         create: raw.styles.map((style) => ({

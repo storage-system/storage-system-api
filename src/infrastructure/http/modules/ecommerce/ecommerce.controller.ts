@@ -1,7 +1,8 @@
 import { UpdateEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/update-ecommerce-products/update-ecommerce-products-use-case'
-import { ListEcommerceProductsCommand } from '@/domain/application/ecommerce/use-case/retrieve/list/list-ecommerce-products-command'
+import { ListEcommerceProductsCommand } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-ecommerce-products-command'
+import { GetEcommerceBySlugUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-by-slug/get-ecommerce-by-slug-use-case'
+import { ListEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-products-use-case'
 import { PublishEcommerceUseCase } from '@/domain/application/ecommerce/use-case/publish-ecommerce/publish-ecommerce-use-case'
-import { ListEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/retrieve/list/list-products-use-case'
 import {
   CurrentUser,
   UserPayload,
@@ -31,6 +32,7 @@ export class EcommerceController {
     private readonly publishEcommerceUseCase: PublishEcommerceUseCase,
     private readonly updateProductsUseCase: UpdateEcommerceProductsUseCase,
     private readonly listProductsUseCase: ListEcommerceProductsUseCase,
+    private readonly getEcommerceBySlugUseCase: GetEcommerceBySlugUseCase,
   ) {}
 
   @Post('/publish')
@@ -56,6 +58,12 @@ export class EcommerceController {
     })
   }
 
+  @Public()
+  @Get('/:slug')
+  async retrieveEcommerce(@Param('slug') slug: string) {
+    return this.getEcommerceBySlugUseCase.execute({ slug })
+  }
+
   @ApiQuery({
     name: 'page',
     type: Number,
@@ -69,7 +77,7 @@ export class EcommerceController {
     description: 'Number of items per page',
   })
   @Public()
-  @Get('/:slug')
+  @Get('/:slug/products')
   async listProducts(
     @Param('slug') slug: string,
     @Query('page', new ParsePositiveIntPipe(1)) page: number = 1,

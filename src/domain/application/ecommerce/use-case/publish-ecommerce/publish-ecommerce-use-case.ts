@@ -3,10 +3,12 @@ import { CompaniesRepository } from '@/domain/enterprise/company/companies-repos
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import NotAuthorizedException from '@/core/exception/not-authorized-exception'
 import NotificationException from '@/core/exception/notification-exception'
+import { FileRepository } from '@/domain/enterprise/file/file-repository'
 import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Notification } from '@/core/validation/notification'
 import { Company } from '@/domain/enterprise/company/company'
+import { Hero } from '@/domain/enterprise/ecommerce/hero'
 import { Style } from '@/domain/enterprise/style/style'
 import { Slug } from '@/domain/enterprise/slug/slug'
 import { User } from '@/domain/enterprise/user/user'
@@ -16,7 +18,11 @@ export interface PublishEcommerceUseCaseRequest {
   name: string
   companyId: string
   author: User
-
+  ecommercePreview: string
+  hero: {
+    fileId: string
+    text: string
+  }[]
   style?: {
     name: string
     isActive: boolean
@@ -36,6 +42,7 @@ export class PublishEcommerceUseCase {
   constructor(
     private readonly ecommerceRepository: EcommerceRepository,
     private readonly companyRepository: CompaniesRepository,
+    private readonly fileRepository: FileRepository,
   ) {}
 
   async execute(props: PublishEcommerceUseCaseRequest) {
@@ -47,6 +54,8 @@ export class PublishEcommerceUseCase {
     const ecommerce = await this.createEcommerce({
       name: props.name,
       slug,
+      ecommercePreview: props.ecommercePreview,
+      hero: props.hero,
       style: props.style,
       companyId: company.id,
     })
@@ -112,10 +121,14 @@ export class PublishEcommerceUseCase {
     slug,
     style,
     companyId,
+    hero,
+    ecommercePreview,
   }: {
     name: string
     style?: PublishEcommerceUseCaseRequest['style']
+    hero: PublishEcommerceUseCaseRequest['hero']
     companyId: UniqueEntityID
+    ecommercePreview: string
     slug: Slug
   }) {
     const ecommerceId = new UniqueEntityID()
@@ -141,12 +154,17 @@ export class PublishEcommerceUseCase {
       tertiaryColor: style?.tertiaryColor ?? defaultStyle.tertiaryColor,
     })
 
+    const heroList = await this.createHero(hero)
+    const previewFile = await this.verifyIfPreviewFileExists(ecommercePreview)
+
     const ecommerce = Ecommerce.create(
       {
         name,
         slug,
         isActive: true,
         companyId,
+        ecommercePreview: previewFile?.id,
+        hero: heroList,
         styles: [ecommerceStyle],
       },
       ecommerceId,
@@ -155,5 +173,41 @@ export class PublishEcommerceUseCase {
     await this.ecommerceRepository.save(ecommerce)
 
     return ecommerce
+  }
+
+  private async createHero(hero: PublishEcommerceUseCaseRequest['hero']) {
+    const heroList: Hero[] = []
+    for (const item of hero) {
+      const file = await this.fileRepository.findById(item.fileId)
+
+      if (!file) {
+        this.notification.appendAnError({
+          message: `File with id ${item.fileId} not found`,
+        })
+      } else {
+        const heroItem = Hero.create({
+          fileId: file.id,
+          text: item.text,
+        })
+
+        heroList.push(heroItem)
+      }
+    }
+
+    if (this.notification.hasErrors()) {
+      throw new NotificationException('Error ecommerce', this.notification)
+    }
+
+    return heroList
+  }
+
+  private async verifyIfPreviewFileExists(ecommercePreview: string) {
+    const file = await this.fileRepository.findById(ecommercePreview)
+
+    if (!file) {
+      throw new NotificationException('File not found', this.notification)
+    }
+
+    return file
   }
 }

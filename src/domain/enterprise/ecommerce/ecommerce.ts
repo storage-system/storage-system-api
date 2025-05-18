@@ -2,36 +2,20 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
-import { Product, ProductID } from '../product/product'
+import { ProductID } from '../product/product'
 import { Style } from '../style/style'
+import { FileID } from '../file/file'
 import { Slug } from '../slug/slug'
-import { File } from '../file/file'
-
-// model Ecommerce {
-//     id        String    @id @default(uuid())
-//     name      String
-//     slug      String    @unique
-//     isActive  Boolean   @default(false) @map("is_active")
-//     createdAt DateTime  @default(now()) @map("created_at")
-//     updatedAt DateTime? @updatedAt @map("updated_at")
-//     deletedAt DateTime? @map("deleted_at")
-
-//     styles Style[]
-
-//     products Product[]
-
-//     companyId String  @unique @map("company_id")
-//     company   Company @relation(fields: [companyId], references: [id])
-
-//     @@map("ecommerces")
-//   }
+import { Hero } from './hero'
 
 interface EcommerceProps {
   name: string
   slug: Slug
   isActive: boolean
   companyId: UniqueEntityID
+  ecommercePreview?: FileID
   styles: Style[]
+  hero: Hero[]
   productIds: ProductID[]
   createdAt: Date
   updatedAt?: Date
@@ -100,8 +84,16 @@ export class Ecommerce extends Entity<EcommerceProps> {
     return this.props.isActive
   }
 
+  get ecommercePreview() {
+    return this.props.ecommercePreview
+  }
+
   get styles() {
     return this.props.styles
+  }
+
+  get hero() {
+    return this.props.hero
   }
 
   get productIds() {

@@ -85,27 +85,6 @@ model Company {
   @@map("companies")
 }
 
-model Ecommerce {
-  id             String    @id @default(uuid())
-  name           String
-  slug           String    @unique
-  isActive       Boolean   @default(false) @map("is_active")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime? @updatedAt @map("updated_at")
-  deletedAt      DateTime? @map("deleted_at")
-  previewImageId String?   @map("preview_image_id")
-  companyId      String    @unique @map("company_id")
-
-  styles Style[]
-
-  products Product[]
-
-  previewImage File?   @relation(fields: [previewImageId], references: [id])
-  company      Company @relation(fields: [companyId], references: [id])
-
-  @@map("ecommerces")
-}
-
 model AccessCode {
   id        String   @id @default(uuid()) @db.VarChar(36)
   code      String   @unique @db.VarChar(12)
@@ -273,6 +252,7 @@ model File {
   productId String?     @map("product_id")
   product   Product?    @relation(fields: [productId], references: [id])
   ecommerce Ecommerce[]
+  Hero      Hero[]
 
   @@map("files")
 }
@@ -295,4 +275,36 @@ model StockMovement {
   companyId String?
 
   @@map("stock_movements")
+}
+
+model Ecommerce {
+  id             String    @id @default(uuid())
+  name           String
+  slug           String    @unique
+  isActive       Boolean   @default(false) @map("is_active")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+  previewImageId String?   @map("preview_image_id")
+  companyId      String    @unique @map("company_id")
+
+  hero   Hero[]
+  styles Style[]
+
+  products Product[]
+
+  previewImage File?   @relation(fields: [previewImageId], references: [id])
+  company      Company @relation(fields: [companyId], references: [id])
+
+  @@map("ecommerces")
+}
+
+model Hero {
+  id   String @id @default(uuid())
+  text String
+
+  file        File       @relation(fields: [fileId], references: [id])
+  ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
+  ecommerceId String?    @map("ecommerce_id")
+  fileId      String     @map("file_id")
 }
