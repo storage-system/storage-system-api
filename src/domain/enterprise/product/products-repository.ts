@@ -6,4 +6,10 @@ import { ListProductsCommand } from '../../application/product/use-cases/retriev
 
 export abstract class ProductsRepository extends Repository<Product> {
   abstract findAll(params: ListProductsCommand): Promise<Pagination<Product>>
+  abstract findAllByEcommerceId(params: {
+    perPage: number
+    page: number
+    ecommerceId: string
+    categoryId?: string
+  }): Promise<Pagination<Product>>
 }

@@ -1,7 +1,6 @@
 import { EcommerceRepository } from '@/domain/enterprise/ecommerce/ecommerce-repository'
 import { CompaniesRepository } from '@/domain/enterprise/company/companies-repository'
 import { ProductsRepository } from '@/domain/enterprise/product/products-repository'
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import NotificationException from '@/core/exception/notification-exception'
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'

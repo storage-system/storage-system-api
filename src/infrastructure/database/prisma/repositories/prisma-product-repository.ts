@@ -1,8 +1,10 @@
+import { ListEcommerceProductsCommand } from '@/domain/application/ecommerce/use-case/retrieve/list/list-ecommerce-products-command'
 import { ListProductsCommand } from '@/domain/application/product/use-cases/retrieve/list/list-products-command'
 import { ProductsRepository } from '@/domain/enterprise/product/products-repository'
 import { Product } from '@/domain/enterprise/product/product'
 import { Pagination } from '@/core/entities/pagination'
 import { Injectable } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
 
 import { PrismaProductMapper } from '../mappers/prisma-product-mapper'
 import { PrismaService } from '../prisma.service'
@@ -40,6 +42,49 @@ export class PrismaProductsRepository implements ProductsRepository {
     ])
 
     return new Pagination({
+      total,
+      page: params.page,
+      perPage: params.perPage,
+      items: products.map(PrismaProductMapper.toDomain),
+    })
+  }
+
+  async findAllByEcommerceId(params: {
+    perPage: number
+    page: number
+    ecommerceId: string
+    categoryId?: string
+  }): Promise<Pagination<Product>> {
+    const where: Prisma.ProductWhereInput = {
+      deletedAt: null,
+      ecommerceId: params.ecommerceId,
+      categories: {
+        some: {
+          id: params.categoryId,
+        },
+      },
+    }
+
+    const [products, total] = await Promise.all([
+      this.prisma.product.findMany({
+        where,
+        take: params.perPage,
+        skip: (params.page - 1) * params.perPage,
+        include: {
+          files: {
+            select: {
+              id: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      this.prisma.product.count({ where }),
+    ])
+
+    return new Pagination<Product>({
       total,
       page: params.page,
       perPage: params.perPage,
