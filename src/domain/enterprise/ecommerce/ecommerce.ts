@@ -56,6 +56,36 @@ export class Ecommerce extends Entity<EcommerceProps> {
       ...this.props,
       ...props,
     }
+
+    this.touch()
+  }
+
+  updateProducts(products: { id: ProductID; action: 'add' | 'remove' }[]) {
+    products.forEach((product) => {
+      if (product.action === 'add') {
+        this.addProduct(product.id)
+      } else {
+        this.removeProduct(product.id)
+      }
+    })
+
+    this.touch()
+  }
+
+  addProduct(productId: ProductID) {
+    if (
+      !this.props.productIds.some(
+        (id) => id.toString() === productId.toString(),
+      )
+    ) {
+      this.props.productIds.push(productId)
+    }
+  }
+
+  removeProduct(productId: ProductID) {
+    this.props.productIds = this.props.productIds.filter(
+      (id) => id.toString() !== productId.toString(),
+    )
   }
 
   get name() {
@@ -92,5 +122,9 @@ export class Ecommerce extends Entity<EcommerceProps> {
 
   get deletedAt() {
     return this.props.deletedAt
+  }
+
+  touch() {
+    this.props.updatedAt = new Date()
   }
 }

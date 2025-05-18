@@ -3,22 +3,20 @@ import { CompaniesRepository } from '@/domain/enterprise/company/companies-repos
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import NotAuthorizedException from '@/core/exception/not-authorized-exception'
 import NotificationException from '@/core/exception/notification-exception'
-import { AlreadyExistsError } from '@/core/errors/already-exists-error'
 import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Company } from '@/domain/enterprise/company/company'
 import { Notification } from '@/core/validation/notification'
+import { Company } from '@/domain/enterprise/company/company'
 import { Style } from '@/domain/enterprise/style/style'
-import { User } from '@/domain/enterprise/user/user'
 import { Slug } from '@/domain/enterprise/slug/slug'
+import { User } from '@/domain/enterprise/user/user'
 import { Injectable, Logger } from '@nestjs/common'
-import { log } from 'console'
 
 export interface PublishEcommerceUseCaseRequest {
   name: string
   companyId: string
   author: User
-  
+
   style?: {
     name: string
     isActive: boolean

@@ -1,5 +1,6 @@
 import { EcommerceRepository } from '@/domain/enterprise/ecommerce/ecommerce-repository'
-import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'
+import { Ecommerce, EcommerceID } from '@/domain/enterprise/ecommerce/ecommerce'
+import { ProductID } from '@/domain/enterprise/product/product'
 import { Slug } from '@/domain/enterprise/slug/slug'
 import { Injectable } from '@nestjs/common'
 
@@ -87,6 +88,30 @@ export class PrismaEcommerceRepository implements EcommerceRepository {
 
     await this.prisma.ecommerce.update({
       where: { id: record.id.toString() },
+      data,
+    })
+  }
+
+  async addProducts(
+    ecommerceId: EcommerceID,
+    products: ProductID[],
+  ): Promise<void> {
+    const data = PrismaEcommerceMapper.toPersistenceAddProduct(products)
+
+    await this.prisma.ecommerce.update({
+      where: { id: ecommerceId.toString() },
+      data,
+    })
+  }
+
+  async removeProducts(
+    ecommerceId: EcommerceID,
+    products: ProductID[],
+  ): Promise<void> {
+    const data = PrismaEcommerceMapper.toPersistenceRemoveProduct(products)
+
+    await this.prisma.ecommerce.update({
+      where: { id: ecommerceId.toString() },
       data,
     })
   }
