@@ -41,7 +41,7 @@ export function DocumentConfig(app: INestApplication): void {
         content: document,
       },
       metaData: {
-        title: 'Customer Portal - Rest API',
+        title: 'Storage System - Rest API',
       },
     }),
   )

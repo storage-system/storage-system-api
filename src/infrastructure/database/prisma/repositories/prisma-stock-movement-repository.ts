@@ -1,11 +1,14 @@
 import { StockMovementsRepository } from '@/domain/enterprise/stock-movement/stock-movement-repository'
 import { StockMovement } from '@/domain/enterprise/stock-movement/stock-movement'
-import { PrismaClient } from '@prisma/client'
+import { Injectable } from '@nestjs/common'
 
+import { PrismaService } from '../prisma.service'
+
+@Injectable()
 export class PrismaStockMovementsRepository
   implements StockMovementsRepository
 {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaService) {}
 
   async save(movement: StockMovement): Promise<void> {
     await this.prisma.stockMovement.create({
@@ -16,6 +19,7 @@ export class PrismaStockMovementsRepository
         operation: movement.operation,
         timestamp: movement.timestamp,
         performedBy: movement.performedBy,
+        companyId: movement.companyId.toString(),
       },
     })
   }
@@ -36,6 +40,10 @@ export class PrismaStockMovementsRepository
             name: true,
           },
         },
+        timestamp: true,
+      },
+      orderBy: {
+        timestamp: 'desc',
       },
     })
 

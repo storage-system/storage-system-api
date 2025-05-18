@@ -11,6 +11,7 @@ interface StockMovementProps {
   operation: StockOperation
   timestamp: Date
   performedBy: string
+  companyId: CompanyID
 }
 
 export class StockMovement extends Entity<StockMovementProps> {
@@ -36,5 +37,9 @@ export class StockMovement extends Entity<StockMovementProps> {
 
   get performedBy() {
     return this.props.performedBy
+  }
+
+  get companyId() {
+    return this.props.companyId
   }
 }

@@ -44,6 +44,7 @@ export class UpdateProductStockUseCase {
       operation: props.operation,
       timestamp: new Date(),
       performedBy: props.performedBy ?? 'Sistema',
+      companyId: product.companyId,
     })
 
     await this.stockMovementsRepository.save(stockMovement)

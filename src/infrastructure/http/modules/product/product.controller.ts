@@ -11,6 +11,7 @@ import {
   Query,
   Res,
 } from '@nestjs/common'
+import { GetStockMovementsUseCase } from '@/domain/application/product/use-cases/retrieve/stock-movements/get-stock-movements-use-case'
 import { UpdateProductStockUseCase } from '@/domain/application/product/use-cases/update-product-stock/update-product-stock-use-case'
 import { GetProductUseCase } from '@/domain/application/product/use-cases/retrieve/get-product/get-product-use-case'
 import { ListProductsUseCase } from '@/domain/application/product/use-cases/retrieve/list/list-products-use-case'
@@ -37,6 +38,7 @@ export class ProductController {
     private createProductUseCase: CreateProductUseCase,
     private listProductsUseCase: ListProductsUseCase,
     private getProductUseCase: GetProductUseCase,
+    private getStockMovementsUseCase: GetStockMovementsUseCase,
     private updateProductUseCase: UpdateProductUseCase,
     private updateProductStockUseCase: UpdateProductStockUseCase,
     private deleteProductUseCase: DeleteProductUseCase,
@@ -62,6 +64,14 @@ export class ProductController {
   ) {
     return await this.listProductsUseCase.execute({
       ...query,
+      companyId,
+    })
+  }
+
+  @Get('/company/:companyId/stock-movements')
+  @ApiOkResponse({ type: HttpProductListResponse })
+  async getStockMovements(@Param('companyId') companyId: string) {
+    return await this.getStockMovementsUseCase.execute({
       companyId,
     })
   }

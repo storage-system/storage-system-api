@@ -3,7 +3,6 @@ import ResourceNotFoundException from '@/core/exception/not-found-exception'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Category } from '@/domain/enterprise/category/category'
-import { Company } from '@/domain/enterprise/company/company'
 import { Injectable } from '@nestjs/common'
 
 import { ProductsRepository } from '../../../../../enterprise/product/products-repository'
