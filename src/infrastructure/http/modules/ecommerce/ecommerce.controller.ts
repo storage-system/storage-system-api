@@ -1,12 +1,9 @@
+import { GetEcommerceByCompanyIdUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-by-company-id/get-ecommerce-by-company-id-use-case'
 import { UpdateEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/update-ecommerce-products/update-ecommerce-products-use-case'
 import { ListEcommerceProductsCommand } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-ecommerce-products-command'
 import { GetEcommerceBySlugUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-by-slug/get-ecommerce-by-slug-use-case'
 import { ListEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-products-use-case'
 import { PublishEcommerceUseCase } from '@/domain/application/ecommerce/use-case/publish-ecommerce/publish-ecommerce-use-case'
-import {
-  CurrentUser,
-  UserPayload,
-} from '@/infrastructure/decorators/current-user.decorator'
 import {
   Body,
   Controller,
@@ -16,12 +13,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common'
+import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
+import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Public } from '@/infrastructure/auth/public'
 import { User } from '@/domain/enterprise/user/user'
-import { ApiQuery, ApiTags } from '@nestjs/swagger'
 
 import { ParsePositiveIntPipe } from '../../pipes/parse-positive-int.pipe'
 import { UpdateEcommerceProductsDTO } from './dto/update-products.dto'
+import { RetrieveEcommerceDTO } from './dto/retrieve-ecommerce.dto'
 import { PublishEcommerceDTO } from './dto/publish-ecommerce.dto'
 import { CurrentUserPipe } from '../../pipes/current-user-pipe'
 
@@ -33,6 +32,7 @@ export class EcommerceController {
     private readonly updateProductsUseCase: UpdateEcommerceProductsUseCase,
     private readonly listProductsUseCase: ListEcommerceProductsUseCase,
     private readonly getEcommerceBySlugUseCase: GetEcommerceBySlugUseCase,
+    private readonly getEcommerceyCompanyIdUseCase: GetEcommerceByCompanyIdUseCase,
   ) {}
 
   @Post('/publish')
@@ -62,6 +62,21 @@ export class EcommerceController {
   @Get('/:slug')
   async retrieveEcommerce(@Param('slug') slug: string) {
     return this.getEcommerceBySlugUseCase.execute({ slug })
+  }
+
+  @Public()
+  @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'Ecommerce retrieved successfully',
+    type: RetrieveEcommerceDTO,
+  })
+  async retrieveEcommerceByCompanyId(
+    @CurrentUser(CurrentUserPipe) author: User,
+  ) {
+    return this.getEcommerceyCompanyIdUseCase.execute({
+      companyId: author.companyId!.toString(),
+    })
   }
 
   @ApiQuery({
