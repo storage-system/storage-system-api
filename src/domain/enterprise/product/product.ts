@@ -6,6 +6,7 @@ import { Replace } from '@/core/replace'
 import { addDays } from 'date-fns'
 
 import { StockOperation } from '../stock-movement/stock-operation'
+import { EcommerceID } from '../ecommerce/ecommerce'
 import { CategoryID } from '../category/category'
 import { CompanyID } from '../company/company'
 import { Slug } from '../slug/slug'
@@ -52,6 +53,8 @@ export interface ProductProps {
 
   companyId: CompanyID
   categoryIds: CategoryID[]
+
+  ecommerceId?: EcommerceID
 
   createdAt: Date
   updatedAt?: Date | null
@@ -175,6 +178,10 @@ export class Product extends Entity<ProductProps> {
 
   get finalPrice() {
     return this.props.finalPrice
+  }
+
+  get ecommerceId() {
+    return this.props.ecommerceId
   }
 
   get discountPercentage() {

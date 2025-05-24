@@ -27,6 +27,15 @@ const ecommerceSchema = z.object({
       }),
     )
     .default([]),
+  hero: z
+    .array(
+      z.object({
+        fileId: z.string(),
+        text: z.string(),
+        fileUrl: z.string(),
+      }),
+    )
+    .default([]),
   updatedAt: z.date().nullable().optional(),
 })
 

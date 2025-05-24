@@ -3,6 +3,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ProductID } from '@/domain/enterprise/product/product'
 import { Hero } from '@/domain/enterprise/ecommerce/hero'
 import { Style } from '@/domain/enterprise/style/style'
+import { FileID } from '@/domain/enterprise/file/file'
 import { Slug } from '@/domain/enterprise/slug/slug'
 
 interface GetEcommerceByCompanyIdOutputProps {
@@ -13,7 +14,7 @@ interface GetEcommerceByCompanyIdOutputProps {
   previewUrl?: string
   companyId: UniqueEntityID
   styles: Style[]
-  hero: Hero[]
+  hero: { text: string; fileId: FileID; fileUrl: string }[]
   productIds: ProductID[]
   createdAt: Date
   updatedAt?: Date
@@ -41,6 +42,12 @@ export class GetEcommerceByCompanyIdOutput {
     tertiaryColor: string
   }[]
 
+  hero: {
+    fileId: string
+    text: string
+    fileUrl: string
+  }[]
+
   updatedAt: Date | null
 
   constructor(data: GetEcommerceByCompanyIdOutputProps) {
@@ -52,6 +59,11 @@ export class GetEcommerceByCompanyIdOutput {
     this.isActive = data.isActive
     this.previewUrl = data.previewUrl
     this.slug = data.slug.value
+    this.hero = data.hero.map((hero) => ({
+      fileId: hero.fileId.toString(),
+      text: hero.text,
+      fileUrl: hero.fileUrl,
+    }))
     this.styles = data.styles.map((style) => ({
       id: style.id.toString(),
       createdAt: new Date(style.createdAt),

@@ -55,19 +55,75 @@ export class PrismaProductsRepository implements ProductsRepository {
     ecommerceId: string
     categoryId?: string
   }): Promise<Pagination<Product>> {
-    const where: Prisma.ProductWhereInput = {
+    const baseWhere: Prisma.ProductWhereInput = {
       deletedAt: null,
       ecommerceId: params.ecommerceId,
-      categories: {
-        some: {
-          id: params.categoryId,
+      ...(params.categoryId && {
+        categories: {
+          some: {
+            id: params.categoryId,
+          },
         },
+      }),
+    }
+
+    const productsWithMovements = await this.prisma.product.findMany({
+      where: baseWhere,
+      select: {
+        id: true,
+        name: true,
+        quantityInStock: true,
+        stockMovement: {
+          select: {
+            quantity: true,
+            operation: true,
+          },
+        },
+      },
+    })
+
+    const productIdsWithStock = productsWithMovements
+      .map((product) => {
+        const calculatedQuantity = product.stockMovement.reduce(
+          (sum, movement) => {
+            return movement.operation === 'INCREASE'
+              ? sum + movement.quantity
+              : sum - movement.quantity
+          },
+          0,
+        )
+
+        const directQuantity = product.quantityInStock
+
+        return {
+          id: product.id,
+          directQuantity,
+          calculatedQuantity,
+          hasStock: directQuantity > 0,
+        }
+      })
+      .filter((product) => product.hasStock)
+      .map((product) => product.id)
+
+    if (productIdsWithStock.length === 0) {
+      return new Pagination<Product>({
+        total: 0,
+        page: params.page,
+        perPage: params.perPage,
+        items: [],
+      })
+    }
+
+    const finalWhere: Prisma.ProductWhereInput = {
+      ...baseWhere,
+      id: {
+        in: productIdsWithStock,
       },
     }
 
     const [products, total] = await Promise.all([
       this.prisma.product.findMany({
-        where,
+        where: finalWhere,
         take: params.perPage,
         skip: (params.page - 1) * params.perPage,
         include: {
@@ -81,7 +137,7 @@ export class PrismaProductsRepository implements ProductsRepository {
           createdAt: 'desc',
         },
       }),
-      this.prisma.product.count({ where }),
+      this.prisma.product.count({ where: finalWhere }),
     ])
 
     return new Pagination<Product>({

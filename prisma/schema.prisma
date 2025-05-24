@@ -231,7 +231,7 @@ model Product {
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime?  @updatedAt @map("updated_at")
   deletedAt   DateTime?  @map("deleted_at")
-  Ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
+  ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
   ecommerceId String?
 
   @@map("products")

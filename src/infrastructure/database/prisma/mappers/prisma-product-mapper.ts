@@ -1,4 +1,5 @@
 import { Product, StatusProduct } from '@/domain/enterprise/product/product'
+import { EcommerceID } from '@/domain/enterprise/ecommerce/ecommerce'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Prisma, Product as PrismaProduct } from '@prisma/client'
 import { Slug } from '@/domain/enterprise/slug/slug'
@@ -37,6 +38,9 @@ export class PrismaProductMapper {
         status: raw.status as StatusProduct,
         companyId: new UniqueEntityID(raw.companyId),
         categoryIds: [],
+        ecommerceId: raw.ecommerceId
+          ? new EcommerceID(raw.ecommerceId)
+          : undefined,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         deletedAt: raw.deletedAt,
@@ -83,6 +87,7 @@ export class PrismaProductMapper {
             })),
           }
         : undefined,
+      ecommerceId: product.ecommerceId ? product.ecommerceId.toString() : null,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
       deletedAt: product.deletedAt,

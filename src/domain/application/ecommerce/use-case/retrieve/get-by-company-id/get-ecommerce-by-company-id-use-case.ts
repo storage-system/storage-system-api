@@ -2,6 +2,7 @@ import { EcommerceRepository } from '@/domain/enterprise/ecommerce/ecommerce-rep
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { Hero } from '@/domain/enterprise/ecommerce/hero'
 import { FileID } from '@/domain/enterprise/file/file'
 
 import { GetEcommerceByCompanyIdOutput } from './get-ecommerce-by-company-id-output'
@@ -31,6 +32,8 @@ export class GetEcommerceByCompanyIdUseCase {
       ecommerce.ecommercePreview &&
       (await this.getPreviewImageUrl(ecommerce.ecommercePreview))
 
+    const heroImages = await this.getHeroImageUrl(ecommerce.hero)
+
     return GetEcommerceByCompanyIdOutput.from({
       id: ecommerce.id,
       name: ecommerce.name,
@@ -39,7 +42,7 @@ export class GetEcommerceByCompanyIdUseCase {
       previewUrl,
       companyId: ecommerce.companyId,
       styles: ecommerce.styles,
-      hero: ecommerce.hero,
+      hero: heroImages,
       productIds: ecommerce.productIds,
       createdAt: ecommerce.createdAt,
       updatedAt: ecommerce.updatedAt,
@@ -61,5 +64,31 @@ export class GetEcommerceByCompanyIdUseCase {
     )
 
     return fileUrl
+  }
+
+  async getHeroImageUrl(hero: Hero[]) {
+    const heroImages = await Promise.all(
+      hero.map(async (heroItem) => {
+        const heroImage = await this.filesRepository.findById(
+          heroItem.fileId.toString(),
+        )
+
+        if (!heroImage) {
+          throw new NotFoundException('Hero image not found')
+        }
+
+        const fileUrl = await this.fileStorageRepository.getFileUrl(
+          heroImage.path,
+        )
+
+        return {
+          fileId: heroItem.fileId,
+          text: heroItem.text,
+          fileUrl,
+        }
+      }),
+    )
+
+    return heroImages
   }
 }

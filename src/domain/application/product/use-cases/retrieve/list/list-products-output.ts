@@ -21,6 +21,8 @@ export class ListProductsOutput {
   status: StatusProduct
   productImage?: string
 
+  ecommerceId?: string
+
   categories: {
     id: string
     name: string
@@ -52,6 +54,7 @@ export class ListProductsOutput {
 
     this.status = aProductProps.status
     this.productImage = aProductProps.productImage
+    this.ecommerceId = aProductProps.ecommerceId?.toString()
 
     this.categories =
       aCategoryProps.length > 0
