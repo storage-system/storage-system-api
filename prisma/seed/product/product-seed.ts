@@ -65,7 +65,7 @@ export async function productsSeed(prisma: PrismaClient) {
 
     const imagePath = path.resolve(__dirname, '../images', filename)
     const buffer = await fs.readFile(imagePath)
-    const objectName = `product/${filename}`
+    const objectName = `${filename}`
 
     await minioClient.putObject(BUCKET_NAME, objectName, buffer)
 

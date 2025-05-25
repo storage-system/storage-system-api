@@ -1,6 +1,8 @@
 import { CategoriesRepository } from '@/domain/enterprise/category/categories-repository'
 import { EcommerceRepository } from '@/domain/enterprise/ecommerce/ecommerce-repository'
+import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import ResourceNotFoundException from '@/core/exception/not-found-exception'
+import { FileRepository } from '@/domain/enterprise/file/file-repository'
 import { Pagination, PaginationProps } from '@/core/entities/pagination'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Category } from '@/domain/enterprise/category/category'
@@ -20,6 +22,8 @@ export class ListEcommerceProductsUseCase {
     private productsRepository: ProductsRepository,
     private ecommerceRepository: EcommerceRepository,
     private categoriesRepository: CategoriesRepository,
+    private fileRepository: FileRepository,
+    private fileGatewayRepository: FileStorageGateway,
   ) {}
 
   async execute(
@@ -38,8 +42,16 @@ export class ListEcommerceProductsUseCase {
       products.items.map((product) => this.getCategories(product.categoryIds)),
     )
 
-    const items = products.items.map((product, index) =>
-      ListEcommerceProductsOutput.from(product, categories[index]),
+    const items = await Promise.all(
+      products.items.map(async (product, index) => {
+        const productImage = await this.getProductImage(product.fileIds[0])
+
+        return ListEcommerceProductsOutput.from(
+          product,
+          categories[index],
+          productImage,
+        )
+      }),
     )
 
     return new Pagination<ListEcommerceProductsOutput>({
@@ -82,5 +94,17 @@ export class ListEcommerceProductsUseCase {
     }
 
     return category
+  }
+
+  private async getProductImage(productImageId?: string) {
+    if (!productImageId) return undefined
+
+    const file = await this.fileRepository.findById(productImageId)
+
+    if (!file) {
+      return undefined
+    }
+
+    return this.fileGatewayRepository.getFileUrl(file.filename)
   }
 }

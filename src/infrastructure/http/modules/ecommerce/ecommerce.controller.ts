@@ -6,6 +6,7 @@ import { GetEcommerceBySlugUseCase } from '@/domain/application/ecommerce/use-ca
 import { ListEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-products-use-case'
 import { GetProductUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-product-by-id/get-product-by-id-use-case'
 import { PublishEcommerceUseCase } from '@/domain/application/ecommerce/use-case/publish-ecommerce/publish-ecommerce-use-case'
+import { UpdateEcommerceUseCase } from '@/domain/application/ecommerce/use-case/update-ecommerce/update-ecommerce-use-case'
 import {
   Body,
   Controller,
@@ -20,13 +21,15 @@ import { ApiOkResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Public } from '@/infrastructure/auth/public'
 import { User } from '@/domain/enterprise/user/user'
 
+import { EcommerceProductsDTO } from './dto/retrieve-ecommerce-products.dto'
 import { ParsePositiveIntPipe } from '../../pipes/parse-positive-int.pipe'
-import { EcommerceProductsDTO } from './dto/retrieve-ecommerce-products'
+import { GetEcommerceProductDTO } from './dto/get-ecommerce-product.dto'
 import { EcommerceCategoriesDTO } from './dto/retrieve-categories.dto'
 import { UpdateEcommerceProductsDTO } from './dto/update-products.dto'
 import { RetrieveEcommerceDTO } from './dto/retrieve-ecommerce.dto'
 import { PublishEcommerceDTO } from './dto/publish-ecommerce.dto'
 import { CurrentUserPipe } from '../../pipes/current-user-pipe'
+import { UpdateEcommerceDTO } from './dto/update-ecommerce.dto'
 
 @ApiTags('Ecommerce')
 @Controller('ecommerce')
@@ -39,6 +42,7 @@ export class EcommerceController {
     private readonly getEcommerceyCompanyIdUseCase: GetEcommerceByCompanyIdUseCase,
     private readonly listCategoriesUseCase: ListCategoriesUseCase,
     private readonly getProductUseCase: GetProductUseCase,
+    private readonly updateEcommerceUseCase: UpdateEcommerceUseCase,
   ) {}
 
   @Post('/publish')
@@ -50,6 +54,19 @@ export class EcommerceController {
       author,
       companyId: author.companyId?.toString()!,
       ...body,
+    })
+  }
+
+  @Patch()
+  async updateEcommerce(
+    @CurrentUser(CurrentUserPipe) author: User,
+    @Body()
+    body: UpdateEcommerceDTO,
+  ) {
+    return this.updateEcommerceUseCase.execute({
+      ...body,
+      companyId: author.companyId?.toString()!,
+      author,
     })
   }
 
@@ -121,6 +138,7 @@ export class EcommerceController {
   }
 
   @Public()
+  @ApiResponse({ type: GetEcommerceProductDTO })
   @Get('/:slug/products/:productId')
   async getProduct(
     @Param('slug') slug: string,

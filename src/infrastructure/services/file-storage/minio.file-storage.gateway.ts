@@ -45,7 +45,7 @@ export class MinioFileStorageGateway implements FileStorageGateway {
   }
 
   async getFileUrl(fileName: string) {
-    const expiresTime = 60
+    const expiresTime = 60 * 60 * 24 // 1 day in seconds
     return await this.minioClient.presignedUrl(
       'GET',
       this.bucketName,

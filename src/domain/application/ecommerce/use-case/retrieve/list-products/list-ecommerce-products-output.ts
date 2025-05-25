@@ -39,6 +39,7 @@ export class ListEcommerceProductsOutput {
         id: string
       } & CategoryProps
     >[],
+    productImage?: string,
   ) {
     this.id = aProductProps.id.toString()
     this.name = aProductProps.name
@@ -55,7 +56,7 @@ export class ListEcommerceProductsOutput {
     this.batch = aProductProps.batch
 
     this.status = aProductProps.status
-    this.productImage = aProductProps.productImage
+    this.productImage = productImage
 
     this.categories =
       aCategoryProps.length > 0
@@ -70,12 +71,20 @@ export class ListEcommerceProductsOutput {
     this.deletedAt = aProductProps.deletedAt ?? undefined
   }
 
-  static from(product: Product, categoriesProps: Category[]) {
+  static from(
+    product: Product,
+    categoriesProps: Category[],
+    productImage?: string,
+  ) {
     const categories =
       categoriesProps.length > 0
         ? categoriesProps.map((category) => category.toJSON())
         : []
 
-    return new ListEcommerceProductsOutput(product.toJSON(), categories)
+    return new ListEcommerceProductsOutput(
+      product.toJSON(),
+      categories,
+      productImage,
+    )
   }
 }

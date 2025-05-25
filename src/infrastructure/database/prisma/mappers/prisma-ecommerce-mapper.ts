@@ -88,8 +88,31 @@ export class PrismaEcommerceMapper {
       name: raw.name,
       slug: raw.slug.value,
       isActive: raw.isActive,
+      previewImage: raw.ecommercePreview
+        ? { connect: { id: raw.ecommercePreview.toString() } }
+        : undefined,
+
+      hero: {
+        delete: raw.heroRemoved.map((hero) => ({
+          id: hero.id.toString(),
+        })),
+        upsert: raw.heroAdded.map((hero) => ({
+          where: {
+            id: hero.id.toString(),
+          },
+          update: {
+            text: hero.text,
+          },
+          create: {
+            id: hero.id.toString(),
+            fileId: hero.fileId.toString(),
+            text: hero.text,
+          },
+        })),
+      },
+
       styles: {
-        upsert: raw.styles.map((style) => ({
+        upsert: raw.stylesAdded.map((style) => ({
           where: {
             id: style.id.toString(),
           },
@@ -101,7 +124,6 @@ export class PrismaEcommerceMapper {
             primaryColor: style.primaryColor,
             secondaryColor: style.secondaryColor,
             tertiaryColor: style.tertiaryColor,
-            createdAt: style.createdAt,
             updatedAt: style.updatedAt ?? undefined,
             deletedAt: style.deletedAt ?? undefined,
           },
@@ -120,6 +142,9 @@ export class PrismaEcommerceMapper {
           },
         })),
       },
+
+      updatedAt: raw.updatedAt ?? undefined,
+      deletedAt: raw.deletedAt ?? undefined,
     }
   }
 

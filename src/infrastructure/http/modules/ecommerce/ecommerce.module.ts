@@ -5,6 +5,7 @@ import { GetEcommerceBySlugUseCase } from '@/domain/application/ecommerce/use-ca
 import { ListEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-products-use-case'
 import { GetProductUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-product-by-id/get-product-by-id-use-case'
 import { PublishEcommerceUseCase } from '@/domain/application/ecommerce/use-case/publish-ecommerce/publish-ecommerce-use-case'
+import { UpdateEcommerceUseCase } from '@/domain/application/ecommerce/use-case/update-ecommerce/update-ecommerce-use-case'
 import { DatabaseModule } from '@/infrastructure/database/database.module'
 import { Module } from '@nestjs/common'
 
@@ -21,6 +22,7 @@ import { EcommerceController } from './ecommerce.controller'
     GetEcommerceByCompanyIdUseCase,
     ListCategoriesUseCase,
     GetProductUseCase,
+    UpdateEcommerceUseCase,
   ],
 })
 export class EcommerceModule {}

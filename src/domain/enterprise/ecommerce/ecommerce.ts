@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { WatchedList } from '@/core/watched-list'
 import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
@@ -8,14 +9,14 @@ import { FileID } from '../file/file'
 import { Slug } from '../slug/slug'
 import { Hero } from './hero'
 
-interface EcommerceProps {
+export interface EcommerceProps {
   name: string
   slug: Slug
   isActive: boolean
   companyId: UniqueEntityID
   ecommercePreview?: FileID
-  styles: Style[]
-  hero: Hero[]
+  styles: WatchedList<Style>
+  hero: WatchedList<Hero>
   productIds: ProductID[]
   createdAt: Date
   updatedAt?: Date
@@ -26,19 +27,53 @@ export class EcommerceID extends UniqueEntityID {}
 
 export class Ecommerce extends Entity<EcommerceProps> {
   static create(
-    props: Optional<EcommerceProps, 'createdAt' | 'productIds'>,
+    props: Optional<
+      Omit<EcommerceProps, 'styles' | 'hero'> & {
+        styles: Style[]
+        hero: Hero[]
+      },
+      'createdAt' | 'productIds'
+    >,
     id?: EcommerceID,
   ) {
+    const styleList = new WatchedList(props.styles, (a, b) => a.id.equals(b.id))
+    const heroList = new WatchedList(props.hero, (a, b) =>
+      a.fileId.equals(b.fileId),
+    )
+
     return new Ecommerce(
-      { createdAt: new Date(), productIds: [], ...props },
+      {
+        ...props,
+        styles: styleList,
+        hero: heroList,
+        createdAt: new Date(),
+        productIds: [],
+      },
       id,
     )
   }
 
-  update(props: Partial<EcommerceProps>) {
+  update(
+    props: Partial<
+      Omit<EcommerceProps, 'styles' | 'hero'> & {
+        styles?: Style[]
+        hero?: Hero[]
+      }
+    >,
+  ) {
+    if (props.styles) {
+      this.props.styles.replace(props.styles)
+    }
+
+    if (props.hero) {
+      this.props.hero.replace(props.hero)
+    }
+
     this.props = {
       ...this.props,
       ...props,
+      styles: this.props.styles,
+      hero: this.props.hero,
     }
 
     this.touch()
@@ -89,11 +124,27 @@ export class Ecommerce extends Entity<EcommerceProps> {
   }
 
   get styles() {
-    return this.props.styles
+    return this.props.styles.items
+  }
+
+  get stylesAdded() {
+    return this.props.styles.getAdded()
+  }
+
+  get stylesRemoved() {
+    return this.props.styles.getRemoved()
   }
 
   get hero() {
-    return this.props.hero
+    return this.props.hero.items
+  }
+
+  get heroAdded() {
+    return this.props.hero.getAdded()
+  }
+
+  get heroRemoved() {
+    return this.props.hero.getRemoved()
   }
 
   get productIds() {
