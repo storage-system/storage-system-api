@@ -9,8 +9,8 @@ import { UserRoles } from '@/domain/enterprise/user/user-types'
 import { z } from 'zod'
 
 const tokenPayloadSchema = z.object({
-  sub: z.string().uuid(),
-  companyId: z.string().uuid().optional(),
+  sub: z.string(),
+  companyId: z.string().optional(),
   name: z.string().optional(),
   email: z.string().email().optional(),
   phone: z.string().optional(),
@@ -22,6 +22,7 @@ export type UserPayload = z.infer<typeof tokenPayloadSchema>
 export const CurrentUser = createParamDecorator(
   async (data: unknown, context: ExecutionContext, pipe?: PipeTransform) => {
     const request = context.switchToHttp().getRequest()
+
     const token = request.headers.authorization.replace('Bearer ', '')
     const userData = atob(token.split('.')[1])
     const safeParse = tokenPayloadSchema.safeParse(JSON.parse(userData))
