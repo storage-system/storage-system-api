@@ -65,6 +65,16 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     })
   }
 
+  async findAllByCompanyId(companyId: string): Promise<Category[]> {
+    const categories = await this.prisma.category.findMany({
+      where: {
+        deletedAt: null,
+      },
+    })
+
+    return categories.map(PrismaCategoryMapper.toDomain)
+  }
+
   async findBySlug(slug: string): Promise<Category | null> {
     const category = await this.prisma.category.findFirst({
       where: {

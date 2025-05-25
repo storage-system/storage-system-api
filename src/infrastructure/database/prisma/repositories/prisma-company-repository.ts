@@ -53,6 +53,30 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     return PrismaCompanyMapper.toDomain(company)
   }
 
+  async findByEcommerceSlug(ecommerceSlug: string): Promise<Company | null> {
+    const company = await this.prisma.company.findFirst({
+      where: {
+        ecommerce: {
+          slug: ecommerceSlug,
+        },
+      },
+      include: {
+        users: {
+          select: {
+            id: true,
+          },
+        },
+        address: true,
+      },
+    })
+
+    if (!company) {
+      return null
+    }
+
+    return PrismaCompanyMapper.toDomain(company)
+  }
+
   async save(company: Company): Promise<void> {
     const data = PrismaCompanyMapper.toPersistence(company)
 

@@ -1,8 +1,10 @@
 import { GetEcommerceByCompanyIdUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-by-company-id/get-ecommerce-by-company-id-use-case'
 import { UpdateEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/update-ecommerce-products/update-ecommerce-products-use-case'
 import { ListEcommerceProductsCommand } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-ecommerce-products-command'
+import { ListCategoriesUseCase } from '@/domain/application/ecommerce/use-case/retrieve/list-ecommerce-categories/list-categories-use-case'
 import { GetEcommerceBySlugUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-by-slug/get-ecommerce-by-slug-use-case'
 import { ListEcommerceProductsUseCase } from '@/domain/application/ecommerce/use-case/retrieve/list-products/list-products-use-case'
+import { GetProductUseCase } from '@/domain/application/ecommerce/use-case/retrieve/get-product-by-id/get-product-by-id-use-case'
 import { PublishEcommerceUseCase } from '@/domain/application/ecommerce/use-case/publish-ecommerce/publish-ecommerce-use-case'
 import {
   Body,
@@ -14,11 +16,13 @@ import {
   Query,
 } from '@nestjs/common'
 import { CurrentUser } from '@/infrastructure/decorators/current-user.decorator'
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Public } from '@/infrastructure/auth/public'
 import { User } from '@/domain/enterprise/user/user'
 
 import { ParsePositiveIntPipe } from '../../pipes/parse-positive-int.pipe'
+import { EcommerceProductsDTO } from './dto/retrieve-ecommerce-products'
+import { EcommerceCategoriesDTO } from './dto/retrieve-categories.dto'
 import { UpdateEcommerceProductsDTO } from './dto/update-products.dto'
 import { RetrieveEcommerceDTO } from './dto/retrieve-ecommerce.dto'
 import { PublishEcommerceDTO } from './dto/publish-ecommerce.dto'
@@ -33,6 +37,8 @@ export class EcommerceController {
     private readonly listProductsUseCase: ListEcommerceProductsUseCase,
     private readonly getEcommerceBySlugUseCase: GetEcommerceBySlugUseCase,
     private readonly getEcommerceyCompanyIdUseCase: GetEcommerceByCompanyIdUseCase,
+    private readonly listCategoriesUseCase: ListCategoriesUseCase,
+    private readonly getProductUseCase: GetProductUseCase,
   ) {}
 
   @Post('/publish')
@@ -91,6 +97,11 @@ export class EcommerceController {
     required: false,
     description: 'Number of items per page',
   })
+  @ApiResponse({
+    status: 200,
+    description: 'Products retrieved successfully',
+    type: EcommerceProductsDTO,
+  })
   @Public()
   @Get('/:slug/products')
   async listProducts(
@@ -107,5 +118,26 @@ export class EcommerceController {
         categoryId,
       }),
     )
+  }
+
+  @Public()
+  @Get('/:slug/products/:productId')
+  async getProduct(
+    @Param('slug') slug: string,
+    @Param('productId') productId: string,
+  ) {
+    return this.getProductUseCase.execute({
+      productId,
+    })
+  }
+
+  @Public()
+  @Get('/:slug/categories')
+  @ApiOkResponse({ type: EcommerceCategoriesDTO })
+  async listCategories(@Param('slug') ecommerceSlug: string) {
+    const categories = await this.listCategoriesUseCase.execute({
+      ecommerceSlug,
+    })
+    return categories
   }
 }

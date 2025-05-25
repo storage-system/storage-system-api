@@ -18,7 +18,6 @@ import {
   CreateProductUseCaseRequest,
 } from './create-product-use-case'
 import { ProductsRepository } from '../../../../enterprise/product/products-repository'
-import { users } from './../../../../../../prisma/user/users'
 
 let productsRepository: ProductsRepository
 let companiesRepository: CompaniesRepository

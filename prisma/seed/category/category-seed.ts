@@ -1,20 +1,20 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 
-import { categories } from './category'
+import * as categories from './category.json'
 
 export async function categoriesSeed(prisma: PrismaClient) {
   for (const category of categories) {
     const createOrUpdate: Prisma.CategoryCreateInput = {
       id: category.id,
       name: category.name,
-
+      slug: category.slug,
       isActive: category.isActive,
       company: {
         connect: {
-          id: 'cfdbc8b8-fdb4-47b1-b9fc-b6b549e78541',
+          id: category.company_id,
         },
       },
-      slug: category.name,
+      createdAt: new Date(category.created_at),
     }
 
     await prisma.category.upsert({

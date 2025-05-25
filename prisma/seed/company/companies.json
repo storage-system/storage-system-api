@@ -1,0 +1,13 @@
+[
+  {
+    "id": "company1",
+    "trade_name": "Aços Brasil",
+    "corporate_name": "Aços Brasil Indústria e Comércio Ltda",
+    "cnpj": "12.345.678/0001-99",
+    "email": "contato@acosbrasil.com",
+    "contact": "(11) 4002-8922",
+    "address_id": "682dea5d-7bd1-4786-8dfc-abf93a0c4827",
+    "responsible_id": "ddf8ce7d-eb21-4d2b-82c6-7f14ebc30e3e",
+    "created_at": "2025-05-25T11:44:51.240033"
+  }
+]

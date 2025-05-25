@@ -1,7 +1,7 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient, Role } from '@prisma/client'
 import { hash } from 'bcryptjs'
 
-import { users } from './users'
+import * as users from './user.json'
 
 export async function usersSeed(prisma: PrismaClient) {
   for (const user of users) {
@@ -13,6 +13,8 @@ export async function usersSeed(prisma: PrismaClient) {
       email: user.email,
       password: hashedPassword,
       phone: user.phone,
+      roles: user.roles as Role[],
+      createdAt: new Date(user.created_at),
     }
 
     await prisma.user.upsert({

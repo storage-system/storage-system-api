@@ -1,0 +1,13 @@
+[
+    {
+        "id": "682dea5d-7bd1-4786-8dfc-abf93a0c4827",
+        "street": "Rua Industrial",
+        "zip_code": "01000-000",
+        "neighborhood": "Zona Industrial",
+        "city": "São Paulo",
+        "state": "SP",
+        "country": "Brasil",
+        "address_number": "100",
+        "address_complement": "Galpão 3"
+    }
+]
