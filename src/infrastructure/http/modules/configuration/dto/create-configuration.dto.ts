@@ -4,7 +4,7 @@ import { z } from 'nestjs-zod/z'
 
 const createConfigurationBodySchema = z.object({
   userId: z.string().uuid(),
-  companyId: z.string().uuid(),
+  companyId: z.string(),
   daysBeforeOldStock: z.number().min(1).max(999),
   warningDays: z.number().min(1).max(999),
   emailNotification: z.boolean(),
