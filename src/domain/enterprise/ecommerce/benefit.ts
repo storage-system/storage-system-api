@@ -1,0 +1,31 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Entity } from '@/core/entities/entity'
+
+import { FileID } from '../file/file'
+
+export interface BenefitProps {
+  fileId: FileID
+  text: string
+}
+
+export class BenefitID extends UniqueEntityID {}
+
+export class Benefit extends Entity<BenefitProps> {
+  static create(props: BenefitProps, id?: BenefitID) {
+    return new Benefit(
+      {
+        fileId: props.fileId,
+        text: props.text,
+      },
+      id,
+    )
+  }
+
+  get text() {
+    return this.props.text
+  }
+
+  get fileId() {
+    return this.props.fileId
+  }
+}

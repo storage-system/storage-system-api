@@ -32,6 +32,10 @@ export interface PublishEcommerceUseCaseRequest {
     secondaryColor: string
     tertiaryColor: string
   }
+  benefits?: {
+    fileId?: string
+    text: string
+  }
 }
 
 @Injectable()

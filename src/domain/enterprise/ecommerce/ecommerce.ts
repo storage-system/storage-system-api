@@ -7,6 +7,7 @@ import { ProductID } from '../product/product'
 import { Style } from '../style/style'
 import { FileID } from '../file/file'
 import { Slug } from '../slug/slug'
+import { Benefit } from './benefit'
 import { Hero } from './hero'
 
 export interface EcommerceProps {
@@ -17,6 +18,7 @@ export interface EcommerceProps {
   ecommercePreview?: FileID
   styles: WatchedList<Style>
   hero: WatchedList<Hero>
+  benefits: WatchedList<Benefit>
   productIds: ProductID[]
   createdAt: Date
   updatedAt?: Date
@@ -145,6 +147,18 @@ export class Ecommerce extends Entity<EcommerceProps> {
 
   get heroRemoved() {
     return this.props.hero.getRemoved()
+  }
+
+  get benefits() {
+    return this.props.benefits.items
+  }
+
+  get benefitsAdded() {
+    return this.props.benefits.getAdded()
+  }
+
+  get benefitsRemoved() {
+    return this.props.benefits.getRemoved()
   }
 
   get productIds() {
