@@ -1,6 +1,7 @@
 import { EcommerceRepository } from '@/domain/enterprise/ecommerce/ecommerce-repository'
 import { FileStorageGateway } from '@/domain/enterprise/file/file-storage.gateway'
 import { FileRepository } from '@/domain/enterprise/file/file-repository'
+import { Benefit } from '@/domain/enterprise/ecommerce/benefit'
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { Hero } from '@/domain/enterprise/ecommerce/hero'
 import { FileID } from '@/domain/enterprise/file/file'
@@ -33,6 +34,7 @@ export class GetEcommerceByCompanyIdUseCase {
       (await this.getPreviewImageUrl(ecommerce.ecommercePreview))
 
     const heroImages = await this.getHeroImageUrl(ecommerce.hero)
+    const benefitSvg = await this.getBenefitSvg(ecommerce.benefits)
 
     return GetEcommerceByCompanyIdOutput.from({
       id: ecommerce.id,
@@ -43,6 +45,7 @@ export class GetEcommerceByCompanyIdUseCase {
       companyId: ecommerce.companyId,
       styles: ecommerce.styles,
       hero: heroImages,
+      benefits: benefitSvg,
       productIds: ecommerce.productIds,
       createdAt: ecommerce.createdAt,
       updatedAt: ecommerce.updatedAt,
@@ -90,5 +93,32 @@ export class GetEcommerceByCompanyIdUseCase {
     )
 
     return heroImages
+  }
+
+  async getBenefitSvg(benefits: Benefit[]) {
+    const benefitsList = await Promise.all(
+      benefits.map(async (benefitItem) => {
+        const benefitImage = await this.filesRepository.findById(
+          benefitItem.fileId.toString(),
+        )
+
+        if (!benefitImage) {
+          throw new NotFoundException('Benefit image not found')
+        }
+
+        const fileUrl = await this.fileStorageRepository.getFileUrl(
+          benefitImage.path,
+        )
+
+        return {
+          fileId: benefitItem.fileId,
+          text: benefitItem.text,
+          description: benefitItem.description,
+          fileUrl,
+        }
+      }),
+    )
+
+    return benefitsList
   }
 }

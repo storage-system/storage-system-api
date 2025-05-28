@@ -10,6 +10,10 @@ export class WatchedList<T> {
     this.current = [...initialItems]
   }
 
+  static fromArray<T>(items: T[]): WatchedList<T> {
+    return new WatchedList<T>(items, (a, b) => a === b)
+  }
+
   get items(): T[] {
     return [...this.current]
   }

@@ -6,6 +6,7 @@ import { FileID } from '../file/file'
 export interface BenefitProps {
   fileId: FileID
   text: string
+  description?: string
 }
 
 export class BenefitID extends UniqueEntityID {}
@@ -16,6 +17,7 @@ export class Benefit extends Entity<BenefitProps> {
       {
         fileId: props.fileId,
         text: props.text,
+        description: props.description,
       },
       id,
     )
@@ -23,6 +25,10 @@ export class Benefit extends Entity<BenefitProps> {
 
   get text() {
     return this.props.text
+  }
+
+  get description() {
+    return this.props.description
   }
 
   get fileId() {
