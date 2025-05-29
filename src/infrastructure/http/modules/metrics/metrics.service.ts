@@ -1,12 +1,4 @@
-import {
-  MetricsOutput,
-  OldStockMetrics,
-  ProductMetrics,
-} from '@/domain/enterprise/metrics/metrics-output'
-import ResourceNotFoundException from '@/core/exception/not-found-exception'
-import NotificationException from '@/core/exception/notification-exception'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Notification } from '@/core/validation/notification'
+import { OldStockMetrics } from '@/domain/enterprise/metrics/metrics-output'
 import { Injectable } from '@nestjs/common'
 
 import { PrismaService } from '../../../database/prisma/prisma.service'
@@ -15,204 +7,143 @@ import { PrismaService } from '../../../database/prisma/prisma.service'
 export class MetricsService {
   constructor(private prisma: PrismaService) {}
 
-  async findMetrics(companyId: string): Promise<MetricsOutput> {
-    const company = await this.getCompany(companyId)
-
-    const oldStockMetrics = await this.findOldStockMetrics(company.id)
-    const productMetrics = await this.findProductMetrics(company.id)
-
-    return {
-      oldStockMetrics,
-      productMetrics,
-    }
+  // 🔹 Usado na aba de "Estoque Antigo"
+  async findOldStockMetrics(companyId: string): Promise<OldStockMetrics> {
+    const products = await this.getProducts(companyId)
+    return this.calculateOldStockMetrics(products)
   }
 
-  private async getCompany(id: string) {
-    const company = await this.prisma.company.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        configuration: {
-          where: {
-            deletedAt: null,
-          },
-          select: {
-            id: true,
-            companyId: true,
-            daysBeforeOldStock: true,
-            warningDays: true,
-            reportFrequency: true,
-            autoDiscardAfterExpiration: true,
-            systemNotification: true,
-            emailNotification: true,
-            freeShippingOnOldStock: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-      },
-    })
-
-    if (!company) {
-      throw ResourceNotFoundException.with('Empresa', new UniqueEntityID())
-    }
-
-    return company
-  }
-
-  private async findOldStockMetrics(
-    companyId: string,
-  ): Promise<OldStockMetrics> {
-    const now = new Date()
-    const in30Days = new Date(now)
-    in30Days.setDate(now.getDate() + 30)
-
-    const in60Days = new Date(now)
-    in60Days.setDate(now.getDate() + 60)
-
-    const in90Days = new Date(now)
-    in90Days.setDate(now.getDate() + 90)
-
-    const [
-      totalProductOldStock,
-      totalOldStockValue,
-      expiringIn30Days,
-      expiringIn60Days,
-      expiringIn90Days,
-      totalStockQuantity,
-    ] = await this.prisma.$transaction([
-      this.prisma.product.count({
-        where: {
-          deletedAt: null,
-          companyId,
-          dueDate: {
-            lt: now,
-          },
-        },
-      }),
-      this.prisma.$queryRaw`
-        SELECT SUM(original_price * quantity_in_stock) AS totalOldStockValue
-        FROM products
-        WHERE deleted_at IS NULL
-        AND company_id = ${companyId}
-        AND due_date < NOW();
-      `,
-      this.prisma.product.count({
-        where: {
-          deletedAt: null,
-          companyId,
-          dueDate: {
-            gte: now,
-            lte: in30Days,
-          },
-        },
-      }),
-      this.prisma.product.count({
-        where: {
-          deletedAt: null,
-          companyId,
-          dueDate: {
-            gte: in30Days,
-            lte: in60Days,
-          },
-        },
-      }),
-      this.prisma.product.count({
-        where: {
-          deletedAt: null,
-          companyId,
-          dueDate: {
-            gte: in60Days,
-            lte: in90Days,
-          },
-        },
-      }),
-      this.prisma.product.count({
-        where: {
-          deletedAt: null,
-          companyId,
-        },
-      }),
-    ])
-
-    const totalOldStockValueResult = Number(
-      (totalOldStockValue as any)[0].totaloldstockvalue,
-    )
-
-    const percentageOldStock =
-      totalStockQuantity > 0
-        ? (totalProductOldStock / totalStockQuantity) * 100
-        : 0
-
-    return {
-      totalProductOldStock,
-      totalOldStockValue: totalOldStockValueResult,
-      expiringIn30Days,
-      expiringIn60Days,
-      expiringIn90Days,
-      percentageOldStock,
-    }
-  }
-
-  private async findProductMetrics(companyId: string): Promise<ProductMetrics> {
-    const currentDate = new Date()
-
-    const configuration = await this.prisma.configuration.findFirst({
+  private async getProducts(companyId: string) {
+    return await this.prisma.product.findMany({
       where: {
         companyId,
+        quantityInStock: { gt: 0 },
+      },
+      select: {
+        dueDate: true,
+        quantityInStock: true,
+        originalPrice: true,
+        name: true,
+        id: true,
+        categories: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
+  }
 
-    if (!configuration) {
-      throw new NotificationException(
-        'Configuração não cadastrada',
-        Notification.create(),
-      )
+  // 🔸 Cálculo das métricas de estoque antigo
+  private async calculateOldStockMetrics(
+    products: {
+      id: string
+      name: string
+      originalPrice: number
+      quantityInStock: number
+      dueDate: Date
+      categories: { name: string }[]
+    }[],
+  ): Promise<OldStockMetrics> {
+    const now = new Date()
+
+    // Função auxiliar para calcular dias para expirar
+    const calculateDaysToExpire = (dueDate: Date) =>
+      Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+
+    // Estrutura inicial para acumular métricas
+    const initialMetrics = {
+      expiredCount: 0,
+      criticalCount: 0,
+      atRiskValue: 0,
+      expiredProducts: [] as any[],
+      criticalProducts: [] as any[],
+      warningProducts: [] as any[],
+      chartBuckets: {
+        vencidos: 0,
+        dias7: 0,
+        dias15: 0,
+        dias30: 0,
+        dias30mais: 0,
+      },
     }
 
-    const warningDays = configuration?.warningDays
-    const warningDate = new Date()
-    warningDate.setDate(currentDate.getDate() + warningDays)
+    const metrics = products.reduce((acc, product) => {
+      const daysToExpire = calculateDaysToExpire(new Date(product.dueDate))
 
-    const [totalStockQuantity, totalStockValue, productsInWarningDays] =
-      await this.prisma.$transaction([
-        this.prisma.product.count({
-          where: {
-            deletedAt: null,
-            companyId,
-            dueDate: {
-              gt: currentDate,
-            },
-          },
-        }),
-        this.prisma.$queryRaw`
-        SELECT SUM(original_price * quantity_in_stock) AS totalStockValue
-        FROM products
-        WHERE deleted_at IS NULL
-        AND company_id = ${companyId}
-        AND due_date > NOW();
-      `,
-        this.prisma.product.count({
-          where: {
-            deletedAt: null,
-            companyId,
-            dueDate: {
-              lte: warningDate,
-              gte: currentDate,
-            },
-          },
-        }),
-      ])
+      const categoryName =
+        product.categories.length > 0
+          ? product.categories[0].name
+          : 'Sem categoria'
 
-    const totalStockValueResult = Number(
-      (totalStockValue as any)[0].totalstockvalue,
-    )
+      const productData = {
+        id: product.id,
+        name: product.name,
+        dueDate: product.dueDate,
+        daysToExpire,
+        quantity: product.quantityInStock,
+        price: product.originalPrice,
+        category: categoryName,
+      }
+
+      const productValue = product.originalPrice * product.quantityInStock
+
+      if (daysToExpire <= 0) {
+        acc.expiredCount++
+        acc.atRiskValue += productValue
+        acc.chartBuckets.vencidos++
+        acc.expiredProducts.push({ ...productData, status: 'expired' })
+      } else if (daysToExpire <= 7) {
+        acc.criticalCount++
+        acc.atRiskValue += productValue
+        acc.chartBuckets.dias7++
+        acc.criticalProducts.push({ ...productData, status: 'critical' })
+      } else if (daysToExpire <= 15) {
+        acc.chartBuckets.dias15++
+        acc.warningProducts.push({ ...productData, status: 'warning' })
+      } else if (daysToExpire <= 30) {
+        acc.chartBuckets.dias30++
+      } else {
+        acc.chartBuckets.dias30mais++
+      }
+
+      return acc
+    }, initialMetrics)
 
     return {
-      totalStockQuantity,
-      totalStockValue: totalStockValueResult,
-      productsInWarningDays,
+      expiredCount: metrics.expiredCount,
+      criticalCount: metrics.criticalCount,
+      atRiskValue: metrics.atRiskValue,
+      expirationChartData: [
+        {
+          name: 'Vencidos',
+          quantidade: metrics.chartBuckets.vencidos,
+          color: '#ef4444',
+        },
+        {
+          name: '7 dias',
+          quantidade: metrics.chartBuckets.dias7,
+          color: '#f59e0b',
+        },
+        {
+          name: '15 dias',
+          quantidade: metrics.chartBuckets.dias15,
+          color: '#eab308',
+        },
+        {
+          name: '30 dias',
+          quantidade: metrics.chartBuckets.dias30,
+          color: '#22c55e',
+        },
+        {
+          name: '30+ dias',
+          quantidade: metrics.chartBuckets.dias30mais,
+          color: '#3b82f6',
+        },
+      ],
+      expiredProducts: metrics.expiredProducts,
+      criticalProducts: metrics.criticalProducts,
+      warningProducts: metrics.warningProducts,
     }
   }
 }

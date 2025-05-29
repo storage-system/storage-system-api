@@ -12,9 +12,9 @@ import { MetricsService } from './metrics.service'
 export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}
 
-  @Get()
+  @Get('/old-stock')
   @ApiOkResponse({ type: HttpGetMetricsResponse })
   productMetrics(@CurrentUser(CurrentUserPipe) user: UserPayload) {
-    return this.metricsService.findMetrics(user.companyId)
+    return this.metricsService.findOldStockMetrics(user.companyId)
   }
 }

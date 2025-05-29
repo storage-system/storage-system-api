@@ -1,13 +1,28 @@
-export interface OldStockMetrics {
-  totalProductOldStock: number
-  totalOldStockValue: number
-  expiringIn30Days: number
-  expiringIn60Days: number
-  expiringIn90Days: number
-  percentageOldStock: number
+export interface ProductMetrics {
+  id: string | undefined
+  name: string | undefined
+  dueDate: Date
+  daysToExpire: number
+  quantity: number
+  price: number
+  category: string
 }
 
-export interface ProductMetrics {
+export interface OldStockMetrics {
+  expiredCount: number
+  criticalCount: number
+  atRiskValue: number
+  expirationChartData: {
+    name: string
+    quantidade: number
+    color: string
+  }[]
+  criticalProducts: ProductMetrics[]
+  expiredProducts: ProductMetrics[]
+  warningProducts: ProductMetrics[]
+}
+
+export interface ProductMetrics2 {
   totalStockQuantity: number
   totalStockValue: number
   productsInWarningDays: number
@@ -15,5 +30,5 @@ export interface ProductMetrics {
 
 export interface MetricsOutput {
   oldStockMetrics: OldStockMetrics
-  productMetrics: ProductMetrics
+  productMetrics: ProductMetrics2
 }
