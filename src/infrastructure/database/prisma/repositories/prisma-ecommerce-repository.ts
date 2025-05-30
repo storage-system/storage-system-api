@@ -20,6 +20,7 @@ export class PrismaEcommerceRepository implements EcommerceRepository {
         styles: true,
         products: { select: { id: true } },
         hero: true,
+        benefits: true,
       },
     })
 
@@ -43,6 +44,7 @@ export class PrismaEcommerceRepository implements EcommerceRepository {
         styles: true,
         products: { select: { id: true } },
         hero: true,
+        benefits: true,
       },
     })
 
@@ -64,6 +66,7 @@ export class PrismaEcommerceRepository implements EcommerceRepository {
         styles: true,
         products: { select: { id: true } },
         hero: true,
+        benefits: true,
       },
     })
 

@@ -289,8 +289,9 @@ model Ecommerce {
   previewImageId String?   @map("preview_image_id")
   companyId      String    @unique @map("company_id")
 
-  hero   Hero[]
-  styles Style[]
+  hero     Hero[]
+  styles   Style[]
+  benefits Benefit[]
 
   products Product[]
 
@@ -315,6 +316,8 @@ model Benefit {
   text        String
   description String?
 
-  file   File?  @relation(fields: [fileId], references: [id])
-  fileId String @map("file_id")
+  file        File       @relation(fields: [fileId], references: [id])
+  fileId      String     @map("file_id")
+  Ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
+  ecommerceId String?
 }
