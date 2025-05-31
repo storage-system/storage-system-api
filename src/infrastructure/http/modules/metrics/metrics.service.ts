@@ -1,4 +1,7 @@
-import { OldStockMetrics } from '@/domain/enterprise/metrics/metrics-output'
+import {
+  GeneralStockMetrics,
+  OldStockMetrics,
+} from '@/domain/enterprise/metrics/metrics-output'
 import { Injectable } from '@nestjs/common'
 
 import { PrismaService } from '../../../database/prisma/prisma.service'
@@ -6,11 +9,191 @@ import { PrismaService } from '../../../database/prisma/prisma.service'
 @Injectable()
 export class MetricsService {
   constructor(private prisma: PrismaService) {}
-
   // 🔹 Usado na aba de "Estoque Antigo"
   async findOldStockMetrics(companyId: string): Promise<OldStockMetrics> {
     const products = await this.getProducts(companyId)
     return this.calculateOldStockMetrics(products)
+  }
+
+  async findStockGeneralMetrics(
+    companyId: string,
+  ): Promise<GeneralStockMetrics> {
+    const totalProducts = await this.prisma.product.count({
+      where: { companyId },
+    })
+
+    const activeCategories = await this.prisma.category.count({
+      where: {
+        products: {
+          some: { companyId },
+        },
+      },
+    })
+
+    const products = await this.prisma.product.findMany({
+      where: {
+        companyId,
+        quantityInStock: { gt: 0 },
+      },
+      select: {
+        id: true,
+        dueDate: true,
+        validityInDays: true,
+        minimumStock: true,
+        originalPrice: true,
+        quantityInStock: true,
+        name: true,
+        categories: {
+          select: { name: true },
+        },
+        manufactureDate: true,
+      },
+    })
+
+    const oldStock = await this.calculateOldStockMetrics(products)
+
+    const oldStockProductIds = oldStock.expiredProducts.map((p) => p.id)
+
+    const activeProducts = products.filter(
+      (p) => !oldStockProductIds.includes(p.id),
+    )
+
+    const totalValue = products.reduce((acc, p) => {
+      return acc + p.originalPrice * p.quantityInStock
+    }, 0)
+
+    const criticalStockProducts = products.filter(
+      (p) =>
+        typeof p.minimumStock === 'number' &&
+        p.quantityInStock < p.minimumStock,
+    )
+
+    const expiredCount = oldStock.expiredProducts.length
+    const totalInStock = products.length
+
+    const validProductsPercentage =
+      totalInStock > 0
+        ? ((totalInStock - expiredCount) / totalInStock) * 100
+        : 0
+
+    const categoriesRaw = await this.prisma.category.findMany({
+      where: {
+        companyId,
+        isActive: true,
+        deletedAt: null,
+        products: {
+          some: {
+            companyId,
+            quantityInStock: { gt: 0 },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        products: {
+          where: {
+            companyId,
+            quantityInStock: { gt: 0 },
+          },
+          select: { id: true },
+        },
+      },
+    })
+
+    const categoryColors = [
+      '#8b5cf6',
+      '#06b6d4',
+      '#10b981',
+      '#f59e0b',
+      '#ef4444',
+    ]
+
+    const categoryOverview = categoriesRaw.map((cat, index) => ({
+      name: cat.name,
+      value: cat.products.length,
+      color: categoryColors[index % categoryColors.length],
+    }))
+
+    const today = new Date()
+    const grouped = new Map<
+      string,
+      { fabricacao: number; validade: number; vencidos: number }
+    >()
+
+    for (const p of products) {
+      if (!p.manufactureDate || !p.dueDate) continue
+
+      const monthNames = [
+        'Jan',
+        'Fev',
+        'Mar',
+        'Abr',
+        'Mai',
+        'Jun',
+        'Jul',
+        'Ago',
+        'Set',
+        'Out',
+        'Nov',
+        'Dez',
+      ]
+      const month = p.manufactureDate.getMonth()
+      const year = p.manufactureDate.getFullYear().toString().slice(-2)
+      const periodo = `${monthNames[month]}/${year}`
+
+      if (!grouped.has(periodo)) {
+        grouped.set(periodo, { fabricacao: 0, validade: 0, vencidos: 0 })
+      }
+
+      const data = grouped.get(periodo)!
+      data.fabricacao += 1
+      if (p.dueDate > today) {
+        data.validade += 1
+      } else {
+        data.vencidos += 1
+      }
+    }
+
+    const dateData = Array.from(grouped.entries())
+      .map(([periodo, valores]) => ({ periodo, ...valores }))
+      .sort((a, b) => {
+        const [monthA, yearA] = a.periodo.split('/')
+        const [monthB, yearB] = b.periodo.split('/')
+
+        const months = [
+          'jan',
+          'fev',
+          'mar',
+          'abr',
+          'mai',
+          'jun',
+          'jul',
+          'ago',
+          'set',
+          'out',
+          'nov',
+          'dez',
+        ]
+        const indexA = months.indexOf(monthA.toLowerCase())
+        const indexB = months.indexOf(monthB.toLowerCase())
+
+        const dateA = new Date(Number('20' + yearA), indexA)
+        const dateB = new Date(Number('20' + yearB), indexB)
+
+        return dateA.getTime() - dateB.getTime()
+      })
+
+    return {
+      totalProducts,
+      activeCategories,
+      totalValue,
+      activeProducts: activeProducts.length,
+      criticalStockProducts: criticalStockProducts.length,
+      validProducts: validProductsPercentage,
+      categoryOverview,
+      dateData,
+    }
   }
 
   private async getProducts(companyId: string) {

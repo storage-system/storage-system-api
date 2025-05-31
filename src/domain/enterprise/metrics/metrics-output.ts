@@ -22,13 +22,26 @@ export interface OldStockMetrics {
   warningProducts: ProductMetrics[]
 }
 
-export interface ProductMetrics2 {
-  totalStockQuantity: number
-  totalStockValue: number
-  productsInWarningDays: number
+export interface CategoryOverview {
+  name: string
+  value: number
+  color: string
 }
 
-export interface MetricsOutput {
-  oldStockMetrics: OldStockMetrics
-  productMetrics: ProductMetrics2
+export interface DateData {
+  periodo: string
+  fabricacao: number
+  validade: number
+  vencidos: number
+}
+
+export interface GeneralStockMetrics {
+  totalProducts: number
+  activeCategories: number
+  totalValue: number
+  activeProducts: number
+  criticalStockProducts: number
+  validProducts: number
+  categoryOverview: CategoryOverview[]
+  dateData: DateData[]
 }
