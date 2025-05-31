@@ -1,14 +1,13 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { WatchedList } from '@/core/watched-list'
 import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
+import { Style, StyleWatchedList } from '../style/style'
+import { Benefit, BenefitWatchedList } from './benefit'
 import { ProductID } from '../product/product'
-import { Style } from '../style/style'
+import { Hero, HeroWatchedList } from './hero'
 import { FileID } from '../file/file'
 import { Slug } from '../slug/slug'
-import { Benefit } from './benefit'
-import { Hero } from './hero'
 
 export interface EcommerceProps {
   name: string
@@ -16,9 +15,9 @@ export interface EcommerceProps {
   isActive: boolean
   companyId: UniqueEntityID
   ecommercePreview?: FileID
-  styles: WatchedList<Style>
-  hero: WatchedList<Hero>
-  benefits: WatchedList<Benefit>
+  styles: StyleWatchedList
+  hero: HeroWatchedList
+  benefits: BenefitWatchedList
   productIds: ProductID[]
   createdAt: Date
   updatedAt?: Date
@@ -39,9 +38,9 @@ export class Ecommerce extends Entity<EcommerceProps> {
     >,
     id?: EcommerceID,
   ) {
-    const styleList = WatchedList.fromArray<Style>(props.styles)
-    const heroList = WatchedList.fromArray<Hero>(props.hero)
-    const benefitList = WatchedList.fromArray<Benefit>(props.benefits)
+    const styleList = new StyleWatchedList(props.styles)
+    const heroList = new HeroWatchedList(props.hero)
+    const benefitList = new BenefitWatchedList(props.benefits)
 
     return new Ecommerce(
       {
@@ -65,11 +64,11 @@ export class Ecommerce extends Entity<EcommerceProps> {
     >,
   ) {
     if (props.styles) {
-      this.props.styles.replace(props.styles)
+      this.props.styles.update(props.styles)
     }
 
     if (props.hero) {
-      this.props.hero.replace(props.hero)
+      this.props.hero.update(props.hero)
     }
 
     this.props = {
@@ -127,39 +126,39 @@ export class Ecommerce extends Entity<EcommerceProps> {
   }
 
   get styles() {
-    return this.props.styles.items
+    return this.props.styles.getItems()
   }
 
   get stylesAdded() {
-    return this.props.styles.getAdded()
+    return this.props.styles.getNewItems()
   }
 
   get stylesRemoved() {
-    return this.props.styles.getRemoved()
+    return this.props.styles.getRemovedItems()
   }
 
   get hero() {
-    return this.props.hero.items
+    return this.props.hero.getItems()
   }
 
   get heroAdded() {
-    return this.props.hero.getAdded()
+    return this.props.hero.getNewItems()
   }
 
   get heroRemoved() {
-    return this.props.hero.getRemoved()
+    return this.props.hero.getRemovedItems()
   }
 
   get benefits() {
-    return this.props.benefits.items
+    return this.props.benefits.getItems()
   }
 
   get benefitsAdded() {
-    return this.props.benefits.getAdded()
+    return this.props.benefits.getNewItems()
   }
 
   get benefitsRemoved() {
-    return this.props.benefits.getRemoved()
+    return this.props.benefits.getRemovedItems()
   }
 
   get productIds() {

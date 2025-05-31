@@ -1,9 +1,9 @@
 import {
   Prisma,
-  Ecommerce as PrismaEcommerce,
-  Style as PrismaStyle,
-  Hero as PrismaHero,
   Benefit as PrismaBenefit,
+  Ecommerce as PrismaEcommerce,
+  Hero as PrismaHero,
+  Style as PrismaStyle,
 } from '@prisma/client'
 import { Benefit, BenefitID } from '@/domain/enterprise/ecommerce/benefit'
 import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'
@@ -12,7 +12,6 @@ import { Hero, HeroID } from '@/domain/enterprise/ecommerce/hero'
 import { ProductID } from '@/domain/enterprise/product/product'
 import { FileID } from '@/domain/enterprise/file/file'
 import { Slug } from '@/domain/enterprise/slug/slug'
-import { Logger } from '@nestjs/common'
 
 import { PrismaStyleMapper } from './prisma-style-mapper'
 

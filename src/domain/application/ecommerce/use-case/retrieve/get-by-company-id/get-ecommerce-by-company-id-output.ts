@@ -54,7 +54,7 @@ export class GetEcommerceByCompanyIdOutput {
   }[]
 
   benefits: {
-    fileId: string
+    fileUrl: string
     text: string
     description?: string
   }[]
@@ -76,21 +76,23 @@ export class GetEcommerceByCompanyIdOutput {
       fileUrl: hero.fileUrl,
     }))
     this.benefits = data.benefits.map((benefit) => ({
-      fileId: benefit.fileId.toString(),
+      fileUrl: benefit.fileUrl,
       text: benefit.text,
       description: benefit.description,
     }))
-    this.styles = data.styles.map((style) => ({
-      id: style.id.toString(),
-      createdAt: new Date(style.createdAt),
-      name: style.name,
-      isActive: style.isActive,
-      backgroundColor: style.backgroundColor,
-      textColor: style.textColor,
-      primaryColor: style.primaryColor,
-      secondaryColor: style.secondaryColor,
-      tertiaryColor: style.tertiaryColor,
-    }))
+    this.styles = data.styles
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .map((style) => ({
+        id: style.id.toString(),
+        createdAt: new Date(style.createdAt),
+        name: style.name,
+        isActive: style.isActive,
+        backgroundColor: style.backgroundColor,
+        textColor: style.textColor,
+        primaryColor: style.primaryColor,
+        secondaryColor: style.secondaryColor,
+        tertiaryColor: style.tertiaryColor,
+      }))
     this.updatedAt = data.updatedAt ?? null
   }
 
