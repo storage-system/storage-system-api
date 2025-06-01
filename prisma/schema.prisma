@@ -253,6 +253,7 @@ model File {
   product   Product?    @relation(fields: [productId], references: [id])
   ecommerce Ecommerce[]
   Hero      Hero[]
+  Benefit   Benefit[]
 
   @@map("files")
 }
@@ -307,4 +308,13 @@ model Hero {
   ecommerce   Ecommerce? @relation(fields: [ecommerceId], references: [id])
   ecommerceId String?    @map("ecommerce_id")
   fileId      String     @map("file_id")
+}
+
+model Benefit {
+  id          String  @id @default(uuid())
+  text        String
+  description String?
+
+  file   File?  @relation(fields: [fileId], references: [id])
+  fileId String @map("file_id")
 }

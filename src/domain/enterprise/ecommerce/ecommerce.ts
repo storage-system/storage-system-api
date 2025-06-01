@@ -7,6 +7,7 @@ import { ProductID } from '../product/product'
 import { Style } from '../style/style'
 import { FileID } from '../file/file'
 import { Slug } from '../slug/slug'
+import { Benefit } from './benefit'
 import { Hero } from './hero'
 
 export interface EcommerceProps {
@@ -17,6 +18,7 @@ export interface EcommerceProps {
   ecommercePreview?: FileID
   styles: WatchedList<Style>
   hero: WatchedList<Hero>
+  benefits: WatchedList<Benefit>
   productIds: ProductID[]
   createdAt: Date
   updatedAt?: Date
@@ -28,24 +30,25 @@ export class EcommerceID extends UniqueEntityID {}
 export class Ecommerce extends Entity<EcommerceProps> {
   static create(
     props: Optional<
-      Omit<EcommerceProps, 'styles' | 'hero'> & {
+      Omit<EcommerceProps, 'styles' | 'hero' | 'benefits'> & {
         styles: Style[]
         hero: Hero[]
+        benefits: Benefit[]
       },
       'createdAt' | 'productIds'
     >,
     id?: EcommerceID,
   ) {
-    const styleList = new WatchedList(props.styles, (a, b) => a.id.equals(b.id))
-    const heroList = new WatchedList(props.hero, (a, b) =>
-      a.fileId.equals(b.fileId),
-    )
+    const styleList = WatchedList.fromArray<Style>(props.styles)
+    const heroList = WatchedList.fromArray<Hero>(props.hero)
+    const benefitList = WatchedList.fromArray<Benefit>(props.benefits)
 
     return new Ecommerce(
       {
         ...props,
         styles: styleList,
         hero: heroList,
+        benefits: benefitList,
         createdAt: new Date(),
         productIds: [],
       },
@@ -145,6 +148,18 @@ export class Ecommerce extends Entity<EcommerceProps> {
 
   get heroRemoved() {
     return this.props.hero.getRemoved()
+  }
+
+  get benefits() {
+    return this.props.benefits.items
+  }
+
+  get benefitsAdded() {
+    return this.props.benefits.getAdded()
+  }
+
+  get benefitsRemoved() {
+    return this.props.benefits.getRemoved()
   }
 
   get productIds() {

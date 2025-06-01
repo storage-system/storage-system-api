@@ -14,6 +14,8 @@ import { Slug } from '@/domain/enterprise/slug/slug'
 import { User } from '@/domain/enterprise/user/user'
 import { Injectable, Logger } from '@nestjs/common'
 
+import { Benefit } from './../../../../enterprise/ecommerce/benefit'
+
 export interface PublishEcommerceUseCaseRequest {
   name: string
   companyId: string
@@ -32,6 +34,11 @@ export interface PublishEcommerceUseCaseRequest {
     secondaryColor: string
     tertiaryColor: string
   }
+  benefits: {
+    fileId: string
+    text: string
+    description?: string
+  }[]
 }
 
 @Injectable()
@@ -58,6 +65,7 @@ export class PublishEcommerceUseCase {
       hero: props.hero,
       style: props.style,
       companyId: company.id,
+      benefits: props.benefits,
     })
 
     return { id: ecommerce.id.toString(), slug: ecommerce.slug.value }
@@ -122,11 +130,13 @@ export class PublishEcommerceUseCase {
     style,
     companyId,
     hero,
+    benefits,
     ecommercePreview,
   }: {
     name: string
     style?: PublishEcommerceUseCaseRequest['style']
     hero: PublishEcommerceUseCaseRequest['hero']
+    benefits: PublishEcommerceUseCaseRequest['benefits']
     companyId: UniqueEntityID
     ecommercePreview: string
     slug: Slug
@@ -155,6 +165,7 @@ export class PublishEcommerceUseCase {
     })
 
     const heroList = await this.createHero(hero)
+    const benefitsList = await this.createBenefits(benefits)
     const previewFile = await this.verifyIfPreviewFileExists(ecommercePreview)
 
     const ecommerce = Ecommerce.create(
@@ -165,6 +176,7 @@ export class PublishEcommerceUseCase {
         companyId,
         ecommercePreview: previewFile?.id,
         hero: heroList,
+        benefits: benefitsList,
         styles: [ecommerceStyle],
       },
       ecommerceId,
@@ -199,6 +211,33 @@ export class PublishEcommerceUseCase {
     }
 
     return heroList
+  }
+
+  private async createBenefits(
+    benefit: PublishEcommerceUseCaseRequest['benefits'],
+  ) {
+    const benefitsList: Benefit[] = []
+    for (const item of benefit) {
+      const file = await this.fileRepository.findById(item.fileId)
+      if (!file) {
+        this.notification.appendAnError({
+          message: `File with id ${item.fileId} not found`,
+        })
+      } else {
+        const benefitItem = Benefit.create({
+          fileId: file.id,
+          text: item.text,
+        })
+
+        benefitsList.push(benefitItem)
+      }
+    }
+
+    if (this.notification.hasErrors()) {
+      throw new NotificationException('Error ecommerce', this.notification)
+    }
+
+    return benefitsList
   }
 
   private async verifyIfPreviewFileExists(ecommercePreview: string) {
