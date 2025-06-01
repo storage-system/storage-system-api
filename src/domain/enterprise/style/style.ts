@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { WatchedList } from '@/core/watched-list'
 import { Optional } from '@/core/types/optional'
 import { Entity } from '@/core/entities/entity'
 
@@ -99,5 +100,19 @@ export class Style extends Entity<StyleProps> {
 
   private touch() {
     this.props.updatedAt = new Date()
+  }
+}
+
+export class StyleWatchedList extends WatchedList<Style> {
+  compareItems(a: Style, b: Style): boolean {
+    return a.id.equals(b.id)
+  }
+
+  constructor(items: Style[] = []) {
+    super(items)
+  }
+
+  static fromArray(items: Style[]) {
+    return new StyleWatchedList(items)
   }
 }

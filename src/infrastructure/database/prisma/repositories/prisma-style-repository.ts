@@ -25,7 +25,7 @@ export class PrismaStyleRepository implements StyleRepository {
         take: perPage,
         skip: (page - 1) * perPage,
         orderBy: {
-          createdAt: 'desc',
+          createdAt: 'asc',
         },
       }),
       this.prisma.style.count({

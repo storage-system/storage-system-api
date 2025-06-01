@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { WatchedList } from '@/core/watched-list'
 import { Entity } from '@/core/entities/entity'
 
 import { FileID } from '../file/file'
@@ -33,5 +34,19 @@ export class Benefit extends Entity<BenefitProps> {
 
   get fileId() {
     return this.props.fileId
+  }
+}
+
+export class BenefitWatchedList extends WatchedList<Benefit> {
+  compareItems(a: Benefit, b: Benefit): boolean {
+    return a.fileId.equals(b.fileId)
+  }
+
+  constructor(items: Benefit[] = []) {
+    super(items)
+  }
+
+  static fromArray(items: Benefit[]) {
+    return new BenefitWatchedList(items)
   }
 }

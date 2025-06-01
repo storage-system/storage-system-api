@@ -1,13 +1,15 @@
 import {
   Prisma,
+  Benefit as PrismaBenefit,
   Ecommerce as PrismaEcommerce,
-  Style as PrismaStyle,
   Hero as PrismaHero,
+  Style as PrismaStyle,
 } from '@prisma/client'
+import { Benefit, BenefitID } from '@/domain/enterprise/ecommerce/benefit'
 import { Ecommerce } from '@/domain/enterprise/ecommerce/ecommerce'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Hero, HeroID } from '@/domain/enterprise/ecommerce/hero'
 import { ProductID } from '@/domain/enterprise/product/product'
-import { Hero } from '@/domain/enterprise/ecommerce/hero'
 import { FileID } from '@/domain/enterprise/file/file'
 import { Slug } from '@/domain/enterprise/slug/slug'
 
@@ -17,6 +19,7 @@ type PrismaEcommerceWithRelations = PrismaEcommerce & {
   products: string[]
   styles: PrismaStyle[]
   hero: PrismaHero[]
+  benefits: PrismaBenefit[]
 }
 
 export class PrismaEcommerceMapper {
@@ -31,10 +34,23 @@ export class PrismaEcommerceMapper {
           ? new FileID(raw.previewImageId)
           : undefined,
         hero: raw.hero.map((hero) =>
-          Hero.create({ text: hero.text, fileId: new FileID(hero.fileId) }),
+          Hero.create(
+            { text: hero.text, fileId: new FileID(hero.fileId) },
+            new HeroID(hero.id),
+          ),
         ),
         styles: raw.styles.map((style) => PrismaStyleMapper.toDomain(style)),
         productIds: raw.products.map((product) => new ProductID(product)),
+        benefits: raw.benefits.map((benefit) =>
+          Benefit.create(
+            {
+              text: benefit.text,
+              description: benefit.description ?? undefined,
+              fileId: new FileID(benefit.fileId),
+            },
+            new BenefitID(benefit.id),
+          ),
+        ),
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt ?? undefined,
         deletedAt: raw.deletedAt ?? undefined,
@@ -61,6 +77,14 @@ export class PrismaEcommerceMapper {
         create: raw.hero.map((hero) => ({
           fileId: hero.fileId.toString(),
           text: hero.text,
+        })),
+      },
+      benefits: {
+        create: raw.benefits.map((benefit) => ({
+          id: benefit.id.toString(),
+          text: benefit.text,
+          description: benefit.description,
+          fileId: benefit.fileId.toString(),
         })),
       },
       styles: {
@@ -110,7 +134,14 @@ export class PrismaEcommerceMapper {
           },
         })),
       },
-
+      benefits: {
+        connect: raw.benefitsAdded.map((benefit) => ({
+          id: benefit.id.toString(),
+        })),
+        disconnect: raw.benefitsRemoved.map((benefit) => ({
+          id: benefit.id.toString(),
+        })),
+      },
       styles: {
         upsert: raw.stylesAdded.map((style) => ({
           where: {

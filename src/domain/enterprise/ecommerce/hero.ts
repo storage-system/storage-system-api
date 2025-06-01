@@ -1,4 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { WatchedList } from '@/core/watched-list'
 import { Entity } from '@/core/entities/entity'
 
 import { FileID } from '../file/file'
@@ -27,5 +28,19 @@ export class Hero extends Entity<HeroProps> {
 
   get fileId() {
     return this.props.fileId
+  }
+}
+
+export class HeroWatchedList extends WatchedList<Hero> {
+  compareItems(a: Hero, b: Hero): boolean {
+    return a.fileId.equals(b.fileId)
+  }
+
+  constructor(items: Hero[] = []) {
+    super(items)
+  }
+
+  static fromArray(items: Hero[]) {
+    return new HeroWatchedList(items)
   }
 }

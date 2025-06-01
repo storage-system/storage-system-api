@@ -27,6 +27,13 @@ const ecommerceSchema = z.object({
       }),
     )
     .default([]),
+  benefits: z.array(
+    z.object({
+      fileUrl: z.string(),
+      text: z.string(),
+      description: z.string().optional(),
+    }),
+  ),
   hero: z
     .array(
       z.object({
