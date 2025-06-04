@@ -49,15 +49,25 @@ export async function productsSeed(prisma: PrismaClient) {
       )
       continue
     }
+    
+    let imagePath
+    let buffer 
+    let objectName
 
-    const imagePath = path.resolve(__dirname, '../images', filename)
-    const buffer = await fs.readFile(imagePath)
-    const objectName = `${filename}`
-
-    await minioClient.putObject(BUCKET_NAME, objectName, buffer)
-
+    try {
+      
+      imagePath = path.resolve(__dirname, '../images', filename)
+      buffer = await fs.readFile(imagePath)
+      objectName = `${filename}`
+      
+      await minioClient.putObject(BUCKET_NAME, objectName, buffer)
+      
+    } catch (error) {
+      continue
+    }
+    
     const fileId = randomUUID()
-
+    
     await prisma.product.upsert({
       where: { id: product.id },
       create: {
