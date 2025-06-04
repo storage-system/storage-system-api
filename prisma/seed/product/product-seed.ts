@@ -17,16 +17,6 @@ const minioClient = new Client({
 
 const BUCKET_NAME = process.env.MINIO_BUCKET_NAME!
 
-const categoryImageFiles: Record<string, string> = {
-  category1: 'bobinas-de-aco.png',
-  category2: 'insumos-quimicos.png',
-  category3: 'equipamentos-industriais.png',
-  category4: 'ferramentas-eletricas.png',
-  category5: 'componentes-eletronicos.png',
-  category6: 'epis.png',
-  category7: 'lubrificantes-industriais.png',
-  category8: 'tubulacoes-e-conexoes.png',
-}
 
 async function emptyBucket(bucket: string) {
   const stream = minioClient.listObjects(bucket, '', true)
@@ -51,10 +41,7 @@ export async function productsSeed(prisma: PrismaClient) {
 
   for (const product of products) {
     const firstCategory = product.categories?.[0]
-    const filename = firstCategory
-      ? categoryImageFiles[firstCategory]
-      : undefined
-
+    const filename =  product.slug.concat('.png')
     if (!filename) {
       // eslint-disable-next-line no-console
       console.warn(
