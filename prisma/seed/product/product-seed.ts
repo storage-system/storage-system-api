@@ -17,7 +17,6 @@ const minioClient = new Client({
 
 const BUCKET_NAME = process.env.MINIO_BUCKET_NAME!
 
-
 async function emptyBucket(bucket: string) {
   const stream = minioClient.listObjects(bucket, '', true)
   for await (const obj of stream) {
@@ -41,7 +40,7 @@ export async function productsSeed(prisma: PrismaClient) {
 
   for (const product of products) {
     const firstCategory = product.categories?.[0]
-    const filename =  product.slug.concat('.png')
+    const filename = product.slug.concat('.png')
     if (!filename) {
       // eslint-disable-next-line no-console
       console.warn(
@@ -49,25 +48,23 @@ export async function productsSeed(prisma: PrismaClient) {
       )
       continue
     }
-    
+
     let imagePath
-    let buffer 
+    let buffer
     let objectName
 
     try {
-      
       imagePath = path.resolve(__dirname, '../images', filename)
       buffer = await fs.readFile(imagePath)
       objectName = `${filename}`
-      
+
       await minioClient.putObject(BUCKET_NAME, objectName, buffer)
-      
     } catch (error) {
       continue
     }
-    
+
     const fileId = randomUUID()
-    
+
     await prisma.product.upsert({
       where: { id: product.id },
       create: {
